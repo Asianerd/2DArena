@@ -1,16 +1,19 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyPathfinding : MonoBehaviour
 {
-    public GameObject enemy;
-    public GameObject player;
-    public float EnemySpeed = 0.5f;
+    public GameObject player; //Fetched in Start()
+    public float EnemySpeed = 0.005f;
+    
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
 
-    // Update is called once per frame
     void Update()
     {
-        enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, player.transform.position, EnemySpeed);
+        transform.position = Vector2.MoveTowards(transform.position, player.transform.position, EnemySpeed);
     }
 }
