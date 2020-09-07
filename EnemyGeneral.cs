@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +7,21 @@ public class EnemyGeneral : MonoBehaviour
 {
     public double HP = 100;
     public float EnemyDist;
+    public GameObject runtime;
+
+    private void Start()
+    {
+        runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
+    }
 
     void Update() 
     {
         if (HP <= 0)
+        {
+            //GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, UnityEngine.Random.Range(0, 2));
+            runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, 0);
             Destroy(gameObject);
+        }
     }
     public void MinusHealth(double LostHealth)
     {
