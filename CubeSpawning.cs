@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 public class CubeSpawning : MonoBehaviour
 {
     public GameObject Player; //Fetched in Start()
-    public GameObject EnemyTemplate; //Init in Start()
+    public GameObject EnemyTemplate;
     public Sprite EnemySprite;
     public float RandXMin, RandXMax, RandYMin, RandYMax;
     public int cooldown = 400;
@@ -18,6 +18,7 @@ public class CubeSpawning : MonoBehaviour
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         //EnemyTemplate Init
+        /*
         GameObject EnemyTemplate = new GameObject("Test", typeof(EnemyAttack), typeof(EnemyGeneral), typeof(EnemyPathfinding));
         SpriteRenderer renderer = EnemyTemplate.AddComponent<SpriteRenderer>();
 
@@ -27,6 +28,7 @@ public class CubeSpawning : MonoBehaviour
         EnemyTemplate.AddComponent<BoxCollider2D>().size = new Vector2(1f,1f);
         EnemyTemplate.tag = "Enemy";
         renderer.sprite = EnemySprite;
+        */
     }
 
     void Update()
