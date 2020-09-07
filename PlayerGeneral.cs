@@ -1,21 +1,32 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerGeneral : MonoBehaviour
 {
     //HP
     public double HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
+    public List<int> InventoryWeapon;
+    public List<string> InventoryWeaponName;
+    public List<ArrayList> InventoryLoot;
+    public List<string> InventoryLootName;
 
     void Update()
     {
         Regen();
-        Debug.Log("HP " + HP + "/" + HPMax);
+        //Debug.Log("HP " + HP + "/" + HPMax);
+        //Debug.Log(string.Join("\n",InventoryWeapon));
     }
     public void MinusHealth(float losthealth)
     {
         HP -= losthealth;
+    }
+    public void AppendInventory(int WeaponType,int WeaponID)
+    {
+        InventoryWeapon.Add(WeaponID);
     }
     void Regen()
     {
