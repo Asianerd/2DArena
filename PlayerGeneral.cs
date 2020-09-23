@@ -17,8 +17,6 @@ public class PlayerGeneral : MonoBehaviour
     void Update()
     {
         Regen();
-        //Debug.Log("HP " + HP + "/" + HPMax);
-        //Debug.Log(string.Join("\n",InventoryWeapon));
     }
     public void MinusHealth(float losthealth)
     {
