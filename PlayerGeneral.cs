@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,17 +6,37 @@ using UnityEngine.Events;
 
 public class PlayerGeneral : MonoBehaviour
 {
+    public class Weapon
+    {
+        public string WeaponName;
+        public float DamageMin, DamageMax;
+        public Weapon(string name, float DmgRangeMin, float DmgRangeMax)
+        {
+            WeaponName = name;
+            DamageMin = DmgRangeMin;
+            DamageMax = DmgRangeMax;
+        }
+    }
+
     //HP
-    public double HP = 100, HPMax = 100, HPRegen = 1;
+    public float HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
     public List<int> InventoryWeapon;
     public List<string> InventoryWeaponName;
     public List<ArrayList> InventoryLoot;
     public List<string> InventoryLootName;
+    public Weapon EquippedWeapon;
+
+    private void Start()
+    {
+        EquippedWeapon = new Weapon("Default", 5f, 10f);
+    }
 
     void Update()
     {
         Regen();
+        //Debug.Log("HP " + HP + "/" + HPMax);
+        //Debug.Log(string.Join("\n",InventoryWeapon));
     }
     public void MinusHealth(float losthealth)
     {
