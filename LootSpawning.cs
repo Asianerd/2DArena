@@ -57,7 +57,6 @@ public class LootSpawning : MonoBehaviour
     {
         WeaponLoot.GetComponent<SpriteRenderer>().sprite = WeaponSpriteList[Weapon_Id];
         WeaponLoot.GetComponent<LootGeneral>().WeaponID = Weapon_Id;
-        Debug.Log(WeaponList[Weapon_Id].WeaponName);
         WeaponLoot.GetComponent<LootGeneral>().WeaponName = WeaponList[Weapon_Id].WeaponName;
 
         Instantiate(WeaponLoot,new Vector2(XPos,YPos),Quaternion.identity);
