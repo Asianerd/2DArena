@@ -8,15 +8,21 @@ public class PlayerGeneral : MonoBehaviour
 {
     public GameObject ItemList;
     public Canvas InvCanvas;
+
+
     public class Weapon
     {
         public string WeaponName;
-        public float DamageMin, DamageMax;
-        public Weapon(string name, float DmgRangeMin, float DmgRangeMax)
+        public float DamageMin, DamageMax, WeaponRange, Knockback;
+        public int WeaponCooldown;
+        public Weapon(string name, float DmgRangeMin, float DmgRangeMax,float WpnKnockback, float WpnRange, int WpnCooldown)
         {
             WeaponName = name;
             DamageMin = DmgRangeMin;
             DamageMax = DmgRangeMax;
+            Knockback = WpnKnockback;
+            WeaponRange = WpnRange;
+            WeaponCooldown = WpnCooldown;
         }
     }
 
@@ -31,17 +37,37 @@ public class PlayerGeneral : MonoBehaviour
 
     private void Awake()
     {
-        EquippedWeapon = new Weapon("Default", 5f, 10f);
         ItemList = GameObject.FindGameObjectWithTag("InventoryWeaponItemList");
     }
+
+
+    // ATK
+    public GameObject[] EnemyArray;
+    public float AttackRange = 1f;
+    public float PlayerDamage = 3f;
+    public Weapon CurrentWeapon = new Weapon("Fists", 2, 3, 50, 2);
 
     void Update()
     {
         Regen();
+        Attack();
     }
     public void MinusHealth(float losthealth)
     {
         HP -= losthealth;
+    }
+    
+    public void Attack()
+    {
+        float DamageInflicted = Random.Range(CurrentWeapon.DamageMin, CurrentWeapon.DamageMax);
+        EnemyArray = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject i in EnemyArray)
+        {
+            if ((i.GetComponent<EnemyGeneral>().DistanceEnemy(transform.position.x, transform.position.y) < AttackRange) && (Input.GetMouseButtonDown(0)))
+            {
+                i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage + DamageInflicted);
+            }
+        }
     }
     public void AppendInventory(int WeaponType,int WeaponID,string WeaponName)
     {
