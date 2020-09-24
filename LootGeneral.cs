@@ -9,6 +9,7 @@ public class LootGeneral : MonoBehaviour
     public GameObject Player;
     public int WeaponID;
     public string WeaponName;
+    public string[] WeaponNameArray = { "Copper shortsword", "Tin shortsword", "Iron shortsword", "Spear", "Amethyst staff", "Topaz staff", "Sapphire staff", "Amber staff", "Lead shortsword", "Silver shortsword", "Tungsten shortsword", "Iron broadsword", "Lead broadsword", "Silver broadsword", "Tungsten broadsword", "Emerald staff", "Ruby staff", "Crimson shortsword", "Gold shortsword", "Crimson broadsword", "Gold broadsword", "Trident", "Glaive", "Platinum shortsword", "Katana", "Platinum broadsword", "Diamond staff", "Last prism", "Star Wrath", "Phantasm", "Meowmere", "Celebration MK.2", "Solar Eruption", "Holy Water", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test" };
 
     void Start()
     {
@@ -28,8 +29,7 @@ public class LootGeneral : MonoBehaviour
         }
         if (DistToPlayer <= PickupRange)
         {
-            Debug.Log(WeaponID);
-            Player.GetComponent<PlayerGeneral>().AppendInventory(1,WeaponID);
+            Player.GetComponent<PlayerGeneral>().AppendInventory(1,WeaponID,WeaponNameArray[WeaponID]);
             Destroy(gameObject);
         }
     }

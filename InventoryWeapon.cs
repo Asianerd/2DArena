@@ -6,23 +6,24 @@ using UnityEngine.UI;
 public class InventoryWeapon : MonoBehaviour
 {
     public Button[] ButtonList;
+    public Button ButtonPrefab;
+    public GameObject ItemList;
     public GameObject Player;
+
+
     void Awake()
     {
         ButtonList = FindObjectsOfType<Button>();
-        Player = GameObject.GetGameObjectWithTag("Player");
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()
     {
-        ButtonList = FindObjectsOfType<Button>();
-        Debug.Log(ButtonList.Length);
-        Debug.Log(ButtonList);
-        for (int i = 0;i<ButtonList.Length;i++)
-        {
-            Debug.Log(i);
-            Debug.Log(ButtonList[i].GetComponentInChildren<Text>().text);
-            ButtonList[i].GetComponentInChildren<Text>().text = i.ToString();
-        }
+    }
+
+    public void AddWeapon(string WeaponName)
+    {
+        ButtonPrefab.GetComponentInChildren<Text>().text = WeaponName;
+        Instantiate(ButtonPrefab, ItemList.transform);
     }
 }

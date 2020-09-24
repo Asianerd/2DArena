@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class PlayerGeneral : MonoBehaviour
 {
+    public GameObject ItemList;
+    public Canvas InvCanvas;
     public class Weapon
     {
         public string WeaponName;
@@ -27,23 +29,23 @@ public class PlayerGeneral : MonoBehaviour
     public List<string> InventoryLootName;
     public Weapon EquippedWeapon;
 
-    private void Start()
+    private void Awake()
     {
         EquippedWeapon = new Weapon("Default", 5f, 10f);
+        ItemList = GameObject.FindGameObjectWithTag("InventoryWeaponItemList");
     }
 
     void Update()
     {
         Regen();
-        //Debug.Log("HP " + HP + "/" + HPMax);
-        //Debug.Log(string.Join("\n",InventoryWeapon));
     }
     public void MinusHealth(float losthealth)
     {
         HP -= losthealth;
     }
-    public void AppendInventory(int WeaponType,int WeaponID)
+    public void AppendInventory(int WeaponType,int WeaponID,string WeaponName)
     {
+        InvCanvas.GetComponent<InventoryWeapon>().AddWeapon(WeaponName);
         InventoryWeapon.Add(WeaponID);
     }
     void Regen()
