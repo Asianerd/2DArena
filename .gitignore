@@ -1,0 +1,5 @@
+
+*.json
+.vs/Scripts/v16/.suo
+*.sqlite
+*.meta
