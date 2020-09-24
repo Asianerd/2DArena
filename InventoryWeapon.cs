@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class InventoryWeapon : MonoBehaviour
 {
     public Button[] ButtonList;
+    public GameObject Player;
     void Awake()
     {
         ButtonList = FindObjectsOfType<Button>();
+        Player = GameObject.GetGameObjectWithTag("Player");
     }
 
     void Update()
