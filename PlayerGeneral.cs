@@ -45,7 +45,7 @@ public class PlayerGeneral : MonoBehaviour
     public GameObject[] EnemyArray;
     public float AttackRange = 1f;
     public float PlayerDamage = 3f;
-    public Weapon CurrentWeapon = new Weapon("Fists", 2, 3, 50, 2);
+    public Weapon CurrentWeapon = new Weapon("Fists", 2, 3, 5, 2, 50);
 
     void Update()
     {
