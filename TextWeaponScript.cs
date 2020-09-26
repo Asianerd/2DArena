@@ -16,8 +16,6 @@ public class TextWeaponScript : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(SelfText.text);
-        Debug.Log(Parent.GetComponent<LootGeneral>().WeaponName);
         SelfText.text = Parent.GetComponent<LootGeneral>().WeaponName;
         transform.position = MainCam.WorldToScreenPoint(WeaponLootParent.transform.position);
     }

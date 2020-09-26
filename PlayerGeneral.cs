@@ -8,6 +8,7 @@ public class PlayerGeneral : MonoBehaviour
 {
     public GameObject ItemList;
     public Canvas InvCanvas;
+    public GameObject RuntimeScript;
 
 
     public class Weapon
@@ -38,6 +39,7 @@ public class PlayerGeneral : MonoBehaviour
     private void Awake()
     {
         ItemList = GameObject.FindGameObjectWithTag("InventoryWeaponItemList");
+        RuntimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
     }
 
 
@@ -49,8 +51,11 @@ public class PlayerGeneral : MonoBehaviour
 
     void Update()
     {
-        Regen();
-        Attack();
+        if (!RuntimeScript.GetComponent<InventoryShow>().GamePaused)
+        {
+            Regen();
+            Attack();
+        }
     }
     public void MinusHealth(float losthealth)
     {
@@ -62,12 +67,13 @@ public class PlayerGeneral : MonoBehaviour
         float DamageInflicted = Random.Range(CurrentWeapon.DamageMin, CurrentWeapon.DamageMax);
         EnemyArray = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject i in EnemyArray)
-        {
+        {   
             if ((i.GetComponent<EnemyGeneral>().DistanceEnemy(transform.position.x, transform.position.y) < AttackRange) && (Input.GetMouseButtonDown(0)))
             {
                 i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage + DamageInflicted);
             }
         }
+        
     }
     public void AppendInventory(int WeaponType,int WeaponID,string WeaponName)
     {

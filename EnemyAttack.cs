@@ -8,6 +8,7 @@ public class EnemyAttack : MonoBehaviour
 {
     public GameObject player; //Fetched in Start()
     public GameObject cam; //Fetched in Start()
+    public GameObject RuntimeScript;
 
     public float AttackRange = 3;
     public float DamageMin = 5f, DamageMax = 10f, Damage;
@@ -17,23 +18,27 @@ public class EnemyAttack : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         cam = GameObject.FindGameObjectWithTag("MainCamera");
+        RuntimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (AttackTime == 0)
+        if (!RuntimeScript.GetComponent<InventoryShow>().GamePaused)
         {
-            if (Vector2.Distance(player.transform.position, transform.position) < AttackRange)
+            if (AttackTime == 0)
             {
-                Damage = Random.Range(DamageMin, DamageMax);
-                player.GetComponent<PlayerGeneral>().MinusHealth(Damage);
-                cam.GetComponent<CameraGeneral>().CamShake(Damage/100,30);
-                AttackTime = AttackCooldown;
+                if (Vector2.Distance(player.transform.position, transform.position) < (AttackRange * Time.deltaTime))
+                {
+                    Damage = Random.Range(DamageMin, DamageMax);
+                    player.GetComponent<PlayerGeneral>().MinusHealth(Damage);
+                    cam.GetComponent<CameraGeneral>().CamShake(Damage / 100, 30);
+                    AttackTime = AttackCooldown;
+                }
             }
+            else AttackTime--;
+            if (AttackTime < 0) AttackTime = 0;
         }
-        else AttackTime--;
-        if (AttackTime < 0) AttackTime = 0;
     }
 }
