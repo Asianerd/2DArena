@@ -28,31 +28,12 @@ public class LootSpawning : MonoBehaviour
     void Awake()
     {
         Renderer = WeaponLoot.AddComponent<SpriteRenderer>();
-        //Debug.Log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         for (int i = 0; i < 56; i++)
         {
-            //Debug.Log(WeaponNameArray[i]);
             WeaponList.Add(new Weapon(WeaponNameArray[i], 10f, 10f));
         }
-        //Debug.Log(WeaponList.Count);
-        //Debug.Log(WeaponList);
+
     }
-
-    void Start()
-    {
-        /*
-        WeaponList.Append(new Weapon("Copper ShortSword", 10f, 10));
-        WeaponList.Append(new Weapon("Silver Shortsword", 15f, 15f));
-        WeaponList.Append(new Weapon("Gold Shortsword", 20f, 20f));
-        for(int i = 0; i < 57;i++)
-        {
-            WeaponList.Append(new Weapon("Test", 10f, 10f));
-        }
-        */
-    }
-
-    void Update() {}
-
     public void SpawnWeaponLoot(float XPos,float YPos,int Weapon_Id)
     {
         WeaponLoot.GetComponent<SpriteRenderer>().sprite = WeaponSpriteList[Weapon_Id];
