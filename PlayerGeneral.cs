@@ -9,7 +9,7 @@ public class PlayerGeneral : MonoBehaviour
     public GameObject ItemList;
     public Canvas InvCanvas;
     public GameObject RuntimeScript;
-
+    public GameObject DamageBubblePrefab;
 
     public class Weapon
     {
@@ -67,10 +67,13 @@ public class PlayerGeneral : MonoBehaviour
         float DamageInflicted = Random.Range(CurrentWeapon.DamageMin, CurrentWeapon.DamageMax);
         EnemyArray = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject i in EnemyArray)
-        {   
+        {
+            Vector3 EnemyPosition = new Vector3(i.transform.position.x, i.transform.position.y);
             if ((i.GetComponent<EnemyGeneral>().DistanceEnemy(transform.position.x, transform.position.y) < AttackRange) && (Input.GetMouseButtonDown(0)))
             {
                 i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage + DamageInflicted);
+                DamageBubblePrefab.GetComponent<FXDamageBubbleGeneral>().Damage = DamageInflicted;
+                Instantiate(DamageBubblePrefab, EnemyPosition,Quaternion.identity);
             }
         }
         
