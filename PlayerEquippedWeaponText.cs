@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerEquippedWeaponText : MonoBehaviour
 {
     public GameObject Player;
+
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
