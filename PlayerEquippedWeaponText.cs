@@ -14,6 +14,8 @@ public class PlayerEquippedWeaponText : MonoBehaviour
 
     void Update()
     {
-        GetComponentInChildren<Text>().text = Player.GetComponent<PlayerGeneral>().CurrentWeapon.WeaponName;
+        string WeaponText;
+        WeaponText = $"{Player.GetComponent<PlayerGeneral>().CurrentWeapon.WeaponName} {Player.GetComponent<PlayerGeneral>().CurrentWeapon.DamageMin}/{Player.GetComponent<PlayerGeneral>().CurrentWeapon.DamageMax}";
+        GetComponentInChildren<Text>().text = WeaponText;
     }
 }
