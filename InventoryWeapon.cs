@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class InventoryWeapon : MonoBehaviour
 {
-    public Button[] ButtonList;
     public Button ButtonPrefab;
     public GameObject ItemList;
     public GameObject Player;
@@ -13,7 +12,6 @@ public class InventoryWeapon : MonoBehaviour
 
     void Awake()
     {
-        ButtonList = FindObjectsOfType<Button>();
         Player = GameObject.FindGameObjectWithTag("Player");
     }
 
