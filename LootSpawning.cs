@@ -27,7 +27,6 @@ public class LootSpawning : MonoBehaviour
 
     void Awake()
     {
-        Renderer = WeaponLoot.AddComponent<SpriteRenderer>();
         for (int i = 0; i < 56; i++)
         {
             WeaponList.Add(new Weapon(WeaponNameArray[i], 10f, 10f));
@@ -36,7 +35,7 @@ public class LootSpawning : MonoBehaviour
     }
     public void SpawnWeaponLoot(float XPos,float YPos,int Weapon_Id)
     {
-        WeaponLoot.GetComponent<SpriteRenderer>().sprite = WeaponSpriteList[Weapon_Id];
+        WeaponLoot.GetComponent<SpriteRenderer>().sprite = WeaponSpriteList[Weapon_Id-1];
         WeaponLoot.GetComponent<LootGeneral>().WeaponID = Weapon_Id;
         WeaponLoot.GetComponent<LootGeneral>().WeaponName = WeaponList[Weapon_Id].WeaponName;
 

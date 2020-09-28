@@ -18,8 +18,7 @@ public class EnemyGeneral : MonoBehaviour
     {
         if (HP <= 0)
         {
-            //GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, UnityEngine.Random.Range(0, 2));
-            runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, UnityEngine.Random.Range(0,57));
+            runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, UnityEngine.Random.Range(0,56));
             Destroy(gameObject);
         }
     }

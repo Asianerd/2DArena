@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LootGeneral : MonoBehaviour
 {
@@ -14,23 +15,21 @@ public class LootGeneral : MonoBehaviour
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
+        GetComponentInChildren<Canvas>().worldCamera = FindObjectOfType<Camera>();
+        WeaponName = WeaponNameArray[WeaponID];
+        GetComponentInChildren<Text>().text = WeaponName;
     }
 
     void Update()
     {
         float DistToPlayer = Vector2.Distance(transform.position, Player.transform.position);
-        if (IsFollowing)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, Player.transform.position,PickupSpeed);
-        }
-        if (DistToPlayer <= AttentionRange)
-        {
-            IsFollowing = true;
-        }
+        if (IsFollowing) transform.position = Vector2.MoveTowards(transform.position, Player.transform.position,PickupSpeed);
+        if (DistToPlayer <= AttentionRange) IsFollowing = true;
         if (DistToPlayer <= PickupRange)
         {
-            Player.GetComponent<PlayerGeneral>().AppendInventory(1,WeaponID,WeaponNameArray[WeaponID]);
+            Player.GetComponent<PlayerGeneral>().AppendInventory(1, WeaponID, WeaponNameArray[WeaponID]);
             Destroy(gameObject);
         }
+        
     }
 }

@@ -71,8 +71,8 @@ public class PlayerGeneral : MonoBehaviour
             Vector3 EnemyPosition = new Vector3(i.transform.position.x, i.transform.position.y);
             if ((i.GetComponent<EnemyGeneral>().DistanceEnemy(transform.position.x, transform.position.y) < AttackRange) && (Input.GetMouseButtonDown(0)))
             {
-                i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage + DamageInflicted);
                 DamageBubblePrefab.GetComponent<FXDamageBubbleGeneral>().Damage = DamageInflicted;
+                i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage + DamageInflicted);
                 Instantiate(DamageBubblePrefab, EnemyPosition,Quaternion.identity);
             }
         }
@@ -89,14 +89,8 @@ public class PlayerGeneral : MonoBehaviour
         {
             if (HP < HPMax)
             {
-                if ((HP + HPRegen > HPMax) && (HP < HPMax))
-                {
-                    HP = HPMax;
-                }
-                else
-                {
-                    HP += HPRegen;
-                }
+                if ((HP + HPRegen > HPMax) && (HP < HPMax)) HP = HPMax;
+                else HP += HPRegen;
             }
         }
         HPRegenClock++;
