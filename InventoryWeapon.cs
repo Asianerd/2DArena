@@ -15,13 +15,11 @@ public class InventoryWeapon : MonoBehaviour
         Player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    void Update()
-    {
-    }
 
-    public void AddWeapon(string WeaponName)
+    public void AddWeapon(PlayerGeneral.Weapon SelectedWeapon)
     {
-        ButtonPrefab.GetComponentInChildren<Text>().text = WeaponName;
+        ButtonPrefab.GetComponent<InventoryWeaponButtonGeneral>().Weapon = SelectedWeapon;
+        ButtonPrefab.GetComponentInChildren<Text>().text = SelectedWeapon.WeaponName;
         Instantiate(ButtonPrefab, ItemList.transform);
     }
 }

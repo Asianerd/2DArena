@@ -30,16 +30,26 @@ public class PlayerGeneral : MonoBehaviour
     //HP
     public float HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
-    public List<int> InventoryWeapon;
-    public List<string> InventoryWeaponName;
+    public List<Weapon> InventoryWeapon;
     public List<ArrayList> InventoryLoot;
     public List<string> InventoryLootName;
     public Weapon EquippedWeapon;
 
-    private void Awake()
+    public List<Weapon> GlobalWeaponList = new List<Weapon>();
+
+    public void Awake()
     {
+        string[] WeaponNameArray = { "Copper shortsword", "Tin shortsword", "Iron shortsword", "Spear", "Amethyst staff", "Topaz staff", "Sapphire staff", "Amber staff", "Lead shortsword", "Silver shortsword", "Tungsten shortsword", "Iron broadsword", "Lead broadsword", "Silver broadsword", "Tungsten broadsword", "Emerald staff", "Ruby staff", "Crimson shortsword", "Gold shortsword", "Crimson broadsword", "Gold broadsword", "Trident", "Glaive", "Platinum shortsword", "Katana", "Platinum broadsword", "Diamond staff", "Last prism", "Star Wrath", "Phantasm", "Meowmere", "Celebration MK.2", "Solar Eruption", "Holy Water", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test" };
         ItemList = GameObject.FindGameObjectWithTag("InventoryWeaponItemList");
         RuntimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
+        for (int i = 0; i < 56; i++)
+        {
+            GlobalWeaponList.Add(new Weapon(WeaponNameArray[i], 10f, 10f,10f,10f,10));
+        }
+        foreach (Weapon x in GlobalWeaponList)
+        {
+            Debug.Log(x.WeaponName);
+        }
     }
 
 
@@ -78,10 +88,10 @@ public class PlayerGeneral : MonoBehaviour
         }
         
     }
-    public void AppendInventory(int WeaponType,int WeaponID,string WeaponName)
+    public void AppendInventory(int WeaponType,Weapon WantedWeapon)
     {
-        InvCanvas.GetComponent<InventoryWeapon>().AddWeapon(WeaponName);
-        InventoryWeapon.Add(WeaponID);
+        InvCanvas.GetComponent<InventoryWeapon>().AddWeapon(WantedWeapon);
+        InventoryWeapon.Add(WantedWeapon);
     }
     void Regen()
     {

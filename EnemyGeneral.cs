@@ -8,17 +8,20 @@ public class EnemyGeneral : MonoBehaviour
     public double HP = 100;
     public float EnemyDist;
     public GameObject runtime;
+    public GameObject Player;
 
-    private void Start()
+    public void Awake()
     {
         runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update() 
     {
         if (HP <= 0)
         {
-            runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, UnityEngine.Random.Range(0,56));
+            int SpawnedWeaponID = UnityEngine.Random.Range(0, 56);
+            runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, Player.GetComponent<PlayerGeneral>().GlobalWeaponList[SpawnedWeaponID],SpawnedWeaponID);
             Destroy(gameObject);
         }
     }

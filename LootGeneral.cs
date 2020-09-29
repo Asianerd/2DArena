@@ -8,16 +8,15 @@ public class LootGeneral : MonoBehaviour
     public bool IsFollowing;
     public float AttentionRange = 1f, PickupRange = 0.2f ,PickupSpeed = 0.5f;
     public GameObject Player;
-    public int WeaponID;
-    public string WeaponName;
-    public string[] WeaponNameArray = { "Copper shortsword", "Tin shortsword", "Iron shortsword", "Spear", "Amethyst staff", "Topaz staff", "Sapphire staff", "Amber staff", "Lead shortsword", "Silver shortsword", "Tungsten shortsword", "Iron broadsword", "Lead broadsword", "Silver broadsword", "Tungsten broadsword", "Emerald staff", "Ruby staff", "Crimson shortsword", "Gold shortsword", "Crimson broadsword", "Gold broadsword", "Trident", "Glaive", "Platinum shortsword", "Katana", "Platinum broadsword", "Diamond staff", "Last prism", "Star Wrath", "Phantasm", "Meowmere", "Celebration MK.2", "Solar Eruption", "Holy Water", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test" };
+    public PlayerGeneral.Weapon CurrentWeapon;
 
-    void Start()
+    public void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         GetComponentInChildren<Canvas>().worldCamera = FindObjectOfType<Camera>();
-        WeaponName = WeaponNameArray[WeaponID];
-        GetComponentInChildren<Text>().text = WeaponName;
+        Debug.Log(CurrentWeapon.WeaponName);
+        GetComponentInChildren<Text>().text = CurrentWeapon.WeaponName;
+        //GetComponentInChildren<Canvas>().GetComponentInChildren<Text>().text = CurrentWeapon.WeaponName;
     }
 
     void Update()
@@ -27,7 +26,7 @@ public class LootGeneral : MonoBehaviour
         if (DistToPlayer <= AttentionRange) IsFollowing = true;
         if (DistToPlayer <= PickupRange)
         {
-            Player.GetComponent<PlayerGeneral>().AppendInventory(1, WeaponID, WeaponNameArray[WeaponID]);
+            Player.GetComponent<PlayerGeneral>().AppendInventory(1, CurrentWeapon);
             Destroy(gameObject);
         }
         
