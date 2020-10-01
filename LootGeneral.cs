@@ -10,13 +10,16 @@ public class LootGeneral : MonoBehaviour
     public GameObject Player;
     public PlayerGeneral.Weapon CurrentWeapon;
 
-    public void Awake()
+    void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         GetComponentInChildren<Canvas>().worldCamera = FindObjectOfType<Camera>();
-        Debug.Log(CurrentWeapon.WeaponName);
+    }
+
+    public void SetWeapon(PlayerGeneral.Weapon SelectedWeapon)
+    {
+        CurrentWeapon = SelectedWeapon;
         GetComponentInChildren<Text>().text = CurrentWeapon.WeaponName;
-        //GetComponentInChildren<Canvas>().GetComponentInChildren<Text>().text = CurrentWeapon.WeaponName;
     }
 
     void Update()
