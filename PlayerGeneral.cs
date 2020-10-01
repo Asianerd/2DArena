@@ -31,8 +31,8 @@ public class PlayerGeneral : MonoBehaviour
     public float HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
     public List<Weapon> InventoryWeapon = new List<Weapon>();
-    public List<ArrayList> InventoryLoot;
-    public List<string> InventoryLootName;
+    public List<ArrayList> InventoryLoot = new List<ArrayList>();
+    public List<string> InventoryLootName = new List<string>();
     public Weapon EquippedWeapon;
 
     public List<Weapon> GlobalWeaponList = new List<Weapon>();
