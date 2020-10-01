@@ -30,7 +30,7 @@ public class PlayerGeneral : MonoBehaviour
     //HP
     public float HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
-    public List<Weapon> InventoryWeapon;
+    public List<Weapon> InventoryWeapon = new List<Weapon>();
     public List<ArrayList> InventoryLoot;
     public List<string> InventoryLootName;
     public Weapon EquippedWeapon;
@@ -72,7 +72,7 @@ public class PlayerGeneral : MonoBehaviour
         HP -= losthealth;
     }
     
-    public void Attack()
+    void Attack()
     {
         float DamageInflicted = Random.Range(CurrentWeapon.DamageMin, CurrentWeapon.DamageMax);
         EnemyArray = GameObject.FindGameObjectsWithTag("Enemy");
@@ -88,7 +88,7 @@ public class PlayerGeneral : MonoBehaviour
         }
         
     }
-    public void AppendInventory(int WeaponType,Weapon WantedWeapon)
+    public void AppendInventory(int WeaponType, Weapon WantedWeapon)
     {
         InvCanvas.GetComponent<InventoryWeapon>().AddWeapon(WantedWeapon);
         InventoryWeapon.Add(WantedWeapon);
