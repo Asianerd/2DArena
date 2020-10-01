@@ -15,4 +15,9 @@ public class InventoryWeaponButtonGeneral : MonoBehaviour
         Player = GameObject.FindGameObjectWithTag("Player");
         Player.GetComponent<PlayerGeneral>().CurrentWeapon = Weapon;
     }
+
+    public void SetWeapon(PlayerGeneral.Weapon SelectedWeapon)
+    {
+        Weapon = SelectedWeapon;
+    }
 }
