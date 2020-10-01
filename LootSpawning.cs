@@ -24,7 +24,7 @@ public class LootSpawning : MonoBehaviour
     public void SpawnWeaponLoot(float XPos,float YPos,PlayerGeneral.Weapon SelectedWeapon,int SelectedWeaponID)
     {
         WeaponLoot.GetComponent<SpriteRenderer>().sprite = WeaponSpriteList[SelectedWeaponID];
-        WeaponLoot.GetComponent<LootGeneral>().CurrentWeapon = SelectedWeapon;
-        Instantiate(WeaponLoot,new Vector2(XPos,YPos),Quaternion.identity);
+        GameObject obj = Instantiate(WeaponLoot,new Vector2(XPos,YPos),Quaternion.identity);
+        obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon);
     }
 }
