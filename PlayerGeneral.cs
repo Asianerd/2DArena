@@ -37,18 +37,25 @@ public class PlayerGeneral : MonoBehaviour
 
     public List<Weapon> GlobalWeaponList = new List<Weapon>();
 
-    public void Awake()
+    void Awake()
     {
         string[] WeaponNameArray = { "Copper shortsword", "Tin shortsword", "Iron shortsword", "Spear", "Amethyst staff", "Topaz staff", "Sapphire staff", "Amber staff", "Lead shortsword", "Silver shortsword", "Tungsten shortsword", "Iron broadsword", "Lead broadsword", "Silver broadsword", "Tungsten broadsword", "Emerald staff", "Ruby staff", "Crimson shortsword", "Gold shortsword", "Crimson broadsword", "Gold broadsword", "Trident", "Glaive", "Platinum shortsword", "Katana", "Platinum broadsword", "Diamond staff", "Last prism", "Star Wrath", "Phantasm", "Meowmere", "Celebration MK.2", "Solar Eruption", "Holy Water", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test" };
         ItemList = GameObject.FindGameObjectWithTag("InventoryWeaponItemList");
         RuntimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
+        /*
         for (int i = 0; i < 56; i++)
         {
             GlobalWeaponList.Add(new Weapon(WeaponNameArray[i], 10f, 10f,10f,10f,10));
         }
-        foreach (Weapon x in GlobalWeaponList)
+        */
+        Addw("Copper shortsword", 3f, 5f, 1f, 2f, 200);
+        Addw("Tin shortsword", 3f, 5f, 1f, 2f, 150);
+        Addw("Iron shortsword", 3f, 6f, 1f, 2f, 230);
+        Addw("Spear",4f,7f,3f,5f,400);
+        Addw("Amethyst staff",7f,10f,0.5f,5f,600);
+        void Addw(string Name,float dmgmin,float dmgmax, float wpnknock, float wpnrange, int cooldown)
         {
-            Debug.Log(x.WeaponName);
+            GlobalWeaponList.Add(new Weapon(Name,dmgmin,dmgmax,wpnknock,wpnrange,cooldown));
         }
     }
 
