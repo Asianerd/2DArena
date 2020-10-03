@@ -21,13 +21,18 @@ public class EnemyGeneral : MonoBehaviour
         if (HP <= 0)
         {
             int SpawnedWeaponID = UnityEngine.Random.Range(0, Player.GetComponent<PlayerGeneral>().GlobalWeaponList.Count);
-            runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, Player.GetComponent<PlayerGeneral>().GlobalWeaponList[SpawnedWeaponID],SpawnedWeaponID);
+            runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, WeaponData.GlobalWeaponList[SpawnedWeaponID],SpawnedWeaponID);
             Destroy(gameObject);
         }
     }
-    public void MinusHealth(double LostHealth)
+    public void MinusHealth(double LostHealth,float Knockback,Vector2 DamageSource)
     {
+        Knockback /= 10;
+        double angle = Math.Atan2(transform.position.y - DamageSource.y, transform.position.x - DamageSource.x);
         HP -= LostHealth;
+        float targetx = Convert.ToSingle((Math.Cos(angle) * Knockback) + transform.position.x);
+        float targety = Convert.ToSingle((Math.Sin(angle) * Knockback) + transform.position.y);
+        transform.position = Vector2.MoveTowards(transform.position, new Vector2(targetx, targety), Knockback);
     }
     public float DistanceEnemy(float SourceX, float SourceY)
     {
