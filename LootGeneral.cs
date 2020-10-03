@@ -8,7 +8,7 @@ public class LootGeneral : MonoBehaviour
     public bool IsFollowing;
     public float AttentionRange = 1f, PickupRange = 0.2f ,PickupSpeed = 0.5f;
     public GameObject Player;
-    public PlayerGeneral.Weapon CurrentWeapon;
+    public WeaponData.Weapon CurrentWeapon;
 
     void Start()
     {
@@ -16,7 +16,7 @@ public class LootGeneral : MonoBehaviour
         GetComponentInChildren<Canvas>().worldCamera = FindObjectOfType<Camera>();
     }
 
-    public void SetWeapon(PlayerGeneral.Weapon SelectedWeapon)
+    public void SetWeapon(WeaponData.Weapon SelectedWeapon)
     {
         CurrentWeapon = SelectedWeapon;
         GetComponentInChildren<Text>().text = CurrentWeapon.WeaponName;

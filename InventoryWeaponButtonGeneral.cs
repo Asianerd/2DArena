@@ -8,7 +8,7 @@ public class InventoryWeaponButtonGeneral : MonoBehaviour
 {
     public GameObject Player;
     public GameObject Parent;
-    public PlayerGeneral.Weapon Weapon;
+    public WeaponData.Weapon Weapon;
 
     public void SetEquippedWeapon()
     {
@@ -16,7 +16,7 @@ public class InventoryWeaponButtonGeneral : MonoBehaviour
         Player.GetComponent<PlayerGeneral>().CurrentWeapon = Weapon;
     }
 
-    public void SetWeapon(PlayerGeneral.Weapon SelectedWeapon)
+    public void SetWeapon(WeaponData.Weapon SelectedWeapon)
     {
         Weapon = SelectedWeapon;
     }

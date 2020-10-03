@@ -16,7 +16,7 @@ public class InventoryWeapon : MonoBehaviour
     }
 
 
-    public void AddWeapon(PlayerGeneral.Weapon SelectedWeapon)
+    public void AddWeapon(WeaponData.Weapon SelectedWeapon)
     {
         ButtonPrefab.GetComponentInChildren<Text>().text = SelectedWeapon.WeaponName;
         var obj = Instantiate(ButtonPrefab, ItemList.transform);
