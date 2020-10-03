@@ -11,60 +11,22 @@ public class PlayerGeneral : MonoBehaviour
     public GameObject RuntimeScript;
     public GameObject DamageBubblePrefab;
 
-    public class Weapon
-    {
-        public string WeaponName;
-        public float DamageMin, DamageMax, WeaponRange, Knockback;
-        public int WeaponCooldown;
-        public Weapon(string name, float DmgRangeMin, float DmgRangeMax,float WpnKnockback, float WpnRange, int WpnCooldown)
-        {
-            WeaponName = name;
-            DamageMin = DmgRangeMin;
-            DamageMax = DmgRangeMax;
-            Knockback = WpnKnockback;
-            WeaponRange = WpnRange;
-            WeaponCooldown = WpnCooldown;
-        }
-    }
+    
 
     //HP
     public float HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
-    public List<Weapon> InventoryWeapon = new List<Weapon>();
+    public List<WeaponData.Weapon> InventoryWeapon = new List<WeaponData.Weapon>();
     public List<ArrayList> InventoryLoot = new List<ArrayList>();
     public List<string> InventoryLootName = new List<string>();
-    public Weapon EquippedWeapon;
-
-    public List<Weapon> GlobalWeaponList = new List<Weapon>();
-
-    void Awake()
-    {
-        string[] WeaponNameArray = { "Copper shortsword", "Tin shortsword", "Iron shortsword", "Spear", "Amethyst staff", "Topaz staff", "Sapphire staff", "Amber staff", "Lead shortsword", "Silver shortsword", "Tungsten shortsword", "Iron broadsword", "Lead broadsword", "Silver broadsword", "Tungsten broadsword", "Emerald staff", "Ruby staff", "Crimson shortsword", "Gold shortsword", "Crimson broadsword", "Gold broadsword", "Trident", "Glaive", "Platinum shortsword", "Katana", "Platinum broadsword", "Diamond staff", "Last prism", "Star Wrath", "Phantasm", "Meowmere", "Celebration MK.2", "Solar Eruption", "Holy Water", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test" };
-        ItemList = GameObject.FindGameObjectWithTag("InventoryWeaponItemList");
-        RuntimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
-        /*
-        for (int i = 0; i < 56; i++)
-        {
-            GlobalWeaponList.Add(new Weapon(WeaponNameArray[i], 10f, 10f,10f,10f,10));
-        }
-        */
-        Addw("Copper shortsword", 3f, 5f, 1f, 2f, 200);
-        Addw("Tin shortsword", 3f, 5f, 1f, 2f, 150);
-        Addw("Iron shortsword", 3f, 6f, 1f, 2f, 230);
-        Addw("Spear",4f,7f,3f,5f,400);
-        Addw("Amethyst staff",7f,10f,0.5f,5f,600);
-        void Addw(string Name,float dmgmin,float dmgmax, float wpnknock, float wpnrange, int cooldown)
-        {
-            GlobalWeaponList.Add(new Weapon(Name,dmgmin,dmgmax,wpnknock,wpnrange,cooldown));
-        }
-    }
-
+    public WeaponData.Weapon EquippedWeapon;
+    public List<WeaponData.Weapon> GlobalWeaponList = new List<WeaponData.Weapon>();
 
     // ATK
     public GameObject[] EnemyArray;
     public float AttackRange = 1f;
     public float PlayerDamage = 3f;
-    public Weapon CurrentWeapon = new Weapon("Fists", 2, 3, 5, 2, 50);
+    public WeaponData.Weapon CurrentWeapon = new WeaponData.Weapon("Fists", 2, 3, 5, 2, 50,0,false,0,0);
 
     void Update()
     {
@@ -89,13 +51,13 @@ public class PlayerGeneral : MonoBehaviour
             if ((i.GetComponent<EnemyGeneral>().DistanceEnemy(transform.position.x, transform.position.y) < AttackRange) && (Input.GetMouseButtonDown(0)))
             {
                 DamageBubblePrefab.GetComponent<FXDamageBubbleGeneral>().Damage = DamageInflicted;
-                i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage + DamageInflicted);
+                i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage+DamageInflicted,CurrentWeapon.Knockback,transform.position);
                 Instantiate(DamageBubblePrefab, EnemyPosition,Quaternion.identity);
             }
         }
         
     }
-    public void AppendInventory(int WeaponType, Weapon WantedWeapon)
+    public void AppendInventory(int WeaponType, WeaponData.Weapon WantedWeapon)
     {
         InvCanvas.GetComponent<InventoryWeapon>().AddWeapon(WantedWeapon);
         InventoryWeapon.Add(WantedWeapon);
