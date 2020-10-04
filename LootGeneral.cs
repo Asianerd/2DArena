@@ -29,9 +29,8 @@ public class LootGeneral : MonoBehaviour
         if (DistToPlayer <= AttentionRange) IsFollowing = true;
         if (DistToPlayer <= PickupRange)
         {
-            Player.GetComponent<PlayerGeneral>().AppendInventory(1, CurrentWeapon);
+            Player.GetComponent<PlayerGeneral>().AppendInventory(CurrentWeapon);
             Destroy(gameObject);
         }
-        
     }
 }

@@ -10,7 +10,7 @@ public class EnemyGeneral : MonoBehaviour
     public GameObject runtime;
     public GameObject Player;
 
-    public void Awake()
+    void Awake()
     {
         runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -20,14 +20,13 @@ public class EnemyGeneral : MonoBehaviour
     {
         if (HP <= 0)
         {
-            int SpawnedWeaponID = UnityEngine.Random.Range(0, Player.GetComponent<PlayerGeneral>().GlobalWeaponList.Count);
+            int SpawnedWeaponID = UnityEngine.Random.Range(0, WeaponData.GlobalWeaponList.Count);
             runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position.x, transform.position.y, WeaponData.GlobalWeaponList[SpawnedWeaponID],SpawnedWeaponID);
             Destroy(gameObject);
         }
     }
     public void MinusHealth(double LostHealth,float Knockback,Vector2 DamageSource)
     {
-        Knockback /= 10;
         double angle = Math.Atan2(transform.position.y - DamageSource.y, transform.position.x - DamageSource.x);
         HP -= LostHealth;
         float targetx = Convert.ToSingle((Math.Cos(angle) * Knockback) + transform.position.x);
