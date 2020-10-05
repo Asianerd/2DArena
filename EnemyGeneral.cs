@@ -9,6 +9,8 @@ public class EnemyGeneral : MonoBehaviour
     public float EnemyDist;
     public GameObject runtime;
     public GameObject Player;
+    public GameObject DamageBubblePrefab;
+
 
     void Awake()
     {
@@ -32,6 +34,7 @@ public class EnemyGeneral : MonoBehaviour
         float targetx = Convert.ToSingle((Math.Cos(angle) * Knockback) + transform.position.x);
         float targety = Convert.ToSingle((Math.Sin(angle) * Knockback) + transform.position.y);
         transform.position = Vector2.MoveTowards(transform.position, new Vector2(targetx, targety), Knockback);
+        Instantiate(DamageBubblePrefab, transform.position, Quaternion.identity).GetComponent<FXDamageBubbleGeneral>().Damage = Convert.ToSingle(LostHealth);
     }
     public float DistanceEnemy(float SourceX, float SourceY)
     {
