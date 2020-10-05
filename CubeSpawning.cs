@@ -25,7 +25,7 @@ public class CubeSpawning : MonoBehaviour
     {
         if (!RuntimeScript.GetComponent<InventoryShow>().GamePaused)
         {
-            if (i == 1)
+            if ((i == 1) | (Input.GetKeyDown(KeyCode.E)))
             {
                 Instantiate(EnemyTemplate, new Vector2(Random.Range(RandXMin, RandXMax), Random.Range(RandYMin, RandYMax)), Quaternion.identity);
             }
