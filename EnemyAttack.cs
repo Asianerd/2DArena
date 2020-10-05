@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class EnemyAttack : MonoBehaviour
 {
-    public GameObject player; //Fetched in Start()
-    public GameObject cam; //Fetched in Start()
+    public GameObject player;
+    public GameObject cam;
     public GameObject RuntimeScript;
 
     public float AttackRange = 3;
@@ -22,14 +22,13 @@ public class EnemyAttack : MonoBehaviour
     }
 
 
-    // Update is called once per frame
     void Update()
     {
         if (!RuntimeScript.GetComponent<InventoryShow>().GamePaused)
         {
             if (AttackTime == 0)
             {
-                if (Vector2.Distance(player.transform.position, transform.position) < (AttackRange * Time.deltaTime))
+                if (Vector2.Distance(player.transform.position, transform.position) < (AttackRange))
                 {
                     Damage = Random.Range(DamageMin, DamageMax);
                     player.GetComponent<PlayerGeneral>().MinusHealth(Damage);
