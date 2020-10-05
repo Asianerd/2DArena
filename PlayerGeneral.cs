@@ -33,12 +33,18 @@ public class PlayerGeneral : MonoBehaviour
     public GameObject[] EnemyArray;
     public float PlayerDamage = 3f;
 
-    public WeaponData.Weapon CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 10, 0, 0, 0, 5);
+    public WeaponData.Weapon CurrentWeapon;
 
     public int WeaponCooldown = 0;
 
+    public void ResetCurrentWeapon()
+    {
+        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 10, 0, 0, 0, 5);
+    }
+
     void Awake()
     {
+        ResetCurrentWeapon();
         PlayerCamera = FindObjectOfType<Camera>();
     }
 
@@ -61,7 +67,7 @@ public class PlayerGeneral : MonoBehaviour
 
     void Attack()
     {
-        if ((WeaponCooldown == 0) && Input.GetMouseButtonDown(0))
+        if ((WeaponCooldown == 0) && Input.GetMouseButton(0))
         {
             WeaponCooldown = CurrentWeapon.WeaponCooldown;
             switch (CurrentWeapon.Category)
@@ -105,24 +111,26 @@ public class PlayerGeneral : MonoBehaviour
             {
                 i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage + DamageInflicted, CurrentWeapon.Knockback, transform.position);
 
-                GameObject obj = Instantiate(DamageBubblePrefab, EnemyPosition, Quaternion.identity);
-                obj.GetComponent<FXDamageBubbleGeneral>().Damage = DamageInflicted;
+                //Instantiate(DamageBubblePrefab, EnemyPosition, Quaternion.identity).GetComponent<FXDamageBubbleGeneral>().Damage = DamageInflicted;
+                //obj.GetComponent<FXDamageBubbleGeneral>().Damage = DamageInflicted;
                 WeaponCooldown = CurrentWeapon.WeaponCooldown;
             }
         }
     }
     void RangeAttack()
     {
-        GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
-        //Debug.Log($"{Convert.ToSingle(Math.Atan2(Input.mousePosition.y-transform.position.y, Input.mousePosition.x-transform.position.x ))}   ::   {(Convert.ToSingle(Math.Atan2(Input.mousePosition.y-transform.position.y, Input.mousePosition.x-transform.position.x)))}");
+        float length = 1.4f;
         Vector3 MousePos = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
-        double angle = Math.Atan2(MousePos.y-transform.position.y,MousePos.x-transform.position.x);
-        obj.GetComponent<GenericRangeProjectile>().Set(angle, CurrentWeapon.SpawnedProjectileSpeed, CurrentWeapon.ProjectileShelfLife);
+        double angle = Math.Atan2(MousePos.y - transform.position.y, MousePos.x - transform.position.x);
+        GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Math.Cos(angle)*length)+transform.position.x), Convert.ToSingle((Math.Sin(angle)*length)+transform.position.y)), Quaternion.identity);
+        obj.GetComponent<GenericRangeProjectile>().Set(angle, CurrentWeapon.SpawnedProjectileSpeed, CurrentWeapon.ProjectileShelfLife,CurrentWeapon);
     }
     void ProjectileAttack()
     {
         Instantiate(CurrentWeapon.Projectile);
     }
+
+
 
     public void AppendInventory(WeaponData.Weapon WantedWeapon)
     {
