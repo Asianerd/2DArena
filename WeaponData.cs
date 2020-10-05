@@ -205,6 +205,7 @@ public class WeaponData : MonoBehaviour
         m("Iron shortsword", 5, 6, 2, 100, 0, 0, 0, 5);
 
         r("Bow", 5, 10, 1, 1, 1, 1, 0, 500, GenericRangeProjectile, 1);
+        r("Darts", 50, 100, 0, 0, 0, 1, 0, 500, GenericRangeProjectile, 5);
         Debug.Log(GlobalWeaponList[3].WeaponName);
 
     }
