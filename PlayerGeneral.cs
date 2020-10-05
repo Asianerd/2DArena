@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
@@ -13,6 +14,8 @@ public class PlayerGeneral : MonoBehaviour
     public Canvas InvCanvas;
     public GameObject RuntimeScript;
     public GameObject DamageBubblePrefab;
+
+    public Camera PlayerCamera;
 
 
 
@@ -34,11 +37,16 @@ public class PlayerGeneral : MonoBehaviour
 
     public int WeaponCooldown = 0;
 
+    void Awake()
+    {
+        PlayerCamera = FindObjectOfType<Camera>();
+    }
+
     void Update()
     {
 
-        //double angle = Math.Atan2()
-
+        //double angle = Math.Atan2(Input.mousePosition.y-transform.position.y, Input.mousePosition.x-transform.position.x);
+        //Vector3 mousecoords = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
 
         if (!RuntimeScript.GetComponent<InventoryShow>().GamePaused)
         {
@@ -107,9 +115,8 @@ public class PlayerGeneral : MonoBehaviour
     {
         GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
         //Debug.Log($"{Convert.ToSingle(Math.Atan2(Input.mousePosition.y-transform.position.y, Input.mousePosition.x-transform.position.x ))}   ::   {(Convert.ToSingle(Math.Atan2(Input.mousePosition.y-transform.position.y, Input.mousePosition.x-transform.position.x)))}");
-        double angle = Math.Atan2(Input.mousePosition.y-transform.position.y,Input.mousePosition.x-transform.position.x);
-
-        Debug.Log(angle);
+        Vector3 MousePos = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
+        double angle = Math.Atan2(MousePos.y-transform.position.y,MousePos.x-transform.position.x);
         obj.GetComponent<GenericRangeProjectile>().Set(angle, CurrentWeapon.SpawnedProjectileSpeed, CurrentWeapon.ProjectileShelfLife);
     }
     void ProjectileAttack()
