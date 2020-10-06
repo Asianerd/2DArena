@@ -38,7 +38,7 @@ public class GenericRangeProjectile : MonoBehaviour
         if (ShelfLife > 0)
         {
             ShelfLife--;
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2(Convert.ToSingle(TargetX),Convert.ToSingle(TargetY)),Speed/10);
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(Convert.ToSingle(TargetX),Convert.ToSingle(TargetY)),Speed);
         }
         else
         {
