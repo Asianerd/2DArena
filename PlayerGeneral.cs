@@ -16,8 +16,10 @@ public class PlayerGeneral : MonoBehaviour
     public GameObject DamageBubblePrefab;
 
     public Camera PlayerCamera;
+    public static Vector3 MousePosition;
+    public static Vector2 PlayerPosition;
 
-
+    public GameObject WeaponObjectPrefab;
 
 
 
@@ -39,7 +41,7 @@ public class PlayerGeneral : MonoBehaviour
 
     public void ResetCurrentWeapon()
     {
-        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 10, 0, 0, 0, 5);
+        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 20, 0, 0, 0,0,5,0.05f);
     }
 
     void Awake()
@@ -50,6 +52,10 @@ public class PlayerGeneral : MonoBehaviour
 
     void Update()
     {
+
+        MousePosition = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
+
+        PlayerPosition = new Vector2(transform.position.x, transform.position.y);
 
         //double angle = Math.Atan2(Input.mousePosition.y-transform.position.y, Input.mousePosition.x-transform.position.x);
         //Vector3 mousecoords = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -102,6 +108,10 @@ public class PlayerGeneral : MonoBehaviour
 
     void MeleeAttack()
     {
+        GameObject obj = Instantiate(WeaponObjectPrefab, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
+        obj.GetComponent<WeaponObject>().Set(CurrentWeapon);
+
+        /*
         float DamageInflicted = UnityEngine.Random.Range(CurrentWeapon.DamageMin, CurrentWeapon.DamageMax);
         EnemyArray = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject i in EnemyArray)
@@ -116,6 +126,7 @@ public class PlayerGeneral : MonoBehaviour
                 WeaponCooldown = CurrentWeapon.WeaponCooldown;
             }
         }
+        */
     }
     void RangeAttack()
     {
