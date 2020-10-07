@@ -23,7 +23,7 @@ public class CubeSpawning : MonoBehaviour
 
     void Update()
     {
-        if (!RuntimeScript.GetComponent<InventoryShow>().GamePaused)
+        if (!InventoryShow.GamePaused)
         {
             if ((i == 0) | (Input.GetKeyDown(KeyCode.E)))
             {

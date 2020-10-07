@@ -57,10 +57,12 @@ public class PlayerGeneral : MonoBehaviour
 
         PlayerPosition = new Vector2(transform.position.x, transform.position.y);
 
+        WeaponObjectPrefab.GetComponent<SpriteRenderer>().sprite = RuntimeScript.GetComponent<WeaponData>().WeaponSpriteList[CurrentWeapon.WeaponID];
+
         //double angle = Math.Atan2(Input.mousePosition.y-transform.position.y, Input.mousePosition.x-transform.position.x);
         //Vector3 mousecoords = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
 
-        if (!RuntimeScript.GetComponent<InventoryShow>().GamePaused)
+        if (!InventoryShow.GamePaused)
         {
             Regen();
             Attack();
