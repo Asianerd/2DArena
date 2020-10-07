@@ -5,6 +5,7 @@ public class WeaponData : MonoBehaviour
 {
     public List<GameObject> RangeProjectilePrefabList;
     public List<GameObject> ProjectilePrefabList;
+    public List<Sprite> WeaponSpriteList;
 
     public GameObject GenericRangeProjectile;
     public GameObject GenericProjectile;
@@ -196,19 +197,19 @@ public class WeaponData : MonoBehaviour
         }
         void r(string Name, float dmgmin,float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid,int shelflife, GameObject projectile,float speed, int maxdurability = -10, int fx =0,int mana=0)
         {
-            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, shelflife, weaponid, projectile, speed, maxdurability, fx, mana));
+            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, speed, maxdurability, fx, mana));
         }
         void p(string Name, float dmgmin,float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid,int shelflife, GameObject projectile,float speed, int amount,int maxdurability = -10, int fx = 0,int mana=0)
         {
-            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, shelflife, weaponid, projectile, amount, speed, maxdurability, fx, mana));
+            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, amount, speed, maxdurability, fx, mana));
         }
         //Name Min Max Knck Cool Rare Cate Type Sprite
         m("Aluminium shortsword", 2, 3, 4f, 100, 0, 0, 0, 1, 1.5f, 0.05f, 60);
         m("Silicon shortsword", 3, 4, 2f, 100, 0, 0, 0, 2, 10, 0.05f);
         m("Iron shortsword", 5, 6, 2, 100, 0, 0, 0, 3, 5, 0.05f);
 
-        r("Bow", 5, 10, 1, 1, 1, 1, 0, 4, 500, GenericRangeProjectile, 0.1f);
-        r("Darts", 50, 100, 0, 0, 0, 1, 0, 5, 500, GenericRangeProjectile, 0.5f);
+        r("Bow",    5,      10,     1, 1, 1, 1, 0, 4, 500, GenericRangeProjectile, 0.1f);
+        r("Darts",  50,     100,    0, 0, 0, 1, 0, 5, 500, GenericRangeProjectile, 0.5f);
 
     }
 
