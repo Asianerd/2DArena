@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InventoryShow : MonoBehaviour
 {
-    public bool GamePaused = false;
+    public static bool GamePaused = false;
     public GameObject InventoryUI;
     private void Start()
     {
