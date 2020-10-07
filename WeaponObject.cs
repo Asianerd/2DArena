@@ -14,16 +14,28 @@ public class WeaponObject : MonoBehaviour
 
     void Update()
     {
-        transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z - IncrementAngle);
-        CurrentCooldown++;
-        if(CurrentCooldown>=Weapon.WeaponCooldown) Destroy(gameObject);
+        if (!InventoryShow.GamePaused)
+        {
+            transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z - IncrementAngle);
+            CurrentCooldown++;
+            if (CurrentCooldown >= Weapon.WeaponCooldown) Destroy(gameObject);
 
-        transform.position = new Vector2(PlayerGeneral.PlayerPosition.x+0.5f,PlayerGeneral.PlayerPosition.y+0.5f);
+            transform.position = new Vector2(PlayerGeneral.PlayerPosition.x + 0.5f, PlayerGeneral.PlayerPosition.y + 0.5f);
+        }
     }
 
-    private void Start()
+    void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
+    }
+
+    private void OnTriggerEnter2D(Collider2D Collision)
+    {
+        if(Collision.CompareTag("Enemy") && !InventoryShow.GamePaused)
+        {
+            double DamageInflicted = UnityEngine.Random.Range(Weapon.DamageMin, Weapon.DamageMax);
+            Collision.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted,Weapon.Knockback,PlayerGeneral.PlayerPosition);
+        }
     }
 
     public void Set(WeaponData.Weapon weapon)
