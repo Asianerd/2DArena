@@ -16,10 +16,11 @@ public class LootGeneral : MonoBehaviour
         GetComponentInChildren<Canvas>().worldCamera = FindObjectOfType<Camera>();
     }
 
-    public void SetWeapon(WeaponData.Weapon SelectedWeapon)
+    public void SetWeapon(WeaponData.Weapon SelectedWeapon,Sprite SelectedSprite)
     {
         CurrentWeapon = SelectedWeapon;
         GetComponentInChildren<Text>().text = CurrentWeapon.WeaponName;
+        GetComponentInChildren<SpriteRenderer>().sprite = SelectedSprite;
     }
 
     void Update()
