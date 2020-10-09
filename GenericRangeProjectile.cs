@@ -6,20 +6,26 @@ using UnityEngine;
 
 public class GenericRangeProjectile : MonoBehaviour
 {
-    public WeaponData.Weapon ProjectileWeapon;
-    public double DirectionAngle;
-    public float Speed;
-    public int ShelfLife;
-    public double TargetX,TargetY;
+    WeaponData.Weapon ProjectileWeapon;
+    double DirectionAngle;
+    float Speed;
+    int ShelfLife;
+    double TargetX,TargetY;
+    public GameObject Runtime;
 
-    public void Set(double angle,float speed,int shelflife,WeaponData.Weapon weapon)
+
+    public void Set(double angle,WeaponData.Weapon weapon)
     {
         DirectionAngle = angle;
-        Speed = speed;
-        ShelfLife = shelflife;
-        TargetX = Math.Cos(DirectionAngle) * 100;
-        TargetY = Math.Sin(DirectionAngle) * 100;
+        Speed = weapon.ProjectileSpeed;
+        ShelfLife = weapon.ShelfLife;
+        TargetX = Math.Cos(DirectionAngle) * 10000;
+        TargetY = Math.Sin(DirectionAngle) * 10000;
         ProjectileWeapon = weapon;
+        Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
+        GetComponentInChildren<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().RangeWeaponProjectileList[weapon.ProjectileSpriteID];
+        
+        //GameObject.FindGameObjectWithTag("RuntimeScript").GetComponent<WeaponData>().RangeWeaponProjectileList[SpriteID];
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -35,14 +41,17 @@ public class GenericRangeProjectile : MonoBehaviour
 
     void Update()
     {
-        if (ShelfLife > 0)
+        if (!InventoryShow.GamePaused)
         {
-            ShelfLife--;
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2(Convert.ToSingle(TargetX),Convert.ToSingle(TargetY)),Speed);
-        }
-        else
-        {
-            Destroy(gameObject);
+            if (ShelfLife > 0)
+            {
+                ShelfLife--;
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(Convert.ToSingle(TargetX), Convert.ToSingle(TargetY)), Speed);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
