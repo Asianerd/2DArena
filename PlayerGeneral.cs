@@ -17,9 +17,11 @@ public class PlayerGeneral : MonoBehaviour
 
     public Camera PlayerCamera;
     public static Vector3 MousePosition;
+    public static float MouseAngle;
     public static Vector2 PlayerPosition;
 
-    public GameObject WeaponObjectPrefab;
+    public GameObject WpnObject;
+    public float CosmeticWeaponDistance = 0.5f;
 
 
 
@@ -36,12 +38,13 @@ public class PlayerGeneral : MonoBehaviour
     public float PlayerDamage = 3f;
 
     public WeaponData.Weapon CurrentWeapon;
+    public static WeaponData.Weapon CurrentWeaponReference;
 
     public int WeaponCooldown = 0;
 
     public void ResetCurrentWeapon()
     {
-        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 20, 0, 0, 0,0,5,0.05f);
+        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 100, 0, 0, 0, 0, 5, 0.05f);
     }
 
     void Awake()
@@ -55,17 +58,19 @@ public class PlayerGeneral : MonoBehaviour
 
         MousePosition = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
 
+        MouseAngle = Mathf.Atan2(MousePosition.y - transform.position.y, MousePosition.x - transform.position.x);
+
         PlayerPosition = new Vector2(transform.position.x, transform.position.y);
 
-        WeaponObjectPrefab.GetComponent<SpriteRenderer>().sprite = RuntimeScript.GetComponent<WeaponData>().WeaponSpriteList[CurrentWeapon.WeaponID];
+        WpnObject.GetComponent<SpriteRenderer>().sprite = RuntimeScript.GetComponent<WeaponData>().WeaponSpriteList[CurrentWeapon.WeaponID];
 
-        //double angle = Math.Atan2(Input.mousePosition.y-transform.position.y, Input.mousePosition.x-transform.position.x);
-        //Vector3 mousecoords = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
+        CurrentWeaponReference = CurrentWeapon;
 
         if (!InventoryShow.GamePaused)
         {
             Regen();
             Attack();
+            ShowWeapon();
         }
     }
     public void MinusHealth(float losthealth)
@@ -109,41 +114,31 @@ public class PlayerGeneral : MonoBehaviour
     }
 
     void MeleeAttack()
-    {
-        GameObject obj = Instantiate(WeaponObjectPrefab, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
-        obj.GetComponent<WeaponObject>().Set(CurrentWeapon);
-
-        /*
-        float DamageInflicted = UnityEngine.Random.Range(CurrentWeapon.DamageMin, CurrentWeapon.DamageMax);
-        EnemyArray = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject i in EnemyArray)
-        {
-            Vector2 EnemyPosition = new Vector2(i.transform.position.x, i.transform.position.y);
-            if (i.GetComponent<EnemyGeneral>().DistanceEnemy(transform.position.x, transform.position.y) <= CurrentWeapon.AttackRange)
-            {
-                i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage + DamageInflicted, CurrentWeapon.Knockback, transform.position);
-
-                //Instantiate(DamageBubblePrefab, EnemyPosition, Quaternion.identity).GetComponent<FXDamageBubbleGeneral>().Damage = DamageInflicted;
-                //obj.GetComponent<FXDamageBubbleGeneral>().Damage = DamageInflicted;
-                WeaponCooldown = CurrentWeapon.WeaponCooldown;
-            }
-        }
-        */
+    {        
+        WpnObject.GetComponent<WeaponObject>().Swing();
     }
     void RangeAttack()
     {
         float length = 1.4f;
-        Vector3 MousePos = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
-        double angle = Math.Atan2(MousePos.y - transform.position.y, MousePos.x - transform.position.x);
-        GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Math.Cos(angle)*length)+transform.position.x), Convert.ToSingle((Math.Sin(angle)*length)+transform.position.y)), Quaternion.identity);
-        obj.GetComponent<GenericRangeProjectile>().Set(angle, CurrentWeapon.SpawnedProjectileSpeed, CurrentWeapon.ProjectileShelfLife,CurrentWeapon);
+        GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity);
+        obj.GetComponent<GenericRangeProjectile>().Set(MouseAngle,CurrentWeapon);
     }
     void ProjectileAttack()
     {
         Instantiate(CurrentWeapon.Projectile);
     }
 
+    void ShowWeapon()
+    {
+        if (!WeaponObject.IsSwinging)
+        {
+            WpnObject.transform.position = new Vector2(transform.position.x + Mathf.Cos(MouseAngle) * CosmeticWeaponDistance, transform.position.y + Mathf.Sin(MouseAngle) * CosmeticWeaponDistance);
+            WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        }
 
+        //Dont create something new; use WeaponObject instead
+        //Somehow implement it so that its not a Prefab
+    }
 
     public void AppendInventory(WeaponData.Weapon WantedWeapon)
     {
