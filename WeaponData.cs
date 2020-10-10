@@ -89,6 +89,8 @@ public class WeaponData : MonoBehaviour
         public GameObject Projectile;
         public int Used;
         public int Amount;
+        public bool ProjectileSpin;
+        public float ProjectileSpinSpeed;
         // Range & Projectile
         public int ShelfLife;
         public float ProjectileSpeed;
@@ -162,7 +164,7 @@ public class WeaponData : MonoBehaviour
         // Projectile
         public Weapon(string name, float DmgMin,float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnCategory, int WpnType, int WpnID,
             int WpnShelfLife, GameObject WpnProjectile, int WpnAmount, float WpnProjectileSpeed, int WpnProjectileSpriteID
-            , int WpnMaxDurability = -10, int WpnEffect = 0,int WpnMana=0)
+            , int WpnMaxDurability = -10, int WpnEffect = 0,int WpnMana=0,bool WpnProjectileSpin = false,float WpnProjectileSpinSpeed = 0)
         {
             // Default values for every weapon
             WeaponName = name;
@@ -190,6 +192,8 @@ public class WeaponData : MonoBehaviour
             Used = 0;
             ProjectileSpeed = WpnProjectileSpeed;
             ProjectileSpriteID = WpnProjectileSpriteID;
+            ProjectileSpin = WpnProjectileSpin;
+            ProjectileSpinSpeed = WpnProjectileSpinSpeed;
         }
     }
 
@@ -205,9 +209,9 @@ public class WeaponData : MonoBehaviour
         {
             GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, speed, spriteid, maxdurability, fx, mana));
         }
-        void p(string Name, float dmgmin,float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid,int shelflife, GameObject projectile,float speed, int amount,int spriteid,int maxdurability = -10, int fx = 0,int mana=0)
+        void p(string Name, float dmgmin,float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid,int shelflife, GameObject projectile,float speed, int amount,int spriteid,int maxdurability = -10, int fx = 0,int mana=0,bool spin=false,float spinspeed=0)
         {
-            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, amount, speed, spriteid, maxdurability, fx, mana));
+            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, amount, speed, spriteid, maxdurability, fx, mana,spin,spinspeed));
         }
         //Name Min Max Knck Cool Rare Cate Type Sprite
         m("Aluminium shortsword", 2, 3, 4f, 100, 0, 0, 0, 1, 1.5f, 0.05f, 60);
@@ -217,6 +221,8 @@ public class WeaponData : MonoBehaviour
         r("Bow", 5, 10, 1, 1, 1, 1, 0, 4, 500, GenericRangeProjectile, 0.1f, 1);
         r("Darts", 50, 100, 0, 0, 0, 1, 0, 5, 500, GenericRangeProjectile, 0.5f, 0);
 
+        p("Throwing Knives", 1, 5, 1f, 20, 0, 2, 0, 0, 100, GenericProjectile, 0.5f, 5, 0);
+        p("Throwing Stars", 1, 10, 1f, 5, 0, 2, 1, 0, 100, GenericProjectile, 0.5f, 20, 1,spin:true,spinspeed:5);
     }
 
 }
