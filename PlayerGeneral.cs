@@ -33,7 +33,7 @@ public class PlayerGeneral : MonoBehaviour
     public List<string> InventoryLootName = new List<string>();
     public WeaponData.Weapon EquippedWeapon;
 
-    // ATK
+    //ATK
     public GameObject[] EnemyArray;
     public float PlayerDamage = 3f;
 
@@ -41,6 +41,10 @@ public class PlayerGeneral : MonoBehaviour
     public static WeaponData.Weapon CurrentWeaponReference;
 
     public int WeaponCooldown = 0;
+
+    //Projectile data
+    public int ProjectileAmountUsed;
+    public List<GameObject> ProjectileSpawned;
 
     public void ResetCurrentWeapon()
     {
@@ -92,6 +96,7 @@ public class PlayerGeneral : MonoBehaviour
                     RangeAttack();
                     break;
                 case 2:
+                    ProjectileAttack();
                     break;
                 default:
                     break;
@@ -121,23 +126,49 @@ public class PlayerGeneral : MonoBehaviour
     {
         float length = 1.4f;
         GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity);
-        obj.GetComponent<GenericRangeProjectile>().Set(MouseAngle,CurrentWeapon);
+        obj.GetComponent<GenericRangeProjectile>().Set(CurrentWeapon);
     }
     void ProjectileAttack()
     {
-        Instantiate(CurrentWeapon.Projectile);
+        float length = 1.4f;
+        if(ProjectileAmountUsed < CurrentWeapon.Amount)
+        {
+            GameObject proj = Instantiate(CurrentWeapon.Projectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle) * length) + transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle) * length) + transform.position.y)), Quaternion.identity);
+            proj.GetComponent<GenericProjectile>().Set(CurrentWeapon,gameObject);
+            ProjectileAmountUsed++;
+        }
     }
 
     void ShowWeapon()
     {
         if (!WeaponObject.IsSwinging)
         {
-            WpnObject.transform.position = new Vector2(transform.position.x + Mathf.Cos(MouseAngle) * CosmeticWeaponDistance, transform.position.y + Mathf.Sin(MouseAngle) * CosmeticWeaponDistance);
-            WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        }
+            //WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
-        //Dont create something new; use WeaponObject instead
-        //Somehow implement it so that its not a Prefab
+            Vector3 diff = Camera.main.ScreenToWorldPoint(Input.mousePosition) - WpnObject.transform.position;
+            diff.Normalize();
+            float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+
+            WpnObject.transform.position = Vector2.MoveTowards(WpnObject.transform.position, new Vector2(transform.position.x + Mathf.Cos(MouseAngle) * CosmeticWeaponDistance, transform.position.y + Mathf.Sin(MouseAngle) * CosmeticWeaponDistance), 0.2f);
+            switch (CurrentWeapon.Category)
+            {
+                case 0:
+                    WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    break;
+                case 1:
+                    WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 45);
+                    break;
+                case 2:
+                    WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    break;
+                default:
+                    break;
+            }
+
+            if ((Math.Abs(MouseAngle * Mathf.Rad2Deg)) >= 90) WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = true;
+            else WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = false;
+
+        }
     }
 
     public void AppendInventory(WeaponData.Weapon WantedWeapon)
