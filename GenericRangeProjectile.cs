@@ -24,7 +24,12 @@ public class GenericRangeProjectile : MonoBehaviour
         ProjectileWeapon = weapon;
         Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
         GetComponentInChildren<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().RangeWeaponProjectileList[weapon.ProjectileSpriteID];
-        
+
+        Vector3 diff = new Vector3(Convert.ToSingle(TargetX),Convert.ToSingle(TargetY)) - transform.position;
+        diff.Normalize();
+        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+
         //GameObject.FindGameObjectWithTag("RuntimeScript").GetComponent<WeaponData>().RangeWeaponProjectileList[SpriteID];
     }
 
