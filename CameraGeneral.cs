@@ -30,7 +30,7 @@ public class CameraGeneral : MonoBehaviour
 
         PlayerCam.orthographicSize = Mathf.Lerp(PlayerCam.orthographicSize, WantedZoom, Time.deltaTime * ZoomLerpSpeed);
 
-        WantedZoom = Mathf.Clamp(WantedZoom, 4.5f, 8f);
+        WantedZoom = Mathf.Clamp(WantedZoom, 4.5f, 16f);
 
 
         if (i != 0)
