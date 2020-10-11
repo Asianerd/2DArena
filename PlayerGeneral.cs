@@ -24,7 +24,6 @@ public class PlayerGeneral : MonoBehaviour
     public float CosmeticWeaponDistance = 0.5f;
 
 
-
     //HP
     public float HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
@@ -126,7 +125,7 @@ public class PlayerGeneral : MonoBehaviour
     {
         float length = 1.4f;
         GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity);
-        obj.GetComponent<GenericRangeProjectile>().Set(CurrentWeapon);
+        obj.GetComponent<RangeProjectileScript>().Set(CurrentWeapon);
     }
     void ProjectileAttack()
     {
@@ -134,22 +133,21 @@ public class PlayerGeneral : MonoBehaviour
         if(ProjectileAmountUsed < CurrentWeapon.Amount)
         {
             GameObject proj = Instantiate(CurrentWeapon.Projectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle) * length) + transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle) * length) + transform.position.y)), Quaternion.identity);
-            proj.GetComponent<GenericProjectile>().Set(CurrentWeapon,gameObject);
+            proj.GetComponent<ProjectileScript>().Set(CurrentWeapon,gameObject);
             ProjectileAmountUsed++;
         }
     }
 
     void ShowWeapon()
     {
+        float ReturnSpeed = 0.4f;
         if (!WeaponObject.IsSwinging)
         {
-            //WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-
             Vector3 diff = Camera.main.ScreenToWorldPoint(Input.mousePosition) - WpnObject.transform.position;
             diff.Normalize();
             float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
 
-            WpnObject.transform.position = Vector2.MoveTowards(WpnObject.transform.position, new Vector2(transform.position.x + Mathf.Cos(MouseAngle) * CosmeticWeaponDistance, transform.position.y + Mathf.Sin(MouseAngle) * CosmeticWeaponDistance), 0.2f);
+            WpnObject.transform.position = Vector2.Lerp(WpnObject.transform.position, new Vector2(transform.position.x + Mathf.Cos(MouseAngle) * CosmeticWeaponDistance, transform.position.y + Mathf.Sin(MouseAngle) * CosmeticWeaponDistance), ReturnSpeed);
             switch (CurrentWeapon.Category)
             {
                 case 0:
