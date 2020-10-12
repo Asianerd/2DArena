@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
+using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
@@ -65,9 +66,14 @@ public class PlayerGeneral : MonoBehaviour
 
         PlayerPosition = new Vector2(transform.position.x, transform.position.y);
 
-        WpnObject.GetComponent<SpriteRenderer>().sprite = RuntimeScript.GetComponent<WeaponData>().WeaponSpriteList[CurrentWeapon.WeaponID];
-
         CurrentWeaponReference = CurrentWeapon;
+
+        if(Input.GetKey(KeyCode.C))
+        {
+            int SpawnedWeaponID = UnityEngine.Random.Range(0, WeaponData.GlobalWeaponList.Count);
+            RuntimeScript.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position, WeaponData.GlobalWeaponList[SpawnedWeaponID]);
+
+        }
 
         if (!InventoryShow.GamePaused)
         {
@@ -138,10 +144,11 @@ public class PlayerGeneral : MonoBehaviour
         }
     }
 
+    bool IsFlipped = false;
     void ShowWeapon()
     {
         float ReturnSpeed = 0.4f;
-        if (!WeaponObject.IsSwinging)
+       if (!WeaponObject.IsSwinging)
         {
             Vector3 diff = Camera.main.ScreenToWorldPoint(Input.mousePosition) - WpnObject.transform.position;
             diff.Normalize();
@@ -154,7 +161,7 @@ public class PlayerGeneral : MonoBehaviour
                     WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                     break;
                 case 1:
-                    WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 45);
+                      WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                     break;
                 case 2:
                     WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
@@ -163,9 +170,16 @@ public class PlayerGeneral : MonoBehaviour
                     break;
             }
 
-            if ((Math.Abs(MouseAngle * Mathf.Rad2Deg)) >= 90) WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = true;
-            else WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = false;
-
+            if ((Math.Abs(MouseAngle * Mathf.Rad2Deg)) >= 90)
+            {
+                WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = true;
+                IsFlipped = true;
+            }
+            else
+            {
+                WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = false;
+                IsFlipped = false;
+            }
         }
     }
 
