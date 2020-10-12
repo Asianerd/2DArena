@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LootSpawning : MonoBehaviour
 {
     public GameObject WeaponLoot;
-    public SpriteRenderer Renderer;
     public GameObject Runtime;
 
     public List<WeaponData.Weapon> WeaponList = new List<WeaponData.Weapon>();
@@ -15,7 +15,7 @@ public class LootSpawning : MonoBehaviour
 
     public void SpawnWeaponLoot(Vector3 SelectedVector3, WeaponData.Weapon SelectedWeapon)
     {
-        GameObject obj = Instantiate(WeaponLoot,SelectedVector3,Quaternion.identity);
-        obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon,Runtime.GetComponent<WeaponData>().WeaponSpriteList[SelectedWeapon.WeaponID]);
+        GameObject obj = Instantiate(WeaponLoot, SelectedVector3, Quaternion.identity);
+        obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon,Runtime.GetComponent<WeaponData>().MeleeWeaponSpriteList[SelectedWeapon.WeaponID]);
     }
 }
