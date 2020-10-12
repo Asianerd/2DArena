@@ -8,12 +8,14 @@ public class WeaponObject : MonoBehaviour
 {
     WeaponData.Weapon Weapon;
     int CurrentCooldown;
+    GameObject Runtime;
 
 
     // 0 - Swing
-    public float TotalAngle = 130;
+    public float TotalIncrement = 130;
     public float IncrementAngle;
     public float OffsetX, OffsetY;
+    public float IncrementAmount;
 
     // 1 - Stab
     public Vector2 Target;
@@ -30,6 +32,18 @@ public class WeaponObject : MonoBehaviour
 
     void Update()
     {
+        switch(PlayerGeneral.CurrentWeaponReference.Category)
+        {
+            case 1:
+                GetComponent<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().RangeWeaponSpriteList[PlayerGeneral.CurrentWeaponReference.WeaponID];
+                break;
+            case 2:
+                GetComponent<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().ProjectileSpriteList[PlayerGeneral.CurrentWeaponReference.ProjectileSpriteID];
+                break;
+            default:
+                GetComponent<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().MeleeWeaponSpriteList[PlayerGeneral.CurrentWeaponReference.WeaponID];
+                break;
+        }
         if (!InventoryShow.GamePaused && IsSwinging)
         {
             switch (Weapon.ScriptID)
@@ -46,6 +60,7 @@ public class WeaponObject : MonoBehaviour
                     }
                     break;
                 case 2:
+                    //Auto-aim
                     if (NearestEnemy != null)
                     {
                         transform.position = Vector2.MoveTowards(transform.position, NearestEnemy.transform.position, Weapon.Knockback);
@@ -65,12 +80,16 @@ public class WeaponObject : MonoBehaviour
                     break;
                 default:
                     //Swing
-                    transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z - IncrementAngle);
-                    transform.position = new Vector2(PlayerGeneral.PlayerPosition.x + OffsetX, PlayerGeneral.PlayerPosition.y + OffsetY);
-
+                    if (IncrementAmount <= TotalIncrement)
+                    {
+                        IncrementAmount += Weapon.Knockback;
+                        transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z - IncrementAngle);
+                        transform.position = new Vector2(PlayerGeneral.PlayerPosition.x + OffsetX, PlayerGeneral.PlayerPosition.y + OffsetY);
+                    }
                     CurrentCooldown++;
                     if (CurrentCooldown >= PlayerGeneral.CurrentWeaponReference.WeaponCooldown)
                     {
+                        IncrementAmount = 0;
                         IsSwinging = false;
                         EnemyAttackedList = new List<GameObject>();
                     }
@@ -111,16 +130,23 @@ public class WeaponObject : MonoBehaviour
         }
     }
 
+    void Awake()
+    {
+        Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
+    }
+
     public void Swing()
     {
         Weapon = PlayerGeneral.CurrentWeaponReference;
         switch(Weapon.ScriptID)
         {
             case 1:
+                //Stab
                 Target = new Vector2(Mathf.Cos(PlayerGeneral.MouseAngle)*100,Mathf.Sin(PlayerGeneral.MouseAngle)*100);
                 Speed = PlayerGeneral.CurrentWeaponReference.Knockback;
                 break;
             case 2:
+                //Auto-aim
                 EnemyList = GameObject.FindGameObjectsWithTag("Enemy");
                 if (EnemyList.Length > 0)
                 {
@@ -137,7 +163,8 @@ public class WeaponObject : MonoBehaviour
             default:
                 OffsetX = Mathf.Cos(PlayerGeneral.MouseAngle) * 0.5f;
                 OffsetY = Mathf.Sin(PlayerGeneral.MouseAngle) * 0.5f;
-                IncrementAngle = TotalAngle / PlayerGeneral.CurrentWeaponReference.WeaponCooldown; // Change this ; Speed(TotalAngle) is determined by the knockback
+                IncrementAngle = Weapon.Knockback; // Change this ; Speed(TotalAngle) is determined by the knockback
+                IncrementAmount = 0;
                 break;
         }
 
