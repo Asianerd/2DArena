@@ -26,6 +26,8 @@ public class RangeProjectileScript : MonoBehaviour
         ProjectileWeapon = weapon;
         Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
         GetComponentInChildren<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().RangeWeaponProjectileList[weapon.ProjectileSpriteID];
+        GetComponent<CapsuleCollider2D>().size = GetComponentInChildren<SpriteRenderer>().sprite.rect.size/10;
+
 
         Vector3 diff = new Vector3(Convert.ToSingle(TargetX),Convert.ToSingle(TargetY)) - transform.position;
         diff.Normalize();

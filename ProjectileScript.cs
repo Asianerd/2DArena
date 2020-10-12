@@ -28,6 +28,8 @@ public class ProjectileScript : MonoBehaviour
         Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
 
         GetComponentInChildren<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().ProjectileSpriteList[weapon.ProjectileSpriteID];
+        GetComponent<CapsuleCollider2D>().size = GetComponent<SpriteRenderer>().sprite.rect.size/10;
+
 
         //Look at
         Vector3 diff = new Vector3(Convert.ToSingle(TargetX), Convert.ToSingle(TargetY)) - transform.position;
