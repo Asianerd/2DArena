@@ -22,7 +22,7 @@ public class PlayerGeneral : MonoBehaviour
     public static Vector2 PlayerPosition;
 
     public GameObject WpnObject;
-    public float CosmeticWeaponDistance = 0.5f;
+    public float CosmeticWeaponDistance = 1f;
 
 
     //HP
@@ -46,6 +46,11 @@ public class PlayerGeneral : MonoBehaviour
     public int ProjectileAmountUsed;
     public List<GameObject> ProjectileSpawned;
 
+
+
+    public GameObject LastButton; //So that the weapon data in the button matches the current weapon - durability is stored for each button
+    public static bool WeaponObjectIsFlipped = false;
+
     public void ResetCurrentWeapon()
     {
         CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 100, 0, 0, 0, 0, 5, 0.05f);
@@ -59,7 +64,6 @@ public class PlayerGeneral : MonoBehaviour
 
     void Update()
     {
-
         MousePosition = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
 
         MouseAngle = Mathf.Atan2(MousePosition.y - transform.position.y, MousePosition.x - transform.position.x);
@@ -67,6 +71,10 @@ public class PlayerGeneral : MonoBehaviour
         PlayerPosition = new Vector2(transform.position.x, transform.position.y);
 
         CurrentWeaponReference = CurrentWeapon;
+        if (LastButton != null)
+        {
+            LastButton.GetComponent<InventoryWeaponButtonGeneral>().Weapon = CurrentWeapon;
+        }
 
         if(Input.GetKey(KeyCode.C))
         {
@@ -80,11 +88,26 @@ public class PlayerGeneral : MonoBehaviour
             Regen();
             Attack();
             ShowWeapon();
+            WeaponDurabilityCheck();
         }
     }
+
     public void MinusHealth(float losthealth)
     {
         HP -= losthealth;
+    }
+
+    public void MinusWeaponDurability(int LostDurability = 1)
+    {
+        CurrentWeapon.Durability -= LostDurability;
+    }
+
+    void WeaponDurabilityCheck()
+    {
+        if ((CurrentWeapon.Durability <= 0) && !(CurrentWeapon.Durability == -100))
+        {
+            ResetCurrentWeapon();
+        }
     }
 
     void Attack()
@@ -106,19 +129,6 @@ public class PlayerGeneral : MonoBehaviour
                 default:
                     break;
             }
-
-            /*
-            EnemyArray = GameObject.FindGameObjectsWithTag("Enemy");
-            foreach (GameObject i in EnemyArray)
-            {
-                Vector3 EnemyPosition = new Vector3(i.transform.position.x, i.transform.position.y);
-                if ((i.GetComponent<EnemyGeneral>().DistanceEnemy(transform.position.x, transform.position.y) < AttackRange) && (Input.GetMouseButtonDown(0)))
-                {
-                    i.GetComponent<EnemyGeneral>().MinusHealth(PlayerDamage + DamageInflicted, CurrentWeapon.Knockback, transform.position);
-                    Instantiate(DamageBubblePrefab, EnemyPosition, Quaternion.identity).GetComponent<FXDamageBubbleGeneral>().Damage = DamageInflicted;
-                    WeaponCooldown = CurrentWeapon.WeaponCooldown;
-                }
-            }*/
         }
         if (WeaponCooldown > 0) WeaponCooldown--;
     }
@@ -127,12 +137,14 @@ public class PlayerGeneral : MonoBehaviour
     {        
         WpnObject.GetComponent<WeaponObject>().Swing();
     }
+
     void RangeAttack()
     {
         float length = 1.4f;
         GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity);
         obj.GetComponent<RangeProjectileScript>().Set(CurrentWeapon);
     }
+
     void ProjectileAttack()
     {
         float length = 1.4f;
@@ -144,17 +156,20 @@ public class PlayerGeneral : MonoBehaviour
         }
     }
 
-    bool IsFlipped = false;
+    float TempMouseAngle;
+
     void ShowWeapon()
     {
         float ReturnSpeed = 0.4f;
-       if (!WeaponObject.IsSwinging)
+        WpnObject.transform.position = Vector2.MoveTowards(WpnObject.transform.position, new Vector2(transform.position.x + (Mathf.Cos(TempMouseAngle) * CosmeticWeaponDistance), transform.position.y + (Mathf.Sin(TempMouseAngle) * CosmeticWeaponDistance)), ReturnSpeed);
+        if (!WeaponObject.IsSwinging)
         {
             Vector3 diff = Camera.main.ScreenToWorldPoint(Input.mousePosition) - WpnObject.transform.position;
             diff.Normalize();
-            float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+            float rot_z = Mathf.Atan2(diff.y*100, diff.x*100) * Mathf.Rad2Deg;
 
-            WpnObject.transform.position = Vector2.Lerp(WpnObject.transform.position, new Vector2(transform.position.x + Mathf.Cos(MouseAngle) * CosmeticWeaponDistance, transform.position.y + Mathf.Sin(MouseAngle) * CosmeticWeaponDistance), ReturnSpeed);
+            TempMouseAngle = Mathf.Atan2(MousePosition.y- transform.position.y, MousePosition.x - transform.position.x);
+
             switch (CurrentWeapon.Category)
             {
                 case 0:
@@ -173,12 +188,12 @@ public class PlayerGeneral : MonoBehaviour
             if ((Math.Abs(MouseAngle * Mathf.Rad2Deg)) >= 90)
             {
                 WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = true;
-                IsFlipped = true;
+                WeaponObjectIsFlipped = true;
             }
-            else
+            else 
             {
                 WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = false;
-                IsFlipped = false;
+                WeaponObjectIsFlipped = false;
             }
         }
     }
@@ -188,6 +203,7 @@ public class PlayerGeneral : MonoBehaviour
         InvCanvas.GetComponent<InventoryWeapon>().AddWeapon(WantedWeapon);
         InventoryWeapon.Add(WantedWeapon);
     }
+
     void Regen()
     {
         if(HPRegenClock == 0)
