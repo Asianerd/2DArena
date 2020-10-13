@@ -9,6 +9,7 @@ public class WeaponObject : MonoBehaviour
     WeaponData.Weapon Weapon;
     int CurrentCooldown;
     GameObject Runtime;
+    GameObject Player;
 
 
     // 0 - Swing
@@ -83,7 +84,10 @@ public class WeaponObject : MonoBehaviour
                     if (IncrementAmount <= TotalIncrement)
                     {
                         IncrementAmount += Weapon.Knockback;
-                        transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z - IncrementAngle);
+                        if(PlayerGeneral.WeaponObjectIsFlipped)
+                            transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z + IncrementAngle);
+                        else
+                            transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z - IncrementAngle);
                         transform.position = new Vector2(PlayerGeneral.PlayerPosition.x + OffsetX, PlayerGeneral.PlayerPosition.y + OffsetY);
                     }
                     CurrentCooldown++;
@@ -112,6 +116,7 @@ public class WeaponObject : MonoBehaviour
                         double _DamageInflicted = UnityEngine.Random.Range(PlayerGeneral.CurrentWeaponReference.DamageMin, PlayerGeneral.CurrentWeaponReference.DamageMax);
                         Collision.GetComponent<EnemyGeneral>().MinusHealth(_DamageInflicted, PlayerGeneral.CurrentWeaponReference.Knockback, PlayerGeneral.PlayerPosition);
                         EnemyAttackedList.Add(Collision.gameObject);
+                        if (PlayerGeneral.CurrentWeaponReference.IsBreakable) { Player.GetComponent<PlayerGeneral>().MinusWeaponDurability(); }
                     }
                     else
                     {
@@ -124,6 +129,8 @@ public class WeaponObject : MonoBehaviour
                         double DamageInflicted = UnityEngine.Random.Range(PlayerGeneral.CurrentWeaponReference.DamageMin, PlayerGeneral.CurrentWeaponReference.DamageMax);
                         Collision.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, PlayerGeneral.CurrentWeaponReference.Knockback, PlayerGeneral.PlayerPosition);
                         EnemyAttackedList.Add(Collision.gameObject);
+                        Debug.Log(PlayerGeneral.CurrentWeaponReference.IsBreakable);
+                        if(PlayerGeneral.CurrentWeaponReference.IsBreakable) { Player.GetComponent<PlayerGeneral>().MinusWeaponDurability(); }
                     }
                     break;
             }
@@ -133,6 +140,7 @@ public class WeaponObject : MonoBehaviour
     void Awake()
     {
         Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     public void Swing()
