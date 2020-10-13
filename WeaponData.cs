@@ -6,6 +6,7 @@ public class WeaponData : MonoBehaviour
 {
     public List<GameObject> RangeProjectilePrefabList;
     public List<GameObject> ProjectilePrefabList;
+
     public List<Sprite> MeleeWeaponSpriteList;
     public List<Sprite> RangeWeaponSpriteList;
 
@@ -15,6 +16,9 @@ public class WeaponData : MonoBehaviour
     public List<Sprite> RangeWeaponProjectileList;
     public List<Sprite> ProjectileSpriteList;
 
+    public List<Sprite> LootSpriteList;
+    public GameObject LootPrefab;
+
     public static List<Weapon> GlobalWeaponList = new List<Weapon>();
 
     public class Weapon
@@ -22,7 +26,7 @@ public class WeaponData : MonoBehaviour
         public string WeaponName;
         public float DamageMin, DamageMax, Knockback;
         public int WeaponCooldown, Rarity, Durability, MaxDurability;
-        public bool IsBreakable;
+        public bool IsBreakable = true;
         public int ManaUsage;
         public int Category;
         public int WeaponID;
@@ -98,7 +102,6 @@ public class WeaponData : MonoBehaviour
         public int ShelfLife;
         public float ProjectileSpeed;
         public int ProjectileSpriteID;
-        public List<float> ProjectileColliderData;
         /* Overload order
          * 
          * Melee
@@ -108,7 +111,7 @@ public class WeaponData : MonoBehaviour
         // Melee
         public Weapon(string name, float DmgMin, float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnCategory, int WpnType, int WpnID,
             float WpnRange, float WpnWidth
-            , int WpnMaxDurability = -10, int WpnEffect = 0, int WpnMana = 0, int WpnScriptID = 0)
+            , int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, int WpnScriptID = 0)
         {
             // Default values for every weapon
             WeaponName = name;
@@ -117,7 +120,7 @@ public class WeaponData : MonoBehaviour
             Knockback = WpnKnockback;
             WeaponCooldown = WpnCooldown;
 
-            if (WpnMaxDurability == -10)
+            if (WpnMaxDurability == -100)
                 IsBreakable = false;
             MaxDurability = WpnMaxDurability;
             Durability = MaxDurability;
@@ -138,8 +141,8 @@ public class WeaponData : MonoBehaviour
 
         // Range
         public Weapon(string name, float DmgMin, float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnCategory, int WpnType, int WpnID,
-            int WpnShelfLife, GameObject WpnProjectile, float WpnProjectileSpeed, int WpnProjectileSpriteID, List<float> WpnCollider
-            , int WpnMaxDurability = -10, int WpnEffect = 0, int WpnMana = 0, int WpnScriptID = 0)
+            int WpnShelfLife, GameObject WpnProjectile, float WpnProjectileSpeed, int WpnProjectileSpriteID
+            , int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, int WpnScriptID = 0)
         {
             // Default values for every weapon
             WeaponName = name;
@@ -148,7 +151,7 @@ public class WeaponData : MonoBehaviour
             Knockback = WpnKnockback;
             WeaponCooldown = WpnCooldown;
 
-            if (WpnMaxDurability == -10)
+            if (WpnMaxDurability == -100)
                 IsBreakable = false;
             MaxDurability = WpnMaxDurability;
             Durability = MaxDurability;
@@ -167,13 +170,12 @@ public class WeaponData : MonoBehaviour
             ShelfLife = WpnShelfLife;
             ProjectileSpeed= WpnProjectileSpeed;
             ProjectileSpriteID = WpnProjectileSpriteID;
-            ProjectileColliderData = WpnCollider;
         }
 
         // Projectile
         public Weapon(string name, float DmgMin, float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnCategory, int WpnType, int WpnID,
-            int WpnShelfLife, GameObject WpnProjectile, int WpnAmount, float WpnProjectileSpeed, int WpnProjectileSpriteID, List<float> WpnCollider
-            , int WpnMaxDurability = -10, int WpnEffect = 0, int WpnMana = 0, bool WpnProjectileSpin = false, float WpnProjectileSpinSpeed = 0, int WpnScriptID = 0)
+            int WpnShelfLife, GameObject WpnProjectile, int WpnAmount, float WpnProjectileSpeed, int WpnProjectileSpriteID
+            , int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, bool WpnProjectileSpin = false, float WpnProjectileSpinSpeed = 0, int WpnScriptID = 0)
         {
             // Default values for every weapon
             WeaponName = name;
@@ -182,7 +184,7 @@ public class WeaponData : MonoBehaviour
             Knockback = WpnKnockback;
             WeaponCooldown = WpnCooldown;
 
-            if (WpnMaxDurability == -10)
+            if (WpnMaxDurability == -100)
                 IsBreakable = false;
             MaxDurability = WpnMaxDurability;
             Durability = MaxDurability;
@@ -204,38 +206,97 @@ public class WeaponData : MonoBehaviour
             ProjectileSpriteID = WpnProjectileSpriteID;
             ProjectileSpin = WpnProjectileSpin;
             ProjectileSpinSpeed = WpnProjectileSpinSpeed;
-            ProjectileColliderData = WpnCollider;
+        }
+
+        // Weapon = new Weapon(Weapon); - just ignore this
+        public Weapon(Weapon weapon)
+        {
+            WeaponName = weapon.WeaponName;
+            DamageMin = weapon.DamageMin;
+            DamageMax = weapon.DamageMax;
+            Knockback = weapon.Knockback;
+            WeaponCooldown = weapon.WeaponCooldown;
+
+            if (weapon.MaxDurability == -100)
+                IsBreakable = false;
+            MaxDurability = weapon.MaxDurability;
+            Durability = weapon.Durability;
+
+            Rarity = weapon.Rarity;
+            Category = weapon.Category;
+            Type = weapon.Type;
+            Effect = weapon.Effect;
+            ManaUsage = weapon.ManaUsage;
+            WeaponID = weapon.WeaponID;
+            ScriptID = weapon.ScriptID;
+
+
+            // Melee
+            AttackRange = weapon.AttackRange;
+            WeaponWidth = weapon.WeaponWidth;
+
+            // Range
+            RangeProjectile = weapon.RangeProjectile;
+            ShelfLife = weapon.ShelfLife;
+            ProjectileSpeed = weapon.ProjectileSpeed;
+            ProjectileSpriteID = weapon.ProjectileSpriteID;
+
+            // Projectile
+            Projectile = weapon.Projectile;
+            ShelfLife = weapon.ShelfLife;
+            Amount = weapon.Amount;
+            Used = 0;
+            ProjectileSpeed = weapon.ProjectileSpeed;
+            ProjectileSpriteID = weapon.ProjectileSpriteID;
+            ProjectileSpin = weapon.ProjectileSpin;
+            ProjectileSpinSpeed = weapon.ProjectileSpinSpeed;
         }
     }
 
+    public class Loot
+    {
+        public string LootName;
+        public int LootAmount;
+        public Sprite LootSprite;
+        public int LootID;
+        public int PickupCooldown = 500;
+        public int PickupCurrentCooldown = 500;
+        public Loot(string Name,int Amount,int ID,Sprite SpriteID)
+        {
+            LootName = Name;
+            LootAmount = Amount;
+            LootID = ID;
+            LootSprite = SpriteID;
+        }
+        public bool Pickable() { return (PickupCurrentCooldown == PickupCooldown); }
+    }
 
     void Awake()
     {
-        List<float> RoundCollider = new List<float> { 1, 1 };
-        List<float> CapsuleCollider = new List<float> { 1, 3 };
-        void m(string Name, float dmgmin,float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid,float range,float width,int maxdurability = -10, int fx = 0,int mana=0,int scriptid=0)
+        void m(string Name, float dmgmin, float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid,float range,float width,int maxdurability = -100, int fx = 0,int mana=0,int scriptid=0)
         {
             GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, range, width, maxdurability, fx, mana, scriptid));
         }
-        void r(string Name, float dmgmin, float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid, int shelflife, GameObject projectile, float speed, int spriteid, List<float> collider, int maxdurability = -10, int fx = 0, int mana = 0, int scriptid = 0)
+        void r(string Name, float dmgmin, float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid, int shelflife, GameObject projectile, float speed, int spriteid, int maxdurability = -100, int fx = 0, int mana = 0, int scriptid = 0)
         {
-            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, speed, spriteid, collider ,maxdurability, fx, mana, scriptid));
+            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, speed, spriteid ,maxdurability, fx, mana, scriptid));
         }
-        void p(string Name, float dmgmin, float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid, int shelflife, GameObject projectile, float speed, int amount, int spriteid, List<float> collider, int maxdurability = -10, int fx = 0, int mana = 0, bool spin = false, float spinspeed = 0, int scriptid = 0)
+        void p(string Name, float dmgmin, float dmgmax, float wpnknock, int cooldown, int rarity, int category, int type, int weaponid, int shelflife, GameObject projectile, float speed, int amount, int spriteid, int maxdurability = -100, int fx = 0, int mana = 0, bool spin = false, float spinspeed = 0, int scriptid = 0)
         {
-            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, amount, speed, spriteid, collider,maxdurability, fx, mana,spin,spinspeed, scriptid));
+            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, amount, speed, spriteid, maxdurability, fx, mana,spin,spinspeed, scriptid));
         }
-        m("Aluminium shortsword", 2, 3, 4f, 100, 0, 0, 0, 1, 1.5f, 0.05f, 60);
-        m("Silicon shortsword", 3, 4, 2f, 100, 0, 0, 0, 2, 10, 0.05f);
-        m("Iron shortsword", 5, 6, 2, 100, 0, 0, 0, 3, 5, 0.05f);
-        m("Spear object", 10, 20, 0.5f, 100, 0, 0, 0, 4, 5, 1, scriptid: 1);
-        m("Auto-aim", 10, 20, 2, 100, 0, 0, 0, 7, 5, 3, scriptid: 2);
 
-        r("Bow",        5,      10,     1, 1, 1, 1, 0, 0, 500, GenericRangeProjectile, 0.1f, 1, CapsuleCollider);
-        r("Scar H",     50,     100,    0, 0, 0, 1, 0, 1, 500, GenericRangeProjectile, 0.5f, 0, CapsuleCollider);
+        m("Aluminium shortsword",   dmgmin: 2, dmgmax: 3, wpnknock: 4f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 1, range: 1.5f, width: 0.05f, maxdurability: 60);
+        m("Silicon shortsword",     dmgmin: 3, dmgmax: 4, wpnknock: 2f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 2, range: 10, width: 0.05f);
+        m("Iron shortsword",        dmgmin: 5, dmgmax: 6, wpnknock: 2, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 3, range: 5, width: 0.05f);
+        m("Spear object",           dmgmin: 10, dmgmax: 20, wpnknock: 0.5f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 4, range: 5, width: 1,    scriptid: 1);
+        m("Auto-aim",               dmgmin: 10, dmgmax: 20, wpnknock: 2, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 7, range: 5, width: 3,       scriptid: 2);
 
-        p("Throwing Knives", 1, 5, 1f, 20, 0, 2, 0, 0, 100, GenericProjectile, 0.5f, 5, 0, CapsuleCollider);
-        p("Throwing Stars", 1, 10, 1f, 5, 0, 2, 1, 0, 500, GenericProjectile, 0.5f, 20, 1, RoundCollider, spin: true, spinspeed: 5);
-        p("Spear", 10, 20, 0.5f, 100, 0, 2, 0, 2, 200, GenericProjectile, 0.2f, 3, 2, CapsuleCollider);
+        r("Bow", 5, 10, 1, 1, 1, 1, 0, 0, 500, GenericRangeProjectile, 0.1f, 1);
+        r("Scar H", 50, 100, 0, 0, 0, 1, 0, 1, 500, GenericRangeProjectile, 0.5f, 0);
+
+        p("Throwing Knives", 1, 5, 1f, 20, 0, 2, 0, 0, 100, GenericProjectile, 0.5f, 5, 0);
+        p("Throwing Stars", 1, 10, 1f, 5, 0, 2, 1, 0, 500, GenericProjectile, 0.5f, 20, 1, spin: true, spinspeed: 5);
+        p("Spear", 10, 20, 0.5f, 100, 0, 2, 0, 2, 200, GenericProjectile, 0.2f, 3, 2);
     }
 }
