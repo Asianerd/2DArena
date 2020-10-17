@@ -7,6 +7,7 @@ using UnityEngine;
 public class RangeProjectileScript : MonoBehaviour
 {
     WeaponData.Weapon ProjectileWeapon;
+    GameObject Player;
 
     // Straight
     double DirectionAngle;
@@ -16,7 +17,7 @@ public class RangeProjectileScript : MonoBehaviour
     public GameObject Runtime;
 
 
-    public void Set(WeaponData.Weapon weapon)
+    public void Set(WeaponData.Weapon weapon,GameObject Plyr)
     {
         DirectionAngle = PlayerGeneral.MouseAngle;
         Speed = weapon.ProjectileSpeed;
@@ -24,6 +25,7 @@ public class RangeProjectileScript : MonoBehaviour
         TargetX = Math.Cos(DirectionAngle) * 10000;
         TargetY = Math.Sin(DirectionAngle) * 10000;
         ProjectileWeapon = weapon;
+        Player = Plyr;
         Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
         GetComponentInChildren<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().RangeWeaponProjectileList[weapon.ProjectileSpriteID];
         GetComponent<CapsuleCollider2D>().size = GetComponentInChildren<SpriteRenderer>().sprite.rect.size/10;
@@ -42,6 +44,7 @@ public class RangeProjectileScript : MonoBehaviour
         if(CollidedObject.CompareTag("Enemy"))
         {
             CollidedObject.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted,ProjectileWeapon.Knockback,transform.position);
+            Player.GetComponent<PlayerGeneral>().MinusWeaponDurability();
             Destroy(gameObject);
         }
         if(CollidedObject.CompareTag("Solid"))
