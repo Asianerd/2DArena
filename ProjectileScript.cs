@@ -12,6 +12,7 @@ public class ProjectileScript : MonoBehaviour
     float Speed;
     int ShelfLife;
     double TargetX, TargetY;
+    bool HasDied = false;
     public GameObject Runtime;
     public GameObject Player;
 
@@ -23,7 +24,7 @@ public class ProjectileScript : MonoBehaviour
         ShelfLife = weapon.ShelfLife;
         TargetX = Math.Cos(DirectionAngle) * 10000;
         TargetY = Math.Sin(DirectionAngle) * 10000;
-        ProjectileWeapon = weapon;
+        ProjectileWeapon = new WeaponData.Weapon(weapon);
         Player = playerobject;
         Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
 
@@ -47,20 +48,29 @@ public class ProjectileScript : MonoBehaviour
         {
             CollidedObject.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, ProjectileWeapon.Knockback, transform.position);
             Player.GetComponent<PlayerGeneral>().ProjectileSpawned.Remove(gameObject);
-            Player.GetComponent<PlayerGeneral>().ProjectileAmountUsed--;
-            Destroy(gameObject);
+            Die();
         }
         if (CollidedObject.CompareTag("Solid"))
         {
             Player.GetComponent<PlayerGeneral>().ProjectileSpawned.Remove(gameObject);
-            Player.GetComponent<PlayerGeneral>().ProjectileAmountUsed--;
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        if (!HasDied)
+        {
+            ProjectileWeapon.Used--;
             Destroy(gameObject);
+            HasDied = true;
         }
     }
 
 
     void Update()
     {
+
         if (!InventoryShow.GamePaused)
         {
             if (ShelfLife > 0)
@@ -75,8 +85,7 @@ public class ProjectileScript : MonoBehaviour
             else
             {
                 Player.GetComponent<PlayerGeneral>().ProjectileSpawned.Remove(gameObject);
-                Player.GetComponent<PlayerGeneral>().ProjectileAmountUsed--;
-                Destroy(gameObject);
+                Die();
             }
         }
     }
