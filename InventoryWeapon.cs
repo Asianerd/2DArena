@@ -8,6 +8,7 @@ public class InventoryWeapon : MonoBehaviour
     public Button ButtonPrefab;
     public GameObject ItemList;
     public GameObject Player;
+    public GameObject Runtime;
 
 
     void Awake()
@@ -21,5 +22,17 @@ public class InventoryWeapon : MonoBehaviour
         ButtonPrefab.GetComponentInChildren<Text>().text = SelectedWeapon.WeaponName;
         var obj = Instantiate(ButtonPrefab, ItemList.transform);
         obj.GetComponent<InventoryWeaponButtonGeneral>().SetWeapon(SelectedWeapon);
+        switch(SelectedWeapon.Category)
+        {
+            case 1:
+                obj.GetComponent<Button>().image.sprite = Runtime.GetComponent<WeaponData>().RangeWeaponSpriteList[SelectedWeapon.WeaponID];
+                break;
+            case 2:
+                obj.GetComponent<Button>().image.sprite = Runtime.GetComponent<WeaponData>().ProjectileSpriteList[SelectedWeapon.WeaponID];
+                break;
+            default:
+                obj.GetComponent<Button>().image.sprite = Runtime.GetComponent<WeaponData>().MeleeWeaponSpriteList[SelectedWeapon.WeaponID];
+                break;
+        }
     }
 }
