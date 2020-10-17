@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
-using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
@@ -43,7 +42,6 @@ public class PlayerGeneral : MonoBehaviour
     public int WeaponCooldown = 0;
 
     //Projectile data
-    public int ProjectileAmountUsed;
     public List<GameObject> ProjectileSpawned;
 
 
@@ -80,7 +78,11 @@ public class PlayerGeneral : MonoBehaviour
         {
             int SpawnedWeaponID = UnityEngine.Random.Range(0, WeaponData.GlobalWeaponList.Count);
             RuntimeScript.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position, WeaponData.GlobalWeaponList[SpawnedWeaponID]);
+        }
 
+        if(Input.GetKeyDown(KeyCode.B))
+        {
+            transform.position = new Vector2(MousePosition.x, MousePosition.y);
         }
 
         if (!InventoryShow.GamePaused)
@@ -97,9 +99,13 @@ public class PlayerGeneral : MonoBehaviour
         HP -= losthealth;
     }
 
-    public void MinusWeaponDurability(int LostDurability = 1)
+    public void MinusWeaponDurability(int LostDurability = 1,bool IsBreakOverride = false)
     {
-        CurrentWeapon.Durability -= LostDurability;
+        if(IsBreakOverride)
+            CurrentWeapon.Durability -= LostDurability;
+        else
+            if(CurrentWeapon.IsBreakable)
+                CurrentWeapon.Durability -= LostDurability;
     }
 
     void WeaponDurabilityCheck()
@@ -142,17 +148,17 @@ public class PlayerGeneral : MonoBehaviour
     {
         float length = 1.4f;
         GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity);
-        obj.GetComponent<RangeProjectileScript>().Set(CurrentWeapon);
+        obj.GetComponent<RangeProjectileScript>().Set(CurrentWeapon,gameObject);
     }
 
     void ProjectileAttack()
     {
         float length = 1.4f;
-        if(ProjectileAmountUsed < CurrentWeapon.Amount)
+        if(CurrentWeapon.Used < CurrentWeapon.Amount)
         {
             GameObject proj = Instantiate(CurrentWeapon.Projectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle) * length) + transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle) * length) + transform.position.y)), Quaternion.identity);
             proj.GetComponent<ProjectileScript>().Set(CurrentWeapon,gameObject);
-            ProjectileAmountUsed++;
+            CurrentWeapon.Used++;
         }
     }
 
