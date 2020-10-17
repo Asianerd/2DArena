@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class LootGeneral : MonoBehaviour
 {
     public bool IsFollowing;
-    public float AttentionRange = 1f, PickupRange = 0.2f ,PickupSpeed = 0.5f;
+    public float AttentionRange = 3f, PickupRange = 0.2f ,PickupSpeed = 0.5f;
     public GameObject Player;
     public WeaponData.Weapon CurrentWeapon;
 
