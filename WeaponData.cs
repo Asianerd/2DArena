@@ -98,6 +98,8 @@ public class WeaponData : MonoBehaviour
         public int Amount;
         public bool ProjectileSpin;
         public float ProjectileSpinSpeed;
+        // Gun
+        
         // Range & Projectile
         public int ShelfLife;
         public float ProjectileSpeed;
@@ -256,19 +258,25 @@ public class WeaponData : MonoBehaviour
     public class Loot
     {
         public string LootName;
-        public int LootAmount;
+        public int LootAmount,LootAmountMax;
         public Sprite LootSprite;
         public int LootID;
         public int PickupCooldown = 500;
         public int PickupCurrentCooldown = 500;
-        public Loot(string Name,int Amount,int ID,Sprite SpriteID)
+        public Loot(string Name, int Amount, int ID, Sprite SpriteID, int AmountMax = 999)
         {
             LootName = Name;
-            LootAmount = Amount;
             LootID = ID;
             LootSprite = SpriteID;
+            LootAmount = Amount;
+            LootAmountMax = AmountMax;
         }
         public bool Pickable() { return (PickupCurrentCooldown == PickupCooldown); }
+        public void PickupCountdown(bool Override = false)
+        {
+            if (PickupCurrentCooldown > 0 | Override)
+                PickupCurrentCooldown--;
+        }
     }
 
     void Awake()
@@ -286,17 +294,18 @@ public class WeaponData : MonoBehaviour
             GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, category, type, weaponid, shelflife, projectile, amount, speed, spriteid, maxdurability, fx, mana,spin,spinspeed, scriptid));
         }
 
-        m("Aluminium shortsword",   dmgmin: 2, dmgmax: 3, wpnknock: 4f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 1, range: 1.5f, width: 0.05f, maxdurability: 60);
+        
+        /*m("Aluminium shortsword",   dmgmin: 2, dmgmax: 3, wpnknock: 4f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 1, range: 1.5f, width: 0.05f, maxdurability: 60);
         m("Silicon shortsword",     dmgmin: 3, dmgmax: 4, wpnknock: 2f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 2, range: 10, width: 0.05f);
         m("Iron shortsword",        dmgmin: 5, dmgmax: 6, wpnknock: 2, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 3, range: 5, width: 0.05f);
         m("Spear object",           dmgmin: 10, dmgmax: 20, wpnknock: 0.5f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 4, range: 5, width: 1,    scriptid: 1);
-        m("Auto-aim",               dmgmin: 10, dmgmax: 20, wpnknock: 2, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 7, range: 5, width: 3,       scriptid: 2);
+        m("Auto-aim",               dmgmin: 10, dmgmax: 20, wpnknock: 2, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 7, range: 5, width: 3,       scriptid: 2);*/
 
         r("Bow", 5, 10, 1, 1, 1, 1, 0, 0, 500, GenericRangeProjectile, 0.1f, 1);
         r("Scar H", 50, 100, 0, 0, 0, 1, 0, 1, 500, GenericRangeProjectile, 0.5f, 0);
 
         p("Throwing Knives", 1, 5, 1f, 20, 0, 2, 0, 0, 100, GenericProjectile, 0.5f, 5, 0);
-        p("Throwing Stars", 1, 10, 1f, 5, 0, 2, 1, 0, 500, GenericProjectile, 0.5f, 20, 1, spin: true, spinspeed: 5);
+        p("Throwing Stars", 1, 10, 1f, 5, 0, 2, 1, 1, 500, GenericProjectile, 0.5f, 20, 1, spin: true, spinspeed: 5);
         p("Spear", 10, 20, 0.5f, 100, 0, 2, 0, 2, 200, GenericProjectile, 0.2f, 3, 2);
     }
 }
