@@ -129,7 +129,6 @@ public class WeaponObject : MonoBehaviour
                         double DamageInflicted = UnityEngine.Random.Range(PlayerGeneral.CurrentWeaponReference.DamageMin, PlayerGeneral.CurrentWeaponReference.DamageMax);
                         Collision.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, PlayerGeneral.CurrentWeaponReference.Knockback, PlayerGeneral.PlayerPosition);
                         EnemyAttackedList.Add(Collision.gameObject);
-                        Debug.Log(PlayerGeneral.CurrentWeaponReference.IsBreakable);
                         if(PlayerGeneral.CurrentWeaponReference.IsBreakable) { Player.GetComponent<PlayerGeneral>().MinusWeaponDurability(); }
                     }
                     break;
