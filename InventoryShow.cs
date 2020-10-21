@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class InventoryShow : MonoBehaviour
 {
+    //TO BE REMOVED
     public static bool GamePaused = false;
     public GameObject InventoryUI;
     private void Start()
@@ -24,6 +25,10 @@ public class InventoryShow : MonoBehaviour
             }
             else
             {
+                foreach(WeaponData.Weapon i in PlayerGeneral.InventoryWeapon)
+                {
+
+                }
                 Time.timeScale = 0f;
                 GamePaused = true;
                 InventoryUI.SetActive(true);

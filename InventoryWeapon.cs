@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryWeapon : MonoBehaviour
 {
+    //TO BE REMOVED
     public Button ButtonPrefab;
     public GameObject ItemList;
     public GameObject Player;
@@ -24,7 +25,7 @@ public class InventoryWeapon : MonoBehaviour
         obj.GetComponent<InventoryWeaponButtonGeneral>().SetWeapon(SelectedWeapon);
         switch(SelectedWeapon.Category)
         {
-            case 1:
+            case 1: 
                 obj.GetComponent<Button>().image.sprite = Runtime.GetComponent<WeaponData>().RangeWeaponSpriteList[SelectedWeapon.WeaponID];
                 break;
             case 2:
