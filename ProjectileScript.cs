@@ -61,7 +61,6 @@ public class ProjectileScript : MonoBehaviour
     {
         if (!HasDied)
         {
-            ProjectileWeapon.Used--;
             Destroy(gameObject);
             HasDied = true;
         }

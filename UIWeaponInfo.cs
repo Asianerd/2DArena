@@ -15,10 +15,10 @@ public class UIWeaponInfo : MonoBehaviour
             switch (PlayerGeneral.CurrentWeaponReference.Category)
             {
                 case 2:
-                    DurabilityText = $"{PlayerGeneral.CurrentWeaponReference.Used}/{PlayerGeneral.CurrentWeaponReference.Amount}";
+                    DurabilityText = $"{PlayerGeneral.ProjectilesUsed}/{PlayerGeneral.CurrentWeaponReference.Amount}";
                     break;
                 default:
-                    if (PlayerGeneral.CurrentWeaponReference.MaxDurability != -100)
+                    if (PlayerGeneral.CurrentWeaponReference.IsBreakable)
                         DurabilityText = $"{PlayerGeneral.CurrentWeaponReference.Durability}/{PlayerGeneral.CurrentWeaponReference.MaxDurability}";
                     else
                     {
