@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Transactions;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -27,7 +28,7 @@ public class PlayerGeneral : MonoBehaviour
     //HP
     public float HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
-    public List<WeaponData.Weapon> InventoryWeapon = new List<WeaponData.Weapon>();
+    public static List<WeaponData.Weapon> InventoryWeapon = new List<WeaponData.Weapon>();
     public List<ArrayList> InventoryLoot = new List<ArrayList>();
     public List<string> InventoryLootName = new List<string>();
     public WeaponData.Weapon EquippedWeapon;
@@ -43,6 +44,7 @@ public class PlayerGeneral : MonoBehaviour
 
     //Projectile data
     public List<GameObject> ProjectileSpawned;
+    public static int ProjectilesUsed;
 
 
 
@@ -74,6 +76,19 @@ public class PlayerGeneral : MonoBehaviour
             LastButton.GetComponent<InventoryWeaponButtonGeneral>().Weapon = CurrentWeapon;
         }
 
+        GameObject[] gameObjects = FindObjectsOfType<GameObject>();
+        ProjectilesUsed = 0;
+        foreach(GameObject gameobj in gameObjects)
+        {
+            if(gameobj.name == CurrentWeapon.WeaponName)
+            {
+                ProjectilesUsed = gameObjects.Count(n => n.name == CurrentWeapon.WeaponName);
+                Debug.Log($"{ProjectilesUsed}  ::  {gameObjects.Count()}");
+                break;
+            }
+        }
+
+        // Debug keys
         if(Input.GetKey(KeyCode.C))
         {
             int SpawnedWeaponID = UnityEngine.Random.Range(0, WeaponData.GlobalWeaponList.Count);
@@ -84,6 +99,7 @@ public class PlayerGeneral : MonoBehaviour
         {
             transform.position = new Vector2(MousePosition.x, MousePosition.y);
         }
+        // Debug keys
 
         if (!InventoryShow.GamePaused)
         {
@@ -148,17 +164,18 @@ public class PlayerGeneral : MonoBehaviour
     {
         float length = 1.4f;
         GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity);
+        obj.name = CurrentWeapon.WeaponName;
         obj.GetComponent<RangeProjectileScript>().Set(CurrentWeapon,gameObject);
     }
 
     void ProjectileAttack()
     {
         float length = 1.4f;
-        if(CurrentWeapon.Used < CurrentWeapon.Amount)
+        if(ProjectilesUsed < CurrentWeapon.Amount)
         {
             GameObject proj = Instantiate(CurrentWeapon.Projectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle) * length) + transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle) * length) + transform.position.y)), Quaternion.identity);
+            proj.name = CurrentWeapon.WeaponName;
             proj.GetComponent<ProjectileScript>().Set(CurrentWeapon,gameObject);
-            CurrentWeapon.Used++;
         }
     }
 
@@ -206,8 +223,7 @@ public class PlayerGeneral : MonoBehaviour
 
     public void AppendInventory(WeaponData.Weapon WantedWeapon)
     {
-        InvCanvas.GetComponent<InventoryWeapon>().AddWeapon(WantedWeapon);
-        InventoryWeapon.Add(WantedWeapon);
+        InventoryWeapon.Add(new WeaponData.Weapon(WantedWeapon));
     }
 
     void Regen()
