@@ -7,6 +7,7 @@ using System.Transactions;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class PlayerGeneral : MonoBehaviour
@@ -56,6 +57,8 @@ public class PlayerGeneral : MonoBehaviour
     public GameObject LastButton; //So that the weapon data in the button matches the current weapon - durability is stored for each button
     public static bool WeaponObjectIsFlipped = false;
 
+    public GameObject TempText;
+
     public void ResetCurrentWeapon()
     {
         CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 100, 0, 1, 0, 0, 0, 5, 0.05f);
@@ -81,6 +84,8 @@ public class PlayerGeneral : MonoBehaviour
         {
             LastButton.GetComponent<InventoryWeaponButtonGeneral>().Weapon = CurrentWeapon;
         }
+
+        TempText.GetComponent<Text>().text = $"LVL : {CurrentWeapon.Level}  {CurrentWeapon.LevelCurrentProgression}/{CurrentWeapon.LevelNextLevelProgression}";
 
         GameObject[] gameObjects = FindObjectsOfType<GameObject>();
         ProjectilesUsed = 0;
@@ -130,6 +135,12 @@ public class PlayerGeneral : MonoBehaviour
         else
             if(CurrentWeapon.IsBreakable)
                 CurrentWeapon.Durability -= LostDurability;
+    }
+
+    public void AddWeaponLevelProgress(int WeaponProgress)
+    {
+        CurrentWeapon.LevelCurrentProgression += WeaponProgress;
+        CurrentWeapon.LevelCheck();
     }
 
     void WeaponDurabilityCheck()
