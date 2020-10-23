@@ -11,7 +11,6 @@ public class WeaponObject : MonoBehaviour
     GameObject Runtime;
     GameObject Player;
 
-
     // 0 - Swing
     public float TotalIncrement = 130;
     public float IncrementAngle;
@@ -170,7 +169,7 @@ public class WeaponObject : MonoBehaviour
             default:
                 OffsetX = Mathf.Cos(PlayerGeneral.MouseAngle) * 0.5f;
                 OffsetY = Mathf.Sin(PlayerGeneral.MouseAngle) * 0.5f;
-                IncrementAngle = Weapon.Knockback; // Change this ; Speed(TotalAngle) is determined by the knockback
+                IncrementAngle = Weapon.Knockback*7; // Change this ; Speed(TotalAngle) is determined by the knockback
                 IncrementAmount = 0;
                 break;
         }
