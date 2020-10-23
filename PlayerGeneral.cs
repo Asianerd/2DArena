@@ -46,6 +46,11 @@ public class PlayerGeneral : MonoBehaviour
     public List<GameObject> ProjectileSpawned;
     public static int ProjectilesUsed;
 
+    //Animation data
+    public Animator PlayerEyeAnimator;
+    public int PlayerEyeAnimationCooldown;
+    int PlayerEyeCurrentAnimationCooldown = 0;
+
 
 
     public GameObject LastButton; //So that the weapon data in the button matches the current weapon - durability is stored for each button
@@ -53,13 +58,14 @@ public class PlayerGeneral : MonoBehaviour
 
     public void ResetCurrentWeapon()
     {
-        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 100, 0, 0, 0, 0, 5, 0.05f);
+        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 100, 0, 1, 0, 0, 0, 5, 0.05f);
     }
 
     void Awake()
     {
         ResetCurrentWeapon();
         PlayerCamera = FindObjectOfType<Camera>();
+        PlayerEyeAnimationCooldown = UnityEngine.Random.Range(0, 10000);
     }
 
     void Update()
@@ -83,10 +89,11 @@ public class PlayerGeneral : MonoBehaviour
             if(gameobj.name == CurrentWeapon.WeaponName)
             {
                 ProjectilesUsed = gameObjects.Count(n => n.name == CurrentWeapon.WeaponName);
-                Debug.Log($"{ProjectilesUsed}  ::  {gameObjects.Count()}");
                 break;
             }
         }
+
+        CurrentWeapon.LevelCheck();
 
         // Debug keys
         if(Input.GetKey(KeyCode.C))
@@ -107,6 +114,7 @@ public class PlayerGeneral : MonoBehaviour
             Attack();
             ShowWeapon();
             WeaponDurabilityCheck();
+            PlayerEyeAnimation();
         }
     }
 
@@ -219,6 +227,21 @@ public class PlayerGeneral : MonoBehaviour
                 WeaponObjectIsFlipped = false;
             }
         }
+    }
+
+    void PlayerEyeAnimation()
+    {
+        if (PlayerEyeCurrentAnimationCooldown > 0)
+        {
+            PlayerEyeCurrentAnimationCooldown--;
+        }
+        else
+        {
+            PlayerEyeAnimationCooldown = UnityEngine.Random.Range(0, 10000);
+            PlayerEyeCurrentAnimationCooldown = PlayerEyeAnimationCooldown;
+        }
+
+        PlayerEyeAnimator.SetInteger("BlinkTimer", PlayerEyeCurrentAnimationCooldown);
     }
 
     public void AppendInventory(WeaponData.Weapon WantedWeapon)
