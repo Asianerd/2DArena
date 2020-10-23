@@ -166,7 +166,7 @@ public class WeaponData : MonoBehaviour
             Category = WpnCategory;
             Level = WpnLevel;
             LevelCurrentProgression = WpnCProgress;
-            LevelNextLevelProgression = 2 ^ (WpnLevel + 8);
+            LevelNextLevelProgression = Convert.ToInt32(Math.Pow(2,WpnLevel + 8));
             Type = WpnType;
             Effect = WpnEffect;
             ManaUsage = WpnMana;
@@ -271,9 +271,10 @@ public class WeaponData : MonoBehaviour
         {
             if(LevelCurrentProgression>=LevelNextLevelProgression)
             {
+                LevelCurrentProgression -= LevelNextLevelProgression;
                 Level++;
-                LevelCurrentProgression = 0;
-                LevelNextLevelProgression = 2^(Level + 8);
+                LevelNextLevelProgression = Convert.ToInt32(Math.Pow(2, (Level + 8)));
+                //LevelNextLevelProgression = 2 ^ (Level + 8); exponents dont work in c#  fuck
             }
         }
     }
@@ -326,6 +327,7 @@ public class WeaponData : MonoBehaviour
 
         r("Bow", 5, 10, 1, 1, 1, 1, 1, 0, 0, 500, GenericRangeProjectile, 0.1f, 1);
         r("Scar H", 50, 100, 0, 0, 0, 1, 1, 0, 1, 500, GenericRangeProjectile, 0.5f, 0);
+        r("M16", 20, 40, 2f, 5, 0, 1, 1, 0, 2, 500, GenericRangeProjectile, 0.5f, 2);
 
         p("Throwing Knives", 1, 5, 1f, 20, 0, 1, 2, 0, 0, 100, GenericProjectile, 0.5f, 5, 0);
         p("Throwing Stars", 1, 10, 1f, 5, 0, 1, 2, 1, 1, 500, GenericProjectile, 0.5f, 20, 1, spin: true, spinspeed: 5);
