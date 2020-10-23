@@ -15,6 +15,7 @@ public class RangeProjectileScript : MonoBehaviour
     int ShelfLife;
     double TargetX,TargetY;
     public GameObject Runtime;
+    bool HasDied = false;
 
 
     public void Set(WeaponData.Weapon weapon,GameObject Plyr)
@@ -39,12 +40,17 @@ public class RangeProjectileScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        double DamageInflicted = UnityEngine.Random.Range(ProjectileWeapon.DamageMin, ProjectileWeapon.DamageMax);
+        double DamageInflicted = (UnityEngine.Random.Range(ProjectileWeapon.DamageMin, ProjectileWeapon.DamageMax))*ProjectileWeapon.Level;
         GameObject CollidedObject = collision.gameObject;
         if(CollidedObject.CompareTag("Enemy"))
         {
-            CollidedObject.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted,ProjectileWeapon.Knockback,transform.position);
-            Player.GetComponent<PlayerGeneral>().MinusWeaponDurability();
+            if (!HasDied)
+            {
+                CollidedObject.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, ProjectileWeapon.Knockback, transform.position);
+                Player.GetComponent<PlayerGeneral>().MinusWeaponDurability();
+                Player.GetComponent<PlayerGeneral>().AddWeaponLevelProgress(Convert.ToInt32(DamageInflicted));
+            }
+            HasDied = true;
             Destroy(gameObject);
         }
         if(CollidedObject.CompareTag("Solid"))
