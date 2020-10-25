@@ -48,19 +48,20 @@ public class ProjectileScript : MonoBehaviour
         {
             CollidedObject.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, ProjectileWeapon.Knockback, transform.position);
             Player.GetComponent<PlayerGeneral>().ProjectileSpawned.Remove(gameObject);
-            Die();
+            Die(Convert.ToInt32(DamageInflicted));
         }
         if (CollidedObject.CompareTag("Solid"))
         {
             Player.GetComponent<PlayerGeneral>().ProjectileSpawned.Remove(gameObject);
-            Die();
+            Die(Convert.ToInt32(DamageInflicted));
         }
     }
 
-    public void Die()
+    public void Die(int DamageInflicted)
     {
         if (!HasDied)
         {
+            Player.GetComponent<PlayerGeneral>().AddWeaponLevelProgress(DamageInflicted);
             Destroy(gameObject);
             HasDied = true;
         }
@@ -69,8 +70,7 @@ public class ProjectileScript : MonoBehaviour
 
     void Update()
     {
-
-        if (!InventoryShow.GamePaused)
+        if (!InventoryGeneral.GamePaused)
         {
             if (ShelfLife > 0)
             {
@@ -84,7 +84,7 @@ public class ProjectileScript : MonoBehaviour
             else
             {
                 Player.GetComponent<PlayerGeneral>().ProjectileSpawned.Remove(gameObject);
-                Die();
+                Die(0);
             }
         }
     }
