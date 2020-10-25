@@ -24,7 +24,7 @@ public class EnemyAttack : MonoBehaviour
 
     void Update()
     {
-        if (!InventoryShow.GamePaused)
+        if (!InventoryGeneral.GamePaused)
         {
             if (AttackTime == 0)
             {

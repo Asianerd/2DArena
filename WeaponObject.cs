@@ -44,7 +44,7 @@ public class WeaponObject : MonoBehaviour
                 GetComponent<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().MeleeWeaponSpriteList[PlayerGeneral.CurrentWeaponReference.WeaponID];
                 break;
         }
-        if (!InventoryShow.GamePaused && IsSwinging)
+        if (!InventoryGeneral.GamePaused && IsSwinging)
         {
             switch (Weapon.ScriptID)
             {
@@ -105,7 +105,7 @@ public class WeaponObject : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D Collision)
     {
-        if (Collision.CompareTag("Enemy") && !InventoryShow.GamePaused && IsSwinging)
+        if (Collision.CompareTag("Enemy") && !InventoryGeneral.GamePaused && IsSwinging)
         {
             switch (Weapon.ScriptID)
             {

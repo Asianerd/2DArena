@@ -54,7 +54,6 @@ public class PlayerGeneral : MonoBehaviour
 
 
 
-    public GameObject LastButton; //So that the weapon data in the button matches the current weapon - durability is stored for each button
     public static bool WeaponObjectIsFlipped = false;
 
     public GameObject TempText;
@@ -80,10 +79,6 @@ public class PlayerGeneral : MonoBehaviour
         PlayerPosition = new Vector2(transform.position.x, transform.position.y);
 
         CurrentWeaponReference = CurrentWeapon;
-        if (LastButton != null)
-        {
-            LastButton.GetComponent<InventoryWeaponButtonGeneral>().Weapon = CurrentWeapon;
-        }
 
         TempText.GetComponent<Text>().text = $"LVL : {CurrentWeapon.Level}  {CurrentWeapon.LevelCurrentProgression}/{CurrentWeapon.LevelNextLevelProgression}";
 
@@ -113,7 +108,7 @@ public class PlayerGeneral : MonoBehaviour
         }
         // Debug keys
 
-        if (!InventoryShow.GamePaused)
+        if (!InventoryGeneral.GamePaused)
         {
             Regen();
             Attack();
@@ -139,7 +134,7 @@ public class PlayerGeneral : MonoBehaviour
 
     public void AddWeaponLevelProgress(int WeaponProgress)
     {
-        CurrentWeapon.LevelCurrentProgression += WeaponProgress;
+        CurrentWeapon.LevelCurrentProgression += WeaponProgress/10;
         CurrentWeapon.LevelCheck();
     }
 

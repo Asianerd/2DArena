@@ -10,7 +10,7 @@ public class InventoryGeneral : MonoBehaviour
     public GameObject ContentObject;
     public GameObject ButtonPrefab;
     public GameObject Runtime;
-    public bool GamePaused = false;
+    public static bool GamePaused = false;
     void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -46,8 +46,8 @@ public class InventoryGeneral : MonoBehaviour
         foreach(WeaponData.Weapon i in PlayerGeneral.InventoryWeapon)
         {
             GameObject obj = Instantiate(ButtonPrefab,ContentObject.transform);
-            obj.GetComponentInChildren<Text>().text = i.WeaponName;
             obj.GetComponent<InventoryWeaponButtonGeneral>().SetWeapon(i);
+            /*
             switch (i.Category)
             {
                 case 1:
@@ -59,7 +59,7 @@ public class InventoryGeneral : MonoBehaviour
                 default:
                     obj.GetComponent<Button>().image.sprite = Runtime.GetComponent<WeaponData>().MeleeWeaponSpriteList[i.WeaponID];
                     break;
-            }
+            }*/
         }
     }
 }

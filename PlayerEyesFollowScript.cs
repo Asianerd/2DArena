@@ -7,6 +7,7 @@ public class PlayerEyesFollowScript : MonoBehaviour
     public float EyeDistance = 0.1f;
     void Update()
     {
-        transform.position = new Vector2(PlayerGeneral.PlayerPosition.x + (Mathf.Cos(PlayerGeneral.MouseAngle) * EyeDistance), PlayerGeneral.PlayerPosition.y + (Mathf.Sin(PlayerGeneral.MouseAngle) * EyeDistance));
+        if(!InventoryGeneral.GamePaused)
+            transform.position = new Vector2(PlayerGeneral.PlayerPosition.x + (Mathf.Cos(PlayerGeneral.MouseAngle) * EyeDistance), PlayerGeneral.PlayerPosition.y + (Mathf.Sin(PlayerGeneral.MouseAngle) * EyeDistance));
     }
 }

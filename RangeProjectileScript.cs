@@ -61,7 +61,7 @@ public class RangeProjectileScript : MonoBehaviour
 
     void Update()
     {
-        if (!InventoryShow.GamePaused)
+        if (!InventoryGeneral.GamePaused)
         {
             if (ShelfLife > 0)
             {
