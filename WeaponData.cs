@@ -319,11 +319,11 @@ public class WeaponData : MonoBehaviour
         }
 
 
-        /*m("Aluminium shortsword",   dmgmin: 2, dmgmax: 3, wpnknock: 4f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 1, range: 1.5f, width: 0.05f, maxdurability: 60);
-        m("Silicon shortsword",     dmgmin: 3, dmgmax: 4, wpnknock: 2f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 2, range: 10, width: 0.05f);
-        m("Iron shortsword",        dmgmin: 5, dmgmax: 6, wpnknock: 2, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 3, range: 5, width: 0.05f);
-        m("Spear object",           dmgmin: 10, dmgmax: 20, wpnknock: 0.5f, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 4, range: 5, width: 1,    scriptid: 1);
-        m("Auto-aim",               dmgmin: 10, dmgmax: 20, wpnknock: 2, cooldown: 100, rarity: 0, category: 0, type: 0, weaponid: 7, range: 5, width: 3,       scriptid: 2);*/
+        m("Aluminium shortsword",   dmgmin: 2, dmgmax: 3, wpnknock: 4f, cooldown: 100, rarity: 0,1, category: 0, type: 0, weaponid: 1, range: 1.5f, width: 0.05f, maxdurability: 60);
+        m("Silicon shortsword",     dmgmin: 3, dmgmax: 4, wpnknock: 2f, cooldown: 100, rarity: 0, 1, category: 0, type: 0, weaponid: 2, range: 10, width: 0.05f);
+        m("Iron shortsword",        dmgmin: 5, dmgmax: 6, wpnknock: 2, cooldown: 100, rarity: 0, 1, category: 0, type: 0, weaponid: 3, range: 5, width: 0.05f);
+        m("Spear object",           dmgmin: 10, dmgmax: 20, wpnknock: 0.5f, cooldown: 100, rarity: 0, 1, category: 0, type: 0, weaponid: 4, range: 5, width: 1,    scriptid: 1);
+        m("Auto-aim",               dmgmin: 10, dmgmax: 20, wpnknock: 2, cooldown: 100, rarity: 0, 1, category: 0, type: 0, weaponid: 7, range: 5, width: 3,       scriptid: 2);
 
         r("Bow", 5, 10, 1, 1, 1, 1, 1, 0, 0, 500, GenericRangeProjectile, 0.1f, 1);
         r("Scar H", 50, 100, 0, 0, 0, 1, 1, 0, 1, 500, GenericRangeProjectile, 0.5f, 0);
