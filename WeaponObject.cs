@@ -35,13 +35,13 @@ public class WeaponObject : MonoBehaviour
         switch(PlayerGeneral.CurrentWeaponReference.Category)
         {
             case 1:
-                GetComponent<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().RangeWeaponSpriteList[PlayerGeneral.CurrentWeaponReference.WeaponID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponSpriteList[PlayerGeneral.CurrentWeaponReference.WeaponID];
                 break;
             case 2:
-                GetComponent<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().ProjectileSpriteList[PlayerGeneral.CurrentWeaponReference.ProjectileSpriteID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalProjectileSpriteList[PlayerGeneral.CurrentWeaponReference.ProjectileSpriteID];
                 break;
             default:
-                GetComponent<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().MeleeWeaponSpriteList[PlayerGeneral.CurrentWeaponReference.WeaponID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalMeleeWeaponSpriteList[PlayerGeneral.CurrentWeaponReference.WeaponID];
                 break;
         }
         if (!InventoryGeneral.GamePaused && IsSwinging)

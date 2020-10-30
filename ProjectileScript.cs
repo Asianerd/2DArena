@@ -28,7 +28,7 @@ public class ProjectileScript : MonoBehaviour
         Player = playerobject;
         Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
 
-        GetComponentInChildren<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().ProjectileSpriteList[weapon.ProjectileSpriteID];
+        GetComponentInChildren<SpriteRenderer>().sprite = WeaponData.GlobalProjectileSpriteList[weapon.ProjectileSpriteID];
         GetComponent<CapsuleCollider2D>().size = GetComponent<SpriteRenderer>().sprite.rect.size/10;
 
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StartMenuGeneral : MonoBehaviour
@@ -9,6 +10,8 @@ public class StartMenuGeneral : MonoBehaviour
     public GameObject Credits;
     public GameObject Help;
     public GameObject Start;
+    public GameObject LoadingScreen;
+    public Scene MainScene;
 
     public void Awake()
     {
@@ -18,6 +21,7 @@ public class StartMenuGeneral : MonoBehaviour
         Credits.SetActive(false);
         Help.SetActive(false);
         Start.SetActive(true);
+        LoadingScreen.SetActive(false);
     }
 
     public void Normal()
@@ -25,6 +29,7 @@ public class StartMenuGeneral : MonoBehaviour
         Credits.SetActive(false);
         Help.SetActive(false);
         Start.SetActive(true);
+        LoadingScreen.SetActive(false);
     }
 
     public void OpenHelp()
@@ -37,5 +42,14 @@ public class StartMenuGeneral : MonoBehaviour
     {
         Start.SetActive(false);
         Credits.SetActive(true);
+    }
+
+    public void StartGame()
+    {
+        Start.SetActive(false);
+        Credits.SetActive(false);
+        Help.SetActive(false);
+        LoadingScreen.SetActive(true);
+        SceneManager.LoadSceneAsync("Main");
     }
 }

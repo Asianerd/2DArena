@@ -10,11 +10,20 @@ public class InventoryGeneral : MonoBehaviour
     public GameObject ContentObject;
     public GameObject ButtonPrefab;
     public GameObject Runtime;
+    public GameObject CursorObject;
+    public GameObject WeaponSelectTab;
+    public GameObject SelectionOutline;
     public static bool GamePaused = false;
+
+    public static GameObject CurrentWeaponGameObject;
+
+    // on runtime
+
     void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         InventoryUI.SetActive(false);
+        CursorObject = GameObject.FindGameObjectWithTag("CursorObject");
     }
 
     void Update()
@@ -30,6 +39,8 @@ public class InventoryGeneral : MonoBehaviour
                 Time.timeScale = 1f;
                 GamePaused = false;
                 InventoryUI.SetActive(false);
+                CursorObject.GetComponent<CursorSpriteScript>().UpdateCursorSprite();
+                WeaponSelectTab.GetComponent<InventorySelectionGeneral>().SelectionDefault();
             }
             else
             {
@@ -37,8 +48,16 @@ public class InventoryGeneral : MonoBehaviour
                 Time.timeScale = 0f;
                 GamePaused = true;
                 InventoryUI.SetActive(true);
+                CursorObject.GetComponent<CursorSpriteScript>().UpdateCursorSprite();
+                WeaponSelectTab.GetComponent<InventorySelectionGeneral>().SelectionDefault();
             }
         }
+    }
+    IEnumerator DelayedSelectionMovement(GameObject Pos)
+    {
+        yield return new WaitForSeconds(0.1f);
+        SelectionOutline.transform.position = Pos.transform.position;
+        Debug.Log(Pos.transform.position.x);
     }
 
     public void UpdateInventory()
@@ -47,19 +66,6 @@ public class InventoryGeneral : MonoBehaviour
         {
             GameObject obj = Instantiate(ButtonPrefab,ContentObject.transform);
             obj.GetComponent<InventoryWeaponButtonGeneral>().SetWeapon(i);
-            /*
-            switch (i.Category)
-            {
-                case 1:
-                    obj.GetComponent<Button>().image.sprite = Runtime.GetComponent<WeaponData>().RangeWeaponSpriteList[i.WeaponID];
-                    break;
-                case 2:
-                    obj.GetComponent<Button>().image.sprite = Runtime.GetComponent<WeaponData>().ProjectileSpriteList[i.WeaponID];
-                    break;
-                default:
-                    obj.GetComponent<Button>().image.sprite = Runtime.GetComponent<WeaponData>().MeleeWeaponSpriteList[i.WeaponID];
-                    break;
-            }*/
         }
     }
 }

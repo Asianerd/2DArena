@@ -28,7 +28,7 @@ public class RangeProjectileScript : MonoBehaviour
         ProjectileWeapon = weapon;
         Player = Plyr;
         Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
-        GetComponentInChildren<SpriteRenderer>().sprite = Runtime.GetComponent<WeaponData>().RangeWeaponProjectileList[weapon.ProjectileSpriteID];
+        GetComponentInChildren<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponProjectileSpriteList[weapon.ProjectileSpriteID];
         GetComponent<CapsuleCollider2D>().size = GetComponentInChildren<SpriteRenderer>().sprite.rect.size/10;
 
 

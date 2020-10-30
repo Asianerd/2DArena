@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class WeaponData : MonoBehaviour
@@ -7,19 +8,24 @@ public class WeaponData : MonoBehaviour
     public List<GameObject> RangeProjectilePrefabList;
     public List<GameObject> ProjectilePrefabList;
 
-    public List<Sprite> MeleeWeaponSpriteList;
-    public List<Sprite> RangeWeaponSpriteList;
+    public static Sprite[] GlobalMeleeWeaponSpriteList;
+    public static Sprite[] GlobalRangeWeaponSpriteList;
+    public static Sprite[] GlobalProjectileSpriteList;
 
     public GameObject GenericRangeProjectile;
     public GameObject GenericProjectile;
 
-    public List<Sprite> RangeWeaponProjectileList;
-    public List<Sprite> ProjectileSpriteList;
+    public static Sprite[] GlobalRangeWeaponProjectileSpriteList;
 
     public List<Sprite> LootSpriteList;
     public GameObject LootPrefab;
 
     public static List<Weapon> GlobalWeaponList = new List<Weapon>();
+    
+    public static Sprite[] GlobalWeaponBorderList;
+    public static Sprite[] GlobalWeaponTypeSprite;
+    public static string[] GlobalWeaponRarityNames = new string[] { "Common", "Uncommon", "Rare", "Legendary", "Mythical", "Artifact" };
+    public static Sprite[] GlobalRarityBackground;
 
     public class Weapon
     {
@@ -305,6 +311,13 @@ public class WeaponData : MonoBehaviour
 
     void Awake()
     {
+        GlobalWeaponBorderList = Resources.LoadAll<Sprite>("UISprites/Rarity/Border");
+        GlobalRarityBackground = Resources.LoadAll<Sprite>("UISprites/Rarity/Selection");
+        GlobalWeaponTypeSprite = Resources.LoadAll<Sprite>("UISprites/WeaponTypeSprites");
+        GlobalMeleeWeaponSpriteList = Resources.LoadAll<Sprite>("WeaponSprites");
+        GlobalRangeWeaponSpriteList = Resources.LoadAll<Sprite>("RangeProjectileWeaponSprites");
+        GlobalRangeWeaponProjectileSpriteList = Resources.LoadAll<Sprite>("RangeProjectileSprites");
+        GlobalProjectileSpriteList = Resources.LoadAll<Sprite>("ProjectileSprites");
         void m(string Name, float dmgmin, float dmgmax, float wpnknock, int cooldown, int rarity, int lvl,int category, int type, int weaponid,float range,float width,int lvlcprogress=0,int maxdurability = -100, int fx = 0,int mana=0,int scriptid=0)
         {
             GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, lvl,category, type, weaponid, range, width, lvlcprogress, maxdurability, fx, mana, scriptid));
@@ -320,14 +333,14 @@ public class WeaponData : MonoBehaviour
 
 
         m("Aluminium shortsword",   dmgmin: 2, dmgmax: 3, wpnknock: 4f, cooldown: 100, rarity: 0,1, category: 0, type: 0, weaponid: 1, range: 1.5f, width: 0.05f, maxdurability: 60);
-        m("Silicon shortsword",     dmgmin: 3, dmgmax: 4, wpnknock: 2f, cooldown: 100, rarity: 0, 1, category: 0, type: 0, weaponid: 2, range: 10, width: 0.05f);
-        m("Iron shortsword",        dmgmin: 5, dmgmax: 6, wpnknock: 2, cooldown: 100, rarity: 0, 1, category: 0, type: 0, weaponid: 3, range: 5, width: 0.05f);
-        m("Spear object",           dmgmin: 10, dmgmax: 20, wpnknock: 0.5f, cooldown: 100, rarity: 0, 1, category: 0, type: 0, weaponid: 4, range: 5, width: 1,    scriptid: 1);
-        m("Auto-aim",               dmgmin: 10, dmgmax: 20, wpnknock: 2, cooldown: 100, rarity: 0, 1, category: 0, type: 0, weaponid: 7, range: 5, width: 3,       scriptid: 2);
+        m("Silicon shortsword",     dmgmin: 3, dmgmax: 4, wpnknock: 2f, cooldown: 100, rarity: 1, 1, category: 0, type: 0, weaponid: 2, range: 10, width: 0.05f);
+        m("Iron shortsword",        dmgmin: 5, dmgmax: 6, wpnknock: 2, cooldown: 100, rarity: 2, 1, category: 0, type: 0, weaponid: 3, range: 5, width: 0.05f);
+        m("Spear object",           dmgmin: 10, dmgmax: 20, wpnknock: 0.5f, cooldown: 100, rarity: 3, 1, category: 0, type: 0, weaponid: 4, range: 5, width: 1,    scriptid: 1);
+        m("Auto-aim",               dmgmin: 10, dmgmax: 20, wpnknock: 2, cooldown: 100, rarity: 4, 1, category: 0, type: 0, weaponid: 7, range: 5, width: 3,       scriptid: 2);
 
         r("Bow", 5, 10, 1, 1, 1, 1, 1, 0, 0, 500, GenericRangeProjectile, 0.1f, 1);
-        r("Scar H", 50, 100, 0, 0, 0, 1, 1, 0, 1, 500, GenericRangeProjectile, 0.5f, 0);
-        r("M16", 20, 40, 2f, 5, 0, 1, 1, 0, 2, 500, GenericRangeProjectile, 0.5f, 2);
+        r("Scar H", 50, 100, 0, 0, 5, 1, 1, 0, 1, 500, GenericRangeProjectile, 0.5f, 0);
+        r("M16", 20, 40, 0, 5, 0, 1, 1, 0, 2, 500, GenericRangeProjectile, 0.5f, 2);
 
         p("Throwing Knives", 1, 5, 1f, 20, 0, 1, 2, 0, 0, 100, GenericProjectile, 0.5f, 5, 0);
         p("Throwing Stars", 1, 10, 1f, 5, 0, 1, 2, 1, 1, 500, GenericProjectile, 0.5f, 20, 1, spin: true, spinspeed: 5);

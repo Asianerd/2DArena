@@ -18,13 +18,13 @@ public class LootSpawning : MonoBehaviour
         switch (SelectedWeapon.Category)
         {
             case 1:
-                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, Runtime.GetComponent<WeaponData>().RangeWeaponSpriteList[SelectedWeapon.WeaponID]);
+                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, WeaponData.GlobalRangeWeaponSpriteList[SelectedWeapon.WeaponID]);
                 break;
             case 2:
-                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, Runtime.GetComponent<WeaponData>().ProjectileSpriteList[SelectedWeapon.WeaponID]);
+                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, WeaponData.GlobalProjectileSpriteList[SelectedWeapon.WeaponID]);
                 break;
             default:
-                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, Runtime.GetComponent<WeaponData>().MeleeWeaponSpriteList[SelectedWeapon.WeaponID]);
+                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, WeaponData.GlobalMeleeWeaponSpriteList[SelectedWeapon.WeaponID]);
                 break;
         }
     }
