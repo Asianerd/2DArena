@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class WeaponData : MonoBehaviour

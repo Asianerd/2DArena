@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,11 +13,13 @@ public class InventorySelectionGeneral : MonoBehaviour
     public GameObject Mana;
     public GameObject Rarity;
     public GameObject Durability;
+    public Button EquipButton;
 
-    public GameObject Weapon;
+    public GameObject WeaponSprite;
     public GameObject WeaponType;
     public GameObject RarityBG;
-    public static WeaponData.Weapon SelectedWeapon;
+    public static WeaponData.Weapon SelectedWeapon = PlayerGeneral.CurrentWeaponReference;
+    public static bool WeaponIsCurrent;
 
     public GameObject SelectionOutline;
     public GameObject LastButton;
@@ -26,6 +29,8 @@ public class InventorySelectionGeneral : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(WeaponIsCurrent);
+        Check();
         if(InventoryGeneral.GamePaused)
         {
             if (LastButton != null)
@@ -40,7 +45,7 @@ public class InventorySelectionGeneral : MonoBehaviour
         }
     }
 
-    public void Set(WeaponData.Weapon weapon,GameObject LButton)
+    public void Set(WeaponData.Weapon weapon, GameObject LButton)
     {
         SelectedWeapon = weapon;
         LastButton = LButton;
@@ -56,22 +61,50 @@ public class InventorySelectionGeneral : MonoBehaviour
         switch (weapon.Category)
         {
             case 1:
-                Weapon.GetComponent<Image>().sprite = WeaponData.GlobalRangeWeaponSpriteList[weapon.WeaponID];
+                WeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalRangeWeaponSpriteList[weapon.WeaponID];
                 break;
             case 2:
-                Weapon.GetComponent<Image>().sprite = WeaponData.GlobalProjectileSpriteList[weapon.WeaponID];
+                WeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalProjectileSpriteList[weapon.WeaponID];
                 break;
             default:
-                Weapon.GetComponent<Image>().sprite = WeaponData.GlobalMeleeWeaponSpriteList[weapon.WeaponID];
+                WeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalMeleeWeaponSpriteList[weapon.WeaponID];
                 break;
         }
         WeaponType.GetComponent<Image>().sprite = WeaponData.GlobalWeaponTypeSprite[weapon.Category];
-        Weapon.GetComponent<Image>().SetNativeSize();
+        WeaponSprite.GetComponent<Image>().SetNativeSize();
         RarityBG.GetComponent<Image>().sprite = WeaponData.GlobalRarityBackground[weapon.Rarity];
 
-        // Equippable check
-        Equippable = ((weapon.Durability <= 0) && weapon.Durability != -100) ? false : true;
-        
+
+    }
+
+    public void Check()
+    {
+        if (SelectedWeapon != null)
+        {
+            // Equippable check
+            Equippable = ((SelectedWeapon.Durability <= 0) && SelectedWeapon.Durability != -100) ? false : true;
+            // For when durability <= 0
+            if (!Equippable)
+            {
+                EquipButton.interactable = false;
+            }
+            else
+            {
+                EquipButton.interactable = true;
+            }
+        }
+
+        // For when weapon is already equipped
+        if (PlayerGeneral.CurrentWeaponReference == SelectedWeapon)
+        {
+            WeaponIsCurrent = true;
+            EquipButton.GetComponentInChildren<Text>().text = "Unequip";
+        }
+        else
+        {
+            WeaponIsCurrent = false;
+            EquipButton.GetComponentInChildren<Text>().text = "Equip";
+        }
     }
     
     public void SelectionDefault()
@@ -90,17 +123,17 @@ public class InventorySelectionGeneral : MonoBehaviour
         switch (weapon.Category)
         {
             case 1:
-                Weapon.GetComponent<Image>().sprite = WeaponData.GlobalRangeWeaponSpriteList[weapon.WeaponID];
+                WeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalRangeWeaponSpriteList[weapon.WeaponID];
                 break;
             case 2:
-                Weapon.GetComponent<Image>().sprite = WeaponData.GlobalProjectileSpriteList[weapon.WeaponID];
+                WeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalProjectileSpriteList[weapon.WeaponID];
                 break;
             default:
-                Weapon.GetComponent<Image>().sprite = WeaponData.GlobalMeleeWeaponSpriteList[weapon.WeaponID];
+                WeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalMeleeWeaponSpriteList[weapon.WeaponID];
                 break;
         }
         WeaponType.GetComponent<Image>().sprite = WeaponData.GlobalWeaponTypeSprite[weapon.Category];
-        Weapon.GetComponent<Image>().SetNativeSize();
+        WeaponSprite.GetComponent<Image>().SetNativeSize();
         RarityBG.GetComponent<Image>().sprite = WeaponData.GlobalRarityBackground[weapon.Rarity];
     }
 }

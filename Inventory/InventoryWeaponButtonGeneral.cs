@@ -31,7 +31,12 @@ public class InventoryWeaponButtonGeneral : MonoBehaviour
         if (InventorySelectionGeneral.Equippable)
         {
             Player = GameObject.FindGameObjectWithTag("Player");
-            Player.GetComponent<PlayerGeneral>().CurrentWeapon = InventorySelectionGeneral.SelectedWeapon;
+            if(InventorySelectionGeneral.WeaponIsCurrent)
+            {
+                Player.GetComponent<PlayerGeneral>().ResetCurrentWeapon();
+            }
+            else
+                Player.GetComponent<PlayerGeneral>().CurrentWeapon = InventorySelectionGeneral.SelectedWeapon;
         }
     }
 
@@ -60,5 +65,8 @@ public class InventoryWeaponButtonGeneral : MonoBehaviour
                 break;
         }
         SWeaponSprite.GetComponent<Image>().SetNativeSize();
+
+        /*WeaponSelect = GameObject.FindGameObjectWithTag("WeaponSelectionTab");
+        WeaponSelect.GetComponent<InventorySelectionGeneral>().Check();*/
     }
 }

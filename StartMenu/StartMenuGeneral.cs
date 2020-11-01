@@ -52,4 +52,13 @@ public class StartMenuGeneral : MonoBehaviour
         LoadingScreen.SetActive(true);
         SceneManager.LoadSceneAsync("Main");
     }
+
+    public void StartGame1366x768()
+    {
+        Start.SetActive(false);
+        Credits.SetActive(false);
+        Help.SetActive(false);
+        LoadingScreen.SetActive(true);
+        SceneManager.LoadSceneAsync("Main 1366x768");
+    }
 }
