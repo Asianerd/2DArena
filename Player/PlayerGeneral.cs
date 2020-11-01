@@ -12,7 +12,6 @@ using UnityEngine.UIElements;
 
 public class PlayerGeneral : MonoBehaviour
 {
-    public GameObject ItemList;
     public Canvas InvCanvas;
     public GameObject RuntimeScript;
     public GameObject DamageBubblePrefab;
