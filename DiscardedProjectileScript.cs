@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class ProjectileScript : MonoBehaviour
+public class DiscardedProjectileScript : MonoBehaviour
 {
     //This was just copied from RangeProjectileScript.cs so some bugs and errors might exist
     WeaponData.Weapon ProjectileWeapon;

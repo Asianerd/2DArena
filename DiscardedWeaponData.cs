@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponData : MonoBehaviour
+public class DiscardedWeaponData : MonoBehaviour
 {
     public List<GameObject> RangeProjectilePrefabList;
     public List<GameObject> ProjectilePrefabList;

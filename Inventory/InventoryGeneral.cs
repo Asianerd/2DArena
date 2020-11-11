@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,15 +8,21 @@ public class InventoryGeneral : MonoBehaviour
 {
     public GameObject Player;
     public GameObject InventoryUI;
-    public GameObject ContentObject;
-    public GameObject ButtonPrefab;
     public GameObject Runtime;
     public GameObject CursorObject;
-    public GameObject WeaponSelectTab;
-    public GameObject SelectionOutline;
-    public static bool GamePaused = false;
 
-    public static GameObject CurrentWeaponGameObject;
+    public GameObject[] Inventories;
+    public static int InventoryOpen = -1;
+    /*
+    -1 None
+    0 Character
+    1 Weapon
+    2 Equipment(Equipped)
+    3 Equipment storage
+    4 Skills(Equipped)
+    5 Skill storage*/
+
+    public static bool GamePaused = false;
 
     // on runtime
 
@@ -24,48 +31,50 @@ public class InventoryGeneral : MonoBehaviour
         Player = GameObject.FindGameObjectWithTag("Player");
         InventoryUI.SetActive(false);
         CursorObject = GameObject.FindGameObjectWithTag("CursorObject");
+        Inventories = Resources.LoadAll<GameObject>("Prefabs/Inventory Objects");
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            GamePaused = !GamePaused;
+            CursorObject.GetComponent<CursorSpriteScript>().UpdateCursorSprite();
             if (GamePaused)
             {
-                foreach(Transform child in ContentObject.transform)
-                {
-                    Destroy(child.gameObject);
-                }
-                Time.timeScale = 1f;
-                GamePaused = false;
-                InventoryUI.SetActive(false);
-                CursorObject.GetComponent<CursorSpriteScript>().UpdateCursorSprite();
-                WeaponSelectTab.GetComponent<InventorySelectionGeneral>().SelectionDefault();
+                InventoryUI.SetActive(true);
+                OpenInventory(1);
+                Time.timeScale = 0f;
             }
             else
             {
-                UpdateInventory();
-                Time.timeScale = 0f;
-                GamePaused = true;
-                InventoryUI.SetActive(true);
-                CursorObject.GetComponent<CursorSpriteScript>().UpdateCursorSprite();
-                WeaponSelectTab.GetComponent<InventorySelectionGeneral>().SelectionDefault();
+                InventoryUI.SetActive(false);
+                CloseInventory();
+                Time.timeScale = 1f;
             }
         }
     }
-    IEnumerator DelayedSelectionMovement(GameObject Pos)
+
+    /*Inventory List
+    0 Character
+    1 Weapon
+    2 Equipment (Equipped)
+    3 Equipment storage
+    4 Skills (Equipped)
+    5 Skill storage
+    */
+    public void OpenInventory(int InventoryType)
     {
-        yield return new WaitForSeconds(0.1f);
-        SelectionOutline.transform.position = Pos.transform.position;
-        Debug.Log(Pos.transform.position.x);
+        InventoryOpen = InventoryType;
+        Instantiate(Inventories[InventoryType],InventoryUI.transform);
     }
 
-    public void UpdateInventory()
+    public void CloseInventory()
     {
-        foreach(WeaponData.Weapon i in PlayerGeneral.InventoryWeapon)
+        InventoryOpen = -1;
+        foreach(Transform child in InventoryUI.transform)
         {
-            GameObject obj = Instantiate(ButtonPrefab,ContentObject.transform);
-            obj.GetComponent<InventoryWeaponButtonGeneral>().SetWeapon(i);
+            Destroy(child.gameObject);
         }
     }
 }
