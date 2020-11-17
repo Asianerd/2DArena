@@ -83,7 +83,7 @@ public class Discard : MonoBehaviour
                     if (IncrementAmount <= TotalIncrement)
                     {
                         IncrementAmount += Weapon.Knockback;
-                        if (PlayerGeneral.WeaponObjectIsFlipped)
+                        if (WeaponObject.WeaponObjectIsFlipped)
                             transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z + IncrementAngle);
                         else
                             transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z - IncrementAngle);
