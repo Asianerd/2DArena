@@ -19,7 +19,6 @@ public class PlayerGeneral : MonoBehaviour
     public Camera PlayerCamera;
     public static Vector3 MousePosition;
     public static float MouseAngle;
-    public static float NormalizedMouseAngle;
     public static Vector2 PlayerPosition;
 
     public GameObject WpnObject;
@@ -52,6 +51,9 @@ public class PlayerGeneral : MonoBehaviour
     public int PlayerEyeAnimationCooldown;
     int PlayerEyeCurrentAnimationCooldown = 0;
 
+
+
+    public static bool WeaponObjectIsFlipped = false;
 
     public GameObject TempText;
 
@@ -109,7 +111,7 @@ public class PlayerGeneral : MonoBehaviour
         {
             Regen();
             Attack();
-            //ShowWeapon();
+            ShowWeapon();
             WeaponDurabilityCheck();
             PlayerEyeAnimation();
         }
@@ -193,7 +195,6 @@ public class PlayerGeneral : MonoBehaviour
 
     void ShowWeapon()
     {
-        // Moved to WeaponObject.cs
         float ReturnSpeed = 0.4f;
         WpnObject.transform.position = Vector2.MoveTowards(WpnObject.transform.position, new Vector2(transform.position.x + (Mathf.Cos(TempMouseAngle) * CosmeticWeaponDistance), transform.position.y + (Mathf.Sin(TempMouseAngle) * CosmeticWeaponDistance)), ReturnSpeed);
         if (!WeaponObject.IsSwinging)
@@ -210,7 +211,7 @@ public class PlayerGeneral : MonoBehaviour
                     WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                     break;
                 case 1:
-                    WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                      WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                     break;
                 case 2:
                     WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
@@ -222,10 +223,12 @@ public class PlayerGeneral : MonoBehaviour
             if ((Math.Abs(MouseAngle * Mathf.Rad2Deg)) >= 90)
             {
                 WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = true;
+                WeaponObjectIsFlipped = true;
             }
             else 
             {
                 WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = false;
+                WeaponObjectIsFlipped = false;
             }
         }
     }

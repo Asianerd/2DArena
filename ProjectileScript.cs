@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class DiscardedProjectileScript : MonoBehaviour
+public class ProjectileScript : MonoBehaviour
 {
     //This was just copied from RangeProjectileScript.cs so some bugs and errors might exist
     // This is attached to the Projectile GameObject Prefab (the one spawned when shooting)

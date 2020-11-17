@@ -10,7 +10,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class DiscardedWeaponData : MonoBehaviour
+public class WeaponData : MonoBehaviour
 {
     public List<GameObject> RangeProjectilePrefabList;
     public List<GameObject> ProjectilePrefabList;
