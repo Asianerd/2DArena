@@ -6,29 +6,27 @@ using UnityEngine;
 
 public class RangeProjectileScript : MonoBehaviour
 {
-    WeaponData.Weapon ProjectileWeapon;
+    //WeaponData.Weapon ProjectileWeapon;
     GameObject Player;
 
     // Straight
     double DirectionAngle;
-    float Speed;
-    int ShelfLife;
+    public float DamageMin, DamageMax;
+    public float Speed;
+    public int ShelfLife;
     double TargetX,TargetY;
     public GameObject Runtime;
     bool HasDied = false;
 
 
-    public void Set(WeaponData.Weapon weapon,GameObject Plyr)
+    public void Set(,GameObject Plyr)
     {
         DirectionAngle = PlayerGeneral.MouseAngle;
-        Speed = weapon.ProjectileSpeed;
-        ShelfLife = weapon.ShelfLife;
         TargetX = Math.Cos(DirectionAngle) * 10000;
         TargetY = Math.Sin(DirectionAngle) * 10000;
-        ProjectileWeapon = weapon;
         Player = Plyr;
         Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
-        GetComponentInChildren<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponProjectileSpriteList[weapon.ProjectileSpriteID];
+        //GetComponentInChildren<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponProjectileSpriteList[weapon.ProjectileSpriteID; Its going to be set in the SpriteRenderer (cos theres gonna be multiple Projectile prefabs)
         GetComponent<CapsuleCollider2D>().size = GetComponentInChildren<SpriteRenderer>().sprite.rect.size/10;
 
 
@@ -40,7 +38,7 @@ public class RangeProjectileScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        double DamageInflicted = (UnityEngine.Random.Range(ProjectileWeapon.DamageMin, ProjectileWeapon.DamageMax))*ProjectileWeapon.Level;
+        double DamageInflicted = (UnityEngine.Random.Range(DamageMin, DamageMax))*ProjectileWeapon.Level;
         GameObject CollidedObject = collision.gameObject;
         if(CollidedObject.CompareTag("Enemy"))
         {

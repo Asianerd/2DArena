@@ -7,6 +7,7 @@ using UnityEngine;
 public class ProjectileScript : MonoBehaviour
 {
     //This was just copied from RangeProjectileScript.cs so some bugs and errors might exist
+    // This is attached to the Projectile GameObject Prefab (the one spawned when shooting)
     WeaponData.Weapon ProjectileWeapon;
     double DirectionAngle;
     float Speed;

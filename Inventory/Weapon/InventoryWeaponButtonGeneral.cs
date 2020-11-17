@@ -23,20 +23,20 @@ public class InventoryWeaponButtonGeneral : MonoBehaviour
     public void SetSelectedWeapon()
     {
         WeaponSelect = GameObject.FindGameObjectWithTag("WeaponSelectionTab");
-        WeaponSelect.GetComponent<InventorySelectionGeneral>().Set(Weapon,gameObject);
+        WeaponSelect.GetComponent<InventorySelectionTabGeneral>().Set(Weapon,gameObject);
     }
 
     public void SetEquippedWeapon()
     {
-        if (InventorySelectionGeneral.Equippable)
+        if (InventorySelectionTabGeneral.Equippable)
         {
             Player = GameObject.FindGameObjectWithTag("Player");
-            if(InventorySelectionGeneral.WeaponIsCurrent)
+            if(InventorySelectionTabGeneral.WeaponIsCurrent)
             {
                 Player.GetComponent<PlayerGeneral>().ResetCurrentWeapon();
             }
             else
-                Player.GetComponent<PlayerGeneral>().CurrentWeapon = InventorySelectionGeneral.SelectedWeapon;
+                Player.GetComponent<PlayerGeneral>().CurrentWeapon = InventorySelectionTabGeneral.SelectedWeapon;
         }
     }
 

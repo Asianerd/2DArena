@@ -1,6 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Transactions;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Events;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class WeaponData : MonoBehaviour
 {
@@ -34,7 +42,7 @@ public class WeaponData : MonoBehaviour
         public bool IsBreakable = true;
         public int ManaUsage;
         public int Category;
-        public int WeaponID;
+        public int WeaponID; // For the WeaponObject's Sprite
         public int ScriptID;
         public int Level, LevelCurrentProgression, LevelNextLevelProgression;
         /* Category
@@ -44,7 +52,6 @@ public class WeaponData : MonoBehaviour
          * (2) Projectile
          * 
          */
-        public int Type;
         /* Type
          * 
          * Melee
@@ -92,23 +99,23 @@ public class WeaponData : MonoBehaviour
          * 
          */
         // Data for each Category
-        // Melee
-        public float AttackRange;
-        public float WeaponWidth;
-        // Range
+            // Melee
+
+            // Range
         public GameObject RangeProjectile;
-        // Projectile
+
+            // Projectile
         public GameObject Projectile;
         public int Used;
         public int Amount;
         public bool ProjectileSpin;
         public float ProjectileSpinSpeed;
-        // Gun
         
-        // Range & Projectile
+            // Range & Projectile
         public int ShelfLife;
         public float ProjectileSpeed;
-        public int ProjectileSpriteID;
+        public int ProjectileSpriteID;     //Possibly removing these two as it might not be used (the sprites already in the projectile GameObject) DONT REMOVE - stupid fucking vs doesnt want to work
+
         /* Overload order
          * 
          * Melee
@@ -116,9 +123,8 @@ public class WeaponData : MonoBehaviour
          * Projectile
          */
         // Melee
-        public Weapon(string name, float DmgMin, float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnLevel, int WpnCategory, int WpnType, int WpnID,
-            float WpnRange, float WpnWidth
-            , int WpnCProgress = 0, int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, int WpnScriptID = 0)
+        public Weapon(string name, float DmgMin, float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnLevel, int WpnCategory, int WpnID, 
+            int WpnCProgress = 0, int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, int WpnScriptID = 0)
         {
             // Default values for every weapon
             WeaponName = name;
@@ -138,7 +144,6 @@ public class WeaponData : MonoBehaviour
             Category = WpnCategory;
             Level = WpnLevel;
 
-            Type = WpnType;
             Effect = WpnEffect;
             ManaUsage = WpnMana;
             WeaponID = WpnID;
@@ -146,12 +151,10 @@ public class WeaponData : MonoBehaviour
 
 
             // Melee
-            AttackRange = WpnRange;
-            WeaponWidth = WpnWidth;
         }
 
         // Range
-        public Weapon(string name, float DmgMin, float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnLevel,int WpnCategory, int WpnType, int WpnID,
+        public Weapon(string name, float DmgMin, float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnLevel,int WpnCategory, int WpnID,
             int WpnShelfLife, GameObject WpnProjectile, float WpnProjectileSpeed, int WpnProjectileSpriteID
             , int WpnCProgress=0, int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, int WpnScriptID = 0)
         {
@@ -172,7 +175,6 @@ public class WeaponData : MonoBehaviour
             Level = WpnLevel;
             LevelCurrentProgression = WpnCProgress;
             LevelNextLevelProgression = Convert.ToInt32(Math.Pow(2,WpnLevel + 8));
-            Type = WpnType;
             Effect = WpnEffect;
             ManaUsage = WpnMana;
             WeaponID = WpnID;
@@ -187,7 +189,7 @@ public class WeaponData : MonoBehaviour
         }
 
         // Projectile
-        public Weapon(string name, float DmgMin, float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnLevel,int WpnCategory, int WpnType, int WpnID,
+        public Weapon(string name, float DmgMin, float DmgMax, float WpnKnockback, int WpnCooldown, int WpnRarity, int WpnLevel,int WpnCategory, int WpnID,
             int WpnShelfLife, GameObject WpnProjectile, int WpnAmount, float WpnProjectileSpeed, int WpnProjectileSpriteID
             , int WpnCProgress=0,int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, bool WpnProjectileSpin = false, float WpnProjectileSpinSpeed = 0, int WpnScriptID = 0)
         {
@@ -208,7 +210,6 @@ public class WeaponData : MonoBehaviour
             Level = WpnLevel;
             LevelCurrentProgression = WpnCProgress;
             LevelNextLevelProgression = 2 ^ (WpnLevel + 8);
-            Type = WpnType;
             Effect = WpnEffect;
             ManaUsage = WpnMana;
             WeaponID = WpnID;
@@ -225,7 +226,8 @@ public class WeaponData : MonoBehaviour
             ProjectileSpinSpeed = WpnProjectileSpinSpeed;
         }
 
-        // Weapon = new Weapon(Weapon); - just ignore this
+
+        // Weapon = new Weapon(Weapon); - just ignore this; done to make an instance without changing the reference; theres definitely a better way to do this
         public Weapon(Weapon weapon)
         {
             WeaponName = weapon.WeaponName;
@@ -244,7 +246,6 @@ public class WeaponData : MonoBehaviour
             Level = weapon.Level;
             LevelCurrentProgression = weapon.LevelCurrentProgression;
             LevelNextLevelProgression = weapon.LevelNextLevelProgression;
-            Type = weapon.Type;
             Effect = weapon.Effect;
             ManaUsage = weapon.ManaUsage;
             WeaponID = weapon.WeaponID;
@@ -252,8 +253,6 @@ public class WeaponData : MonoBehaviour
 
 
             // Melee
-            AttackRange = weapon.AttackRange;
-            WeaponWidth = weapon.WeaponWidth;
 
             // Range
             RangeProjectile = weapon.RangeProjectile;
@@ -317,32 +316,33 @@ public class WeaponData : MonoBehaviour
         GlobalRangeWeaponSpriteList = Resources.LoadAll<Sprite>("RangeProjectileWeaponSprites");
         GlobalRangeWeaponProjectileSpriteList = Resources.LoadAll<Sprite>("RangeProjectileSprites");
         GlobalProjectileSpriteList = Resources.LoadAll<Sprite>("ProjectileSprites");
-        void m(string Name, float dmgmin, float dmgmax, float wpnknock, int cooldown, int rarity, int lvl,int category, int type, int weaponid,float range,float width,int lvlcprogress=0,int maxdurability = -100, int fx = 0,int mana=0,int scriptid=0)
+
+        /* Creating all the weapons based on the fields in the WeaponConstructorScriptMelee/Range/Projectile scripts 
+         * attached to the GameObjects in Assets/Resources/WeaponConstructor/(Melee/Range/Projectile) 
+         * Yes, GetComponent is used. This is because this only occurs once; when starting the game and not every frame */
+        GameObject[] WeaponConstructorArray = Resources.LoadAll<GameObject>("WeaponConstructor/Melee");
+        foreach (GameObject y in WeaponConstructorArray)
         {
-            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, lvl,category, type, weaponid, range, width, lvlcprogress, maxdurability, fx, mana, scriptid));
-        }
-        void r(string Name, float dmgmin, float dmgmax, float wpnknock, int cooldown, int rarity, int lvl,int category, int type, int weaponid, int shelflife, GameObject projectile, float speed, int spriteid, int lvlcprogress=0,int maxdurability = -100, int fx = 0, int mana = 0, int scriptid = 0)
-        {
-            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity, lvl,category, type, weaponid, shelflife, projectile, speed, spriteid ,lvlcprogress,maxdurability, fx, mana, scriptid));
-        }
-        void p(string Name, float dmgmin, float dmgmax, float wpnknock, int cooldown, int rarity, int lvl,int category, int type, int weaponid, int shelflife, GameObject projectile, float speed, int amount, int spriteid, int lvlcprogress=0,int maxdurability = -100, int fx = 0, int mana = 0, bool spin = false, float spinspeed = 0, int scriptid = 0)
-        {
-            GlobalWeaponList.Add(new Weapon(Name, dmgmin, dmgmax, wpnknock, cooldown, rarity,lvl, category, type, weaponid, shelflife, projectile, amount, speed, spriteid, lvlcprogress,maxdurability, fx, mana,spin,spinspeed, scriptid));
+            WeaponConstructorScriptMelee x = y.GetComponent<WeaponConstructorScriptMelee>();
+            GlobalWeaponList.Add(new Weapon(x.Name, x.DamageMin, x.DamageMax, x.Knockback, x.Cooldown, x.Rarity, x.Level, x.Category, x.WpnID, x.CProgress, x.MaxDurability, x.Effect, x.Mana, x.ScriptID));
         }
 
+        WeaponConstructorArray = Resources.LoadAll<GameObject>("WeaponConstructor/Range");
+        foreach(GameObject y in WeaponConstructorArray)
+        {
+            WeaponConstructorScriptRange x = y.GetComponent<WeaponConstructorScriptRange>();
+            GlobalWeaponList.Add(new Weapon(x.Name, x.DamageMin, x.DamageMax, x.Knockback, x.Cooldown, x.Rarity, x.Level, x.Category, x.WpnID, x.ShelfLife, x.ProjectileFired, x.ProjectileSpeed, x.ProjectileSpriteID, x.CProgress, x.MaxDurability, x.Effect, x.Mana, x.ScriptID));
+        }
 
-        m("Aluminium shortsword",   dmgmin: 2, dmgmax: 3, wpnknock: 4f, cooldown: 100, rarity: 0,1, category: 0, type: 0, weaponid: 1, range: 1.5f, width: 0.05f, maxdurability: 60);
-        m("Silicon shortsword",     dmgmin: 3, dmgmax: 4, wpnknock: 2f, cooldown: 100, rarity: 1, 1, category: 0, type: 0, weaponid: 2, range: 10, width: 0.05f);
-        m("Iron shortsword",        dmgmin: 5, dmgmax: 6, wpnknock: 2, cooldown: 100, rarity: 2, 1, category: 0, type: 0, weaponid: 3, range: 5, width: 0.05f);
-        m("Spear object",           dmgmin: 10, dmgmax: 20, wpnknock: 0.5f, cooldown: 100, rarity: 3, 1, category: 0, type: 0, weaponid: 4, range: 5, width: 1,    scriptid: 1);
-        m("Auto-aim",               dmgmin: 10, dmgmax: 20, wpnknock: 2, cooldown: 100, rarity: 4, 1, category: 0, type: 0, weaponid: 7, range: 5, width: 3,       scriptid: 2);
+        WeaponConstructorArray = Resources.LoadAll<GameObject>("WeaponConstructor/Projectile");
+        foreach(GameObject y in WeaponConstructorArray)
+        {
+            WeaponConstructorScriptProjectile x = y.GetComponent<WeaponConstructorScriptProjectile>();
+            GlobalWeaponList.Add(new Weapon(x.Name, x.DamageMin, x.DamageMax, x.Knockback, x.Cooldown, x.Rarity, x.Level, x.Category, x.WpnID, x.ShelfLife, x.ProjectileFired, x.Amount, x.ProjectileSpeed, x.ProjectileSpriteID, x.CProgress, x.MaxDurability, x.Effect, x.Mana, x.ProjectileSpin, x.ProjectileSpinSpeed, x.ScriptID));
+        }
 
-        r("Bow", 5, 10, 1, 1, 1, 1, 1, 0, 0, 500, GenericRangeProjectile, 0.1f, 1);
-        r("Scar H", 50, 100, 0, 0, 5, 1, 1, 0, 1, 500, GenericRangeProjectile, 0.5f, 0);
-        r("M16", 20, 40, 0, 5, 0, 1, 1, 0, 2, 500, GenericRangeProjectile, 0.5f, 2);
 
-        p("Throwing Knives", 1, 5, 1f, 20, 0, 1, 2, 0, 0, 100, GenericProjectile, 0.5f, 5, 0);
-        p("Throwing Stars", 1, 10, 1f, 5, 0, 1, 2, 1, 1, 500, GenericProjectile, 0.5f, 20, 1, spin: true, spinspeed: 5);
-        p("Spear", 10, 20, 0.5f, 100, 0, 1, 2, 0, 2, 200, GenericProjectile, 0.2f, 3, 2);
+        /* foreach (Weapon x in GlobalWeaponList) // just to test if it works; it does
+        { Debug.Log($"{x.Category} {x.WeaponName} : {x.DamageMin}/{x.DamageMax}"); } */
     }
 }

@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public GameObject player; //Fetched in Start()
-    public float CamMove = 0.05f, CamRange = 1;
+    public GameObject Player; //Fetched in Start()
+    public float CamRange = 1;
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x + (Input.GetAxis("Horizontal")/CamRange), player.transform.position.y + (Input.GetAxis("Vertical") / CamRange), -10f), CamMove);   
+        Vector3 Target = new Vector3(Player.transform.position.x + (Input.GetAxis("Horizontal") / CamRange), Player.transform.position.y + (Input.GetAxis("Vertical") / CamRange));
+        transform.position = Vector3.Lerp(new Vector3(transform.position.x, transform.position.y, -10f), Target, 0.125f);
     }
 }

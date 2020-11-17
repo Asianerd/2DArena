@@ -59,7 +59,7 @@ public class PlayerGeneral : MonoBehaviour
 
     public void ResetCurrentWeapon()
     {
-        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 100, 0, 1, 0, 0, 0, 5, 0.05f);
+        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 100, 0, 1, 0, 0, 0);
     }
 
     void Awake()
@@ -170,14 +170,13 @@ public class PlayerGeneral : MonoBehaviour
 
     void MeleeAttack()
     {        
-        WpnObject.GetComponent<WeaponObject>().Swing();
+        WpnObject.GetComponent<WeaponObject>().SwingWrapper();
     }
 
     void RangeAttack()
     {
         float length = 1.4f;
         GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity);
-        obj.name = CurrentWeapon.WeaponName;
         obj.GetComponent<RangeProjectileScript>().Set(CurrentWeapon,gameObject);
     }
 
@@ -265,7 +264,7 @@ public class PlayerGeneral : MonoBehaviour
             }
         }
         HPRegenClock++;
-        if (HPRegenClock >= HPRegenTime+1) //>= so that HPRegenClock has 100 variants
+        if (HPRegenClock >= HPRegenTime + 1) //>= so that HPRegenClock has 100 variants
             HPRegenClock = 0;
     }
 }
