@@ -5,7 +5,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -86,14 +85,15 @@ public class InventorySelectionTabGeneral : MonoBehaviour
                 // Equippable check
                 Equippable = ((SelectedWeapon.Durability <= 0) && SelectedWeapon.Durability != -100) ? false : true;
                 // For when durability <= 0
-                if (!Equippable)
+                EquipButton.interactable = Equippable;
+                /*if (!Equippable)
                 {
                     EquipButton.interactable = false;
                 }
                 else
                 {
                     EquipButton.interactable = true;
-                }
+                }*/
             }
 
             // For when weapon is already equipped

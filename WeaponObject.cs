@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -16,6 +15,7 @@ public class WeaponObject : MonoBehaviour
     void Update()
     {
         Weapon = PlayerGeneral.CurrentWeaponReference;
+        SpriteCheck();
     }
 
     void SpriteCheck()
@@ -23,7 +23,7 @@ public class WeaponObject : MonoBehaviour
         switch(Weapon.Category)
         {
             case 1:
-                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponProjectileSpriteList[Weapon.WeaponID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponSpriteList[Weapon.WeaponID];
                 break;
             case 2:
                 GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalProjectileSpriteList[Weapon.WeaponID];
@@ -47,7 +47,9 @@ public class WeaponObject : MonoBehaviour
 
         int CurrentCooldown = Weapon.WeaponCooldown;
 
-        Quaternion TargetRotation = Quaternion.Euler(0f, 0f, 0f);
+        //float IncrementAngle = 125f / Weapon.WeaponCooldown;
+        float IncrementAngle = PlayerGeneral.WeaponObjectIsFlipped ? 125f / Weapon.WeaponCooldown : -(125f / Weapon.WeaponCooldown);
+        Debug.Log($"{IncrementAngle} :: {Weapon.WeaponCooldown}");
 
         while (CurrentCooldown > 0)
         {
@@ -56,7 +58,7 @@ public class WeaponObject : MonoBehaviour
             //transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, transform.rotation.eulerAngles.z + IncrementAngle));
             //transform.rotation = Quaternion.Lerp(transform.rotation, new Quaternion(0f, 0f, EndRotating, 0f), 0.125f);
             //transform.rotation = Quaternion.Lerp(transform.rotation,new Quaternion(0f,0f,EndRotating))
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, TargetRotation, Weapon.Knockback);
+            transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z + IncrementAngle);
             yield return null;
         }
         IsSwinging = false;

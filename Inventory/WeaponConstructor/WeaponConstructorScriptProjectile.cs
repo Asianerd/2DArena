@@ -24,11 +24,11 @@ public class WeaponConstructorScriptProjectile : MonoBehaviour
 
     // Projectile
     public GameObject ProjectileFired;
-    public float ProjectileSpeed;
-    public int ProjectileSpriteID;
-    public int ShelfLife;
+    public float ProjectileSpeed; //
+    public int ProjectileSpriteID; //
+    public int ShelfLife; //
     public int Amount;
 
-    public bool ProjectileSpin;
-    public float ProjectileSpinSpeed;
+    public bool ProjectileSpin; // remove these as they are not used (only for the weapon selections tab and a bit more but those can refer the ProjectileFired GameObject instead)
+    public float ProjectileSpinSpeed; //
 }

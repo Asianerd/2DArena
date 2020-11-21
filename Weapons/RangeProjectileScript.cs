@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class RangeProjectileScript : MonoBehaviour
 {
-    //WeaponData.Weapon ProjectileWeapon;
+    WeaponData.Weapon ProjectileWeapon;
     GameObject Player;
 
     // Straight
@@ -14,26 +14,26 @@ public class RangeProjectileScript : MonoBehaviour
     public float DamageMin, DamageMax;
     public float Speed;
     public int ShelfLife;
-    double TargetX,TargetY;
-    public GameObject Runtime;
+    float TargetX,TargetY;
     bool HasDied = false;
 
 
-    public void Set(,GameObject Plyr)
+    public void Set(WeaponData.Weapon Weapon, GameObject Plyr)
     {
         DirectionAngle = PlayerGeneral.MouseAngle;
-        TargetX = Math.Cos(DirectionAngle) * 10000;
-        TargetY = Math.Sin(DirectionAngle) * 10000;
+        ProjectileWeapon = Weapon;
+        TargetX = Convert.ToSingle(Math.Cos(DirectionAngle) * 10000);
+        TargetY = Convert.ToSingle(Math.Sin(DirectionAngle) * 10000);
         Player = Plyr;
-        Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
         //GetComponentInChildren<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponProjectileSpriteList[weapon.ProjectileSpriteID; Its going to be set in the SpriteRenderer (cos theres gonna be multiple Projectile prefabs)
-        GetComponent<CapsuleCollider2D>().size = GetComponentInChildren<SpriteRenderer>().sprite.rect.size/10;
+        //GetComponent<CapsuleCollider2D>().size = GetComponentInChildren<SpriteRenderer>().sprite.rect.size/10;
 
 
-        Vector3 diff = new Vector3(Convert.ToSingle(TargetX),Convert.ToSingle(TargetY)) - transform.position;
-        diff.Normalize();
+        /*Vector3 diff = new Vector3(TargetX,TargetY) - transform.position;
+        //diff.Normalize();
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+        transform.rotation = Quaternion.Euler(0f, 0f, rot_z);*/
+        transform.rotation = Quaternion.Euler(0f, 0f, PlayerGeneral.MouseAngle * Mathf.Rad2Deg);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -51,10 +51,6 @@ public class RangeProjectileScript : MonoBehaviour
             HasDied = true;
             Destroy(gameObject);
         }
-        if(CollidedObject.CompareTag("Solid"))
-        {
-            Destroy(gameObject);
-        }
     }
 
     void Update()
@@ -64,7 +60,7 @@ public class RangeProjectileScript : MonoBehaviour
             if (ShelfLife > 0)
             {
                 ShelfLife--;
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(Convert.ToSingle(TargetX), Convert.ToSingle(TargetY)), Speed);
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(TargetX, TargetY), Speed);
             }
             else
             {

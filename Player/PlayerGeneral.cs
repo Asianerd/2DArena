@@ -24,7 +24,6 @@ public class PlayerGeneral : MonoBehaviour
     public GameObject WpnObject;
     public float CosmeticWeaponDistance = 1f;
 
-
     //HP
     public float HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
@@ -81,7 +80,11 @@ public class PlayerGeneral : MonoBehaviour
 
         TempText.GetComponent<Text>().text = $"LVL : {CurrentWeapon.Level}  {CurrentWeapon.LevelCurrentProgression}/{CurrentWeapon.LevelNextLevelProgression}";
 
-        GameObject[] gameObjects = FindObjectsOfType<GameObject>();
+        // Remove please - taking 70ish fps to execute
+        // Sets ProjectilesUsed to the amount of GameObjects with the same name
+        // Just increase/decrease when a projectile is instantiated/destroyed
+        /*
+        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Projectile");
         ProjectilesUsed = 0;
         foreach(GameObject gameobj in gameObjects)
         {
@@ -91,17 +94,18 @@ public class PlayerGeneral : MonoBehaviour
                 break;
             }
         }
+        */
 
         CurrentWeapon.LevelCheck();
 
         // Debug keys
-        if(Input.GetKey(KeyCode.C))
+        if (Input.GetKey(KeyCode.C))
         {
             int SpawnedWeaponID = UnityEngine.Random.Range(0, WeaponData.GlobalWeaponList.Count);
             RuntimeScript.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position, WeaponData.GlobalWeaponList[SpawnedWeaponID]);
         }
 
-        if(Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B))
         {
             transform.position = new Vector2(MousePosition.x, MousePosition.y);
         }
@@ -185,6 +189,7 @@ public class PlayerGeneral : MonoBehaviour
         float length = 1.4f;
         if(ProjectilesUsed < CurrentWeapon.Amount)
         {
+            AddProjectile();
             GameObject proj = Instantiate(CurrentWeapon.Projectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle) * length) + transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle) * length) + transform.position.y)), Quaternion.identity);
             proj.name = CurrentWeapon.WeaponName;
             proj.GetComponent<ProjectileScript>().Set(CurrentWeapon,gameObject);
@@ -211,7 +216,7 @@ public class PlayerGeneral : MonoBehaviour
                     WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                     break;
                 case 1:
-                      WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                     break;
                 case 2:
                     WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
@@ -222,12 +227,12 @@ public class PlayerGeneral : MonoBehaviour
 
             if ((Math.Abs(MouseAngle * Mathf.Rad2Deg)) >= 90)
             {
-                WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = true;
+                WpnObject.transform.localScale = new Vector3(1, -1, 1);
                 WeaponObjectIsFlipped = true;
             }
             else 
             {
-                WpnObject.GetComponentInChildren<SpriteRenderer>().flipY = false;
+                WpnObject.transform.localScale = new Vector3(1, 1, 1);
                 WeaponObjectIsFlipped = false;
             }
         }
@@ -266,5 +271,15 @@ public class PlayerGeneral : MonoBehaviour
         HPRegenClock++;
         if (HPRegenClock >= HPRegenTime + 1) //>= so that HPRegenClock has 100 variants
             HPRegenClock = 0;
+    }
+
+    public static void MinusProjectile()
+    {
+        ProjectilesUsed--;
+    }
+
+    public static void AddProjectile()
+    {
+        ProjectilesUsed++;
     }
 }
