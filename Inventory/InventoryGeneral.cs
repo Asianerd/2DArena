@@ -43,7 +43,7 @@ public class InventoryGeneral : MonoBehaviour
             if (GamePaused)
             {
                 InventoryUI.SetActive(true);
-                OpenInventory(1);
+                OpenInventory(2);
                 Time.timeScale = 0f;
             }
             else

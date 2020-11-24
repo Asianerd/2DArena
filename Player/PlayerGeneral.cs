@@ -15,6 +15,7 @@ public class PlayerGeneral : MonoBehaviour
     public Canvas InvCanvas;
     public GameObject RuntimeScript;
     public GameObject DamageBubblePrefab;
+    public Transform ProjectileHolder;
 
     public Camera PlayerCamera;
     public static Vector3 MousePosition;
@@ -180,7 +181,7 @@ public class PlayerGeneral : MonoBehaviour
     void RangeAttack()
     {
         float length = 1.4f;
-        GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity);
+        GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity,ProjectileHolder);
         obj.GetComponent<RangeProjectileScript>().Set(CurrentWeapon,gameObject);
     }
 
@@ -190,7 +191,7 @@ public class PlayerGeneral : MonoBehaviour
         if(ProjectilesUsed < CurrentWeapon.Amount)
         {
             AddProjectile();
-            GameObject proj = Instantiate(CurrentWeapon.Projectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle) * length) + transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle) * length) + transform.position.y)), Quaternion.identity);
+            GameObject proj = Instantiate(CurrentWeapon.Projectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle) * length) + transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle) * length) + transform.position.y)), Quaternion.identity,ProjectileHolder);
             proj.name = CurrentWeapon.WeaponName;
             proj.GetComponent<ProjectileScript>().Set(CurrentWeapon,gameObject);
         }
