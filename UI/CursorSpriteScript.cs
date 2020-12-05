@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CursorSpriteScript : MonoBehaviour
 {
-    public static Sprite[] CursorSpriteList;
+    public static Sprite[] cursorSpriteList;
 
     void Update()
     {
@@ -15,7 +15,7 @@ public class CursorSpriteScript : MonoBehaviour
     void Awake()
     {
         Cursor.visible = false;
-        CursorSpriteList = Resources.LoadAll<Sprite>("CursorSprites");
+        cursorSpriteList = Resources.LoadAll<Sprite>("CursorSprites");
         StartCoroutine(EWait());
     }
     IEnumerator EWait()
@@ -26,22 +26,22 @@ public class CursorSpriteScript : MonoBehaviour
 
     public void UpdateCursorSprite()
     {
-        if(InventoryGeneral.GamePaused)
-            GetComponent<Image>().sprite = CursorSpriteList[0];
+        if(InventoryGeneral.gamePaused)
+            GetComponent<Image>().sprite = cursorSpriteList[0];
         else
-            switch (PlayerGeneral.CurrentWeaponReference.Category)
+            switch (PlayerGeneral.currentWeaponReference.category)
             {
                 case 0:
-                    GetComponent<Image>().sprite = CursorSpriteList[1];
+                    GetComponent<Image>().sprite = cursorSpriteList[1];
                     break;
                 case 1:
-                    GetComponent<Image>().sprite = CursorSpriteList[2];
+                    GetComponent<Image>().sprite = cursorSpriteList[2];
                     break;
                 case 2:
-                    GetComponent<Image>().sprite = CursorSpriteList[3];
+                    GetComponent<Image>().sprite = cursorSpriteList[3];
                     break;
                 default:
-                    GetComponent<Image>().sprite = CursorSpriteList[0];
+                    GetComponent<Image>().sprite = cursorSpriteList[0];
                     break;
             }
     }

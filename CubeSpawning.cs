@@ -7,27 +7,26 @@ using UnityEngine.UIElements;
 
 public class CubeSpawning : MonoBehaviour
 {
-    public GameObject Player;
-    public GameObject EnemyTemplate;
-    public Sprite EnemySprite;
-    public GameObject RuntimeScript;
-    public float RandXMin, RandXMax, RandYMin, RandYMax;
+    public GameObject player;
+    public GameObject enemyTemplate;
+    public GameObject runtimeScript;
+    public float randXMin, randXMax, randYMin, randYMax;
     public int cooldown = 400;
     int i = 0;
 
     void Start()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
-        RuntimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
+        player = GameObject.FindGameObjectWithTag("Player");
+        runtimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
     }
 
     void Update()
     {
-        if (!InventoryGeneral.GamePaused)
+        if (!InventoryGeneral.gamePaused)
         {
             if ((i == 0) | (Input.GetKeyDown(KeyCode.E)))
             {
-                Instantiate(EnemyTemplate, new Vector2(Random.Range(RandXMin, RandXMax), Random.Range(RandYMin, RandYMax)), Quaternion.identity);
+                Instantiate(enemyTemplate, new Vector2(Random.Range(randXMin, randXMax), Random.Range(randYMin, randYMax)), Quaternion.identity);
             }
             if (i > cooldown) i = 0;
             else i++;

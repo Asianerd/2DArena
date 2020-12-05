@@ -10,82 +10,82 @@ using UnityEngine.UI;
 
 public class InventorySelectionTabGeneral : MonoBehaviour
 {
-    public GameObject Name;
-    public GameObject Damage;
-    public GameObject Mana;
-    public GameObject Rarity;
-    public GameObject Durability;
-    public Button EquipButton;
+    public GameObject name;
+    public GameObject damage;
+    public GameObject mana;
+    public GameObject rarity;
+    public GameObject durability;
+    public Button equipButton;
 
-    public GameObject WeaponSprite;
-    public GameObject WeaponType;
-    public GameObject RarityBG;
-    public static WeaponData.Weapon SelectedWeapon;
-    public static bool WeaponIsCurrent;
+    public GameObject weaponSprite;
+    public GameObject weaponType;
+    public GameObject rarityBackground;
+    public static WeaponData.Weapon selectedWeapon;
+    public static bool weaponIsCurrentWeapon;
 
-    public static bool Equippable;
+    public static bool equippable;
 
-    public GameObject SelectionOutline;
-    public GameObject LastButton;
+    public GameObject selectionOutline;
+    public GameObject lastButton;
 
-    public Sprite InvisibleImage;
+    public Sprite invisibleImage;
     // on weapon selection tab
 
     void Update()
     {
         Check();
-        if (LastButton != null)
+        if (lastButton != null)
         {
-            if (!SelectionOutline.activeSelf) SelectionOutline.SetActive(true);
-            SelectionOutline.transform.position = LastButton.transform.position;
+            if (!selectionOutline.activeSelf) selectionOutline.SetActive(true);
+            selectionOutline.transform.position = lastButton.transform.position;
         }
         else
         {
-            SelectionOutline.SetActive(false);
+            selectionOutline.SetActive(false);
         }
     }
 
     public void Set(WeaponData.Weapon weapon, GameObject LButton)
     {
-        SelectedWeapon = weapon;
-        LastButton = LButton;
-        EquipButton.gameObject.SetActive(true);
+        selectedWeapon = weapon;
+        lastButton = LButton;
+        equipButton.gameObject.SetActive(true);
         // Text Objects
-        Name.GetComponent<Text>().text = weapon.WeaponName;
-        Damage.GetComponent<Text>().text = $"{weapon.DamageMin * weapon.Level} - {weapon.DamageMax * weapon.Level}";
-        Mana.GetComponent<Text>().text = weapon.ManaUsage.ToString();
-        Rarity.GetComponent<Text>().text = WeaponData.GlobalWeaponRarityNames[weapon.Rarity];
-        if (weapon.IsBreakable) Durability.GetComponent<Text>().text = $"{weapon.Durability}/{weapon.MaxDurability}";
-        else Durability.GetComponent<Text>().text = "";
+        name.GetComponent<Text>().text = weapon.weaponName;
+        damage.GetComponent<Text>().text = $"{weapon.damageMin * weapon.level} - {weapon.damageMax * weapon.level}";
+        mana.GetComponent<Text>().text = weapon.manaUsage.ToString();
+        rarity.GetComponent<Text>().text = WeaponData.globalWeaponRarityNames[weapon.rarity];
+        if (weapon.isBreakable) durability.GetComponent<Text>().text = $"{weapon.durability}/{weapon.maxDurability}";
+        else durability.GetComponent<Text>().text = "";
 
         // Sprite Objects
-        switch (weapon.Category)
+        switch (weapon.category)
         {
             case 1:
-                WeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalRangeWeaponSpriteList[weapon.WeaponID];
+                weaponSprite.GetComponent<Image>().sprite = WeaponData.globalRangeWeaponSpriteList[weapon.weaponID];
                 break;
             case 2:
-                WeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalProjectileSpriteList[weapon.WeaponID];
+                weaponSprite.GetComponent<Image>().sprite = WeaponData.globalProjectileSpriteList[weapon.weaponID];
                 break;
             default:
-                WeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalMeleeWeaponSpriteList[weapon.WeaponID];
+                weaponSprite.GetComponent<Image>().sprite = WeaponData.globalMeleeWeaponSpriteList[weapon.weaponID];
                 break;
         }
-        WeaponType.GetComponent<Image>().sprite = WeaponData.GlobalWeaponTypeSprite[weapon.Category];
-        WeaponSprite.GetComponent<Image>().SetNativeSize();
-        RarityBG.GetComponent<Image>().sprite = WeaponData.GlobalRarityBackground[weapon.Rarity];
+        weaponType.GetComponent<Image>().sprite = WeaponData.globalWeaponTypeSprite[weapon.category];
+        weaponSprite.GetComponent<Image>().SetNativeSize();
+        rarityBackground.GetComponent<Image>().sprite = WeaponData.globalRarityBackground[weapon.rarity];
     }
 
     public void Check()
     {
-        if(EquipButton.gameObject.activeSelf)
+        if(equipButton.gameObject.activeSelf)
         {
-            if (SelectedWeapon != null)
+            if (selectedWeapon != null)
             {
                 // Equippable check
-                Equippable = ((SelectedWeapon.Durability <= 0) && SelectedWeapon.Durability != -100) ? false : true;
+                equippable = ((selectedWeapon.durability <= 0) && selectedWeapon.durability != -100) ? false : true;
                 // For when durability <= 0
-                EquipButton.interactable = Equippable;
+                equipButton.interactable = equippable;
                 /*if (!Equippable)
                 {
                     EquipButton.interactable = false;
@@ -97,15 +97,15 @@ public class InventorySelectionTabGeneral : MonoBehaviour
             }
 
             // For when weapon is already equipped
-            if (PlayerGeneral.CurrentWeaponReference == SelectedWeapon)
+            if (PlayerGeneral.currentWeaponReference == selectedWeapon)
             {
-                WeaponIsCurrent = true;
-                EquipButton.GetComponentInChildren<Text>().text = "Unequip";
+                weaponIsCurrentWeapon = true;
+                equipButton.GetComponentInChildren<Text>().text = "Unequip";
             }
             else
             {
-                WeaponIsCurrent = false;
-                EquipButton.GetComponentInChildren<Text>().text = "Equip";
+                weaponIsCurrentWeapon = false;
+                equipButton.GetComponentInChildren<Text>().text = "Equip";
             }
         }
     }
@@ -113,20 +113,20 @@ public class InventorySelectionTabGeneral : MonoBehaviour
     public void SetEmpty()
     {
         // Text Objects
-        Name.GetComponent<Text>().text = "";
-        Damage.GetComponent<Text>().text = "";
-        Mana.GetComponent<Text>().text = "";
-        Rarity.GetComponent<Text>().text = "";
-        Durability.GetComponent<Text>().text = "";
+        name.GetComponent<Text>().text = "";
+        damage.GetComponent<Text>().text = "";
+        mana.GetComponent<Text>().text = "";
+        rarity.GetComponent<Text>().text = "";
+        durability.GetComponent<Text>().text = "";
 
         // Button
-        EquipButton.gameObject.SetActive(false);
+        equipButton.gameObject.SetActive(false);
 
         // Sprite Objects
-        WeaponSprite.GetComponent<Image>().sprite = InvisibleImage;
-        WeaponType.GetComponent<Image>().sprite = InvisibleImage;
+        weaponSprite.GetComponent<Image>().sprite = invisibleImage;
+        weaponType.GetComponent<Image>().sprite = invisibleImage;
         //WeaponSprite.GetComponent<Image>().SetNativeSize();
-        Debug.Log(WeaponData.GlobalRarityBackground.Count());
-        RarityBG.GetComponent<Image>().sprite = WeaponData.GlobalRarityBackground[6];
+        Debug.Log(WeaponData.globalRarityBackground.Count());
+        rarityBackground.GetComponent<Image>().sprite = WeaponData.globalRarityBackground[6];
     }
 }

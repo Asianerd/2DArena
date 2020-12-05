@@ -7,24 +7,24 @@ using UnityEngine.UI;
 
 public class LootSpawning : MonoBehaviour
 {
-    public GameObject WeaponLoot;
-    public GameObject Runtime;
+    public GameObject weaponLoot;
+    public GameObject runtime;
 
-    public List<WeaponData.Weapon> WeaponList = new List<WeaponData.Weapon>();
+    public List<WeaponData.Weapon> weaponList = new List<WeaponData.Weapon>();
 
     public void SpawnWeaponLoot(Vector3 SelectedVector3, WeaponData.Weapon SelectedWeapon)
     {
-        GameObject obj = Instantiate(WeaponLoot, SelectedVector3, Quaternion.identity);
-        switch (SelectedWeapon.Category)
+        GameObject obj = Instantiate(weaponLoot, SelectedVector3, Quaternion.identity);
+        switch (SelectedWeapon.category)
         {
             case 1:
-                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, WeaponData.GlobalRangeWeaponSpriteList[SelectedWeapon.WeaponID]);
+                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, WeaponData.globalRangeWeaponSpriteList[SelectedWeapon.weaponID]);
                 break;
             case 2:
-                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, WeaponData.GlobalProjectileSpriteList[SelectedWeapon.WeaponID]);
+                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, WeaponData.globalProjectileSpriteList[SelectedWeapon.weaponID]);
                 break;
             default:
-                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, WeaponData.GlobalMeleeWeaponSpriteList[SelectedWeapon.WeaponID]);
+                obj.GetComponent<LootGeneral>().SetWeapon(SelectedWeapon, WeaponData.globalMeleeWeaponSpriteList[SelectedWeapon.weaponID]);
                 break;
         }
     }

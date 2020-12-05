@@ -6,43 +6,43 @@ using UnityEngine.UI;
 
 public class UIWeaponInfo : MonoBehaviour
 {
-    public string DurabilityText;
-    Text TextReference;
-    bool Buffer = false;
+    public string durabilityText;
+    Text textReference;
+    bool buffer = false;
 
 
     
     void Update()
     {
-        if(Buffer)
+        if(buffer)
             TextUpdate();
     }
     IEnumerator Wait()
     {
         yield return new WaitForSeconds(1);
-        Buffer = true;
+        buffer = true;
     }
     void TextUpdate()
     {
-        switch (PlayerGeneral.CurrentWeaponReference.Category)
+        switch (PlayerGeneral.currentWeaponReference.category)
         {
             case 2:
-                DurabilityText = $"{PlayerGeneral.ProjectilesUsed}/{PlayerGeneral.CurrentWeaponReference.Amount}";
+                durabilityText = $"{PlayerGeneral.projectilesUsed}/{PlayerGeneral.currentWeaponReference.amount}";
                 break;
             default:
-                if (PlayerGeneral.CurrentWeaponReference.IsBreakable)
-                    DurabilityText = $"{PlayerGeneral.CurrentWeaponReference.Durability}/{PlayerGeneral.CurrentWeaponReference.MaxDurability}";
+                if (PlayerGeneral.currentWeaponReference.isBreakable)
+                    durabilityText = $"{PlayerGeneral.currentWeaponReference.durability}/{PlayerGeneral.currentWeaponReference.maxDurability}";
                 else
                 {
-                    DurabilityText = "";
+                    durabilityText = "";
                 }
                 break;
         }
-        TextReference.text = DurabilityText;
+        textReference.text = durabilityText;
     }
     void Awake()
     {
-        TextReference = GetComponentInChildren<Text>();
+        textReference = GetComponentInChildren<Text>();
         StartCoroutine(Wait());
     }
 }

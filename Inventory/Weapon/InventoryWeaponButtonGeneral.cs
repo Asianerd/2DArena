@@ -6,65 +6,66 @@ using UnityEngine.UI;
 
 public class InventoryWeaponButtonGeneral : MonoBehaviour
 {
-    public GameObject Player;
-    public GameObject WeaponSelect;
-    public WeaponData.Weapon Weapon;
-    public GameObject Runtime;
+    public GameObject player;
+    public GameObject weaponSelect;
+    public WeaponData.Weapon weapon;
+    public GameObject runtime;
 
-    public Button SButton;
-    public GameObject SText;
-    public GameObject SWeaponSprite;
-    public GameObject SBorderSprite;
+    public GameObject sText;
+    public GameObject sWeaponSprite;
+    public GameObject sBorderSprite;
 
     // on InventoryObject(w)
 
 
 
+
     public void SetSelectedWeapon()
     {
-        WeaponSelect = GameObject.FindGameObjectWithTag("WeaponSelectionTab");
-        WeaponSelect.GetComponent<InventorySelectionTabGeneral>().Set(Weapon,gameObject);
+        weaponSelect = GameObject.FindGameObjectWithTag("WeaponSelectionTab");
+        weaponSelect.GetComponent<InventorySelectionTabGeneral>().Set(weapon,gameObject);
     }
 
     public void SetEquippedWeapon()
     {
-        if (InventorySelectionTabGeneral.Equippable)
+        // On the Weapon Selection Tab Button (EquipButton)
+        if (InventorySelectionTabGeneral.equippable)
         {
-            Player = GameObject.FindGameObjectWithTag("Player");
-            if(InventorySelectionTabGeneral.WeaponIsCurrent)
+            player = GameObject.FindGameObjectWithTag("Player");
+            if(InventorySelectionTabGeneral.weaponIsCurrentWeapon)
             {
-                Player.GetComponent<PlayerGeneral>().ResetCurrentWeapon();
+                player.GetComponent<PlayerGeneral>().ResetCurrentWeapon();
             }
             else
-                Player.GetComponent<PlayerGeneral>().CurrentWeapon = InventorySelectionTabGeneral.SelectedWeapon;
+                player.GetComponent<PlayerGeneral>().currentWeapon = InventorySelectionTabGeneral.selectedWeapon;
         }
     }
 
     public void SetWeapon(WeaponData.Weapon SelectedWeapon)
     {
-        Weapon = SelectedWeapon;
-        Player = GameObject.FindGameObjectWithTag("Player");
-        Runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
+        weapon = SelectedWeapon;
+        player = GameObject.FindGameObjectWithTag("Player");
+        runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
 
-        SText.GetComponent<Text>().text = Weapon.Level.ToString();
+        sText.GetComponent<Text>().text = weapon.level.ToString();
 
-        SBorderSprite.GetComponent<Image>().sprite = WeaponData.GlobalWeaponBorderList[Weapon.Rarity];
+        sBorderSprite.GetComponent<Image>().sprite = WeaponData.globalWeaponBorderList[weapon.rarity];
 
-        switch (Weapon.Category)
+        switch (weapon.category)
         {
             case 1:
-                SWeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalRangeWeaponSpriteList[Weapon.WeaponID];
-                SWeaponSprite.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 45));
+                sWeaponSprite.GetComponent<Image>().sprite = WeaponData.globalRangeWeaponSpriteList[weapon.weaponID];
+                sWeaponSprite.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 45));
                 break;
             case 2:
-                SWeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalProjectileSpriteList[Weapon.ProjectileSpriteID];
-                SWeaponSprite.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 45));
+                sWeaponSprite.GetComponent<Image>().sprite = WeaponData.globalProjectileSpriteList[weapon.projectileSpriteID];
+                sWeaponSprite.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 45));
                 break;
             default:
-                SWeaponSprite.GetComponent<Image>().sprite = WeaponData.GlobalMeleeWeaponSpriteList[Weapon.WeaponID];
+                sWeaponSprite.GetComponent<Image>().sprite = WeaponData.globalMeleeWeaponSpriteList[weapon.weaponID];
                 break;
         }
-        SWeaponSprite.GetComponent<Image>().SetNativeSize();
+        sWeaponSprite.GetComponent<Image>().SetNativeSize();
 
         /*WeaponSelect = GameObject.FindGameObjectWithTag("WeaponSelectionTab");
         WeaponSelect.GetComponent<InventorySelectionGeneral>().Check();*/

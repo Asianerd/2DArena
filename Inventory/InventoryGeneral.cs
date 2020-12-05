@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 public class InventoryGeneral : MonoBehaviour
 {
-    public GameObject Player;
-    public GameObject InventoryUI;
-    public GameObject Runtime;
-    public GameObject CursorObject;
+    public GameObject player;
+    public GameObject inventoryUI;
+    public GameObject runtime;
+    public GameObject cursorObject;
 
-    public GameObject[] Inventories;
-    public static int InventoryOpen = -1;
+    public GameObject[] inventories;
+    public static int inventoryOpen = -1;
     /*
     -1 None
     0 Character
@@ -22,33 +22,33 @@ public class InventoryGeneral : MonoBehaviour
     4 Skills(Equipped)
     5 Skill storage*/
 
-    public static bool GamePaused = false;
+    public static bool gamePaused = false;
 
     // on runtime
 
     void Awake()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
-        InventoryUI.SetActive(false);
-        CursorObject = GameObject.FindGameObjectWithTag("CursorObject");
-        Inventories = Resources.LoadAll<GameObject>("Prefabs/Inventory Objects");
+        player = GameObject.FindGameObjectWithTag("Player");
+        inventoryUI.SetActive(false);
+        cursorObject = GameObject.FindGameObjectWithTag("CursorObject");
+        inventories = Resources.LoadAll<GameObject>("Prefabs/Inventory Objects");
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GamePaused = !GamePaused;
-            CursorObject.GetComponent<CursorSpriteScript>().UpdateCursorSprite();
-            if (GamePaused)
+            gamePaused = !gamePaused;
+            cursorObject.GetComponent<CursorSpriteScript>().UpdateCursorSprite();
+            if (gamePaused)
             {
-                InventoryUI.SetActive(true);
-                OpenInventory(2);
+                inventoryUI.SetActive(true);
+                OpenInventory(1);
                 Time.timeScale = 0f;
             }
             else
             {
-                InventoryUI.SetActive(false);
+                inventoryUI.SetActive(false);
                 CloseInventory();
                 Time.timeScale = 1f;
             }
@@ -65,14 +65,14 @@ public class InventoryGeneral : MonoBehaviour
     */
     public void OpenInventory(int InventoryType)
     {
-        InventoryOpen = InventoryType;
-        Instantiate(Inventories[InventoryType],InventoryUI.transform);
+        inventoryOpen = InventoryType;
+        Instantiate(inventories[InventoryType],inventoryUI.transform);
     }
 
     public void CloseInventory()
     {
-        InventoryOpen = -1;
-        foreach(Transform child in InventoryUI.transform)
+        inventoryOpen = -1;
+        foreach(Transform child in inventoryUI.transform)
         {
             Destroy(child.gameObject);
         }

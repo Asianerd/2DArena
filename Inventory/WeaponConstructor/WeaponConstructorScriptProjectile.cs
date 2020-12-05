@@ -4,31 +4,33 @@ using UnityEngine;
 
 public class WeaponConstructorScriptProjectile : MonoBehaviour
 {
-    public string Name;
-    public float DamageMin, DamageMax;
-    public float Knockback;
-    public int Cooldown;
+    // This weapon classed should be left unused
+    // Range weapons can be used instead of this
+    public string name;
+    public float damageMin, damageMax;
+    public float knockback;
+    public int cooldown;
 
-    public int Rarity;
-    public int Category;
-    public int Type;
-    public int WpnID;
+    public int rarity;
+    public int category;
+    public int type;
+    public int wpnID;
 
-    public int Level = 1;
+    public int level = 1;
 
-    public int CProgress = 0;
-    public int MaxDurability = -100;
-    public int Effect = 0;
-    public int Mana = 0;
-    public int ScriptID = 0;
+    public int cProgress = 0;
+    public int maxDurability = -100;
+    public int effect = 0;
+    public int mana = 0;
+    public int scriptID = 0;
 
     // Projectile
-    public GameObject ProjectileFired;
-    public float ProjectileSpeed; //
-    public int ProjectileSpriteID; //
-    public int ShelfLife; //
-    public int Amount;
+    public GameObject projectileFired;
+    public float projectileSpeed; //
+    public int projectileSpriteID; //
+    public int shelfLife; //
+    public int amount;
 
-    public bool ProjectileSpin; // remove these as they are not used (only for the weapon selections tab and a bit more but those can refer the ProjectileFired GameObject instead)
-    public float ProjectileSpinSpeed; //
+    public bool projectileSpin; // remove these as they are not used (only for the weapon selections tab and a bit more but those can refer the ProjectileFired GameObject instead)
+    public float projectileSpinSpeed; //
 }

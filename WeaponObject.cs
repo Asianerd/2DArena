@@ -8,48 +8,47 @@ using UnityEngine.PlayerLoop;
 
 public class WeaponObject : MonoBehaviour
 {
-    List<IEnumerator> WeaponObjectBehaviours;
-    WeaponData.Weapon Weapon;
-    public static bool IsSwinging;
+    List<IEnumerator> weaponObjectBehaviours;
+    WeaponData.Weapon weapon;
+    public static bool isSwinging;
 
     void Update()
     {
-        Weapon = PlayerGeneral.CurrentWeaponReference;
+        weapon = PlayerGeneral.currentWeaponReference;
         SpriteCheck();
     }
 
     void SpriteCheck()
     {
-        switch(Weapon.Category)
+        switch(weapon.category)
         {
             case 1:
-                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponSpriteList[Weapon.WeaponID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.globalRangeWeaponSpriteList[weapon.weaponID];
                 break;
             case 2:
-                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalProjectileSpriteList[Weapon.WeaponID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.globalProjectileSpriteList[weapon.weaponID];
                 break;
             default:
-                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalMeleeWeaponSpriteList[Weapon.WeaponID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.globalMeleeWeaponSpriteList[weapon.weaponID];
                 break;
         }
     }
 
     public void SwingWrapper()
     {
-        if(!IsSwinging)
+        if(!isSwinging)
             StartCoroutine(Swing());
     }
 
     // Swing
     IEnumerator Swing()
     {
-        IsSwinging = true;
+        isSwinging = true;
 
-        int CurrentCooldown = Weapon.WeaponCooldown;
+        int CurrentCooldown = weapon.weaponCooldown;
 
         //float IncrementAngle = 125f / Weapon.WeaponCooldown;
-        float IncrementAngle = PlayerGeneral.WeaponObjectIsFlipped ? 125f / Weapon.WeaponCooldown : -(125f / Weapon.WeaponCooldown);
-        Debug.Log($"{IncrementAngle} :: {Weapon.WeaponCooldown}");
+        float IncrementAngle = PlayerGeneral.weaponObjectIsFlipped ? 125f / weapon.weaponCooldown : -(125f / weapon.weaponCooldown);
 
         while (CurrentCooldown > 0)
         {
@@ -61,18 +60,18 @@ public class WeaponObject : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z + IncrementAngle);
             yield return null;
         }
-        IsSwinging = false;
+        isSwinging = false;
     }
 
     void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy") && !InventoryGeneral.GamePaused && IsSwinging)
+        if (collision.CompareTag("Enemy") && !InventoryGeneral.gamePaused && isSwinging)
         {
             float MinDamage, MaxDamage;
-            MinDamage = Weapon.DamageMin * Weapon.Level;
-            MaxDamage = Weapon.DamageMax * Weapon.Level;
+            MinDamage = weapon.damageMin * weapon.level;
+            MaxDamage = weapon.damageMax * weapon.level;
             double DamageInflicted = UnityEngine.Random.Range(MinDamage, MaxDamage);
-            collision.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, Weapon.Knockback, transform.position);
+            collision.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, weapon.knockback, transform.position);
         }
     }
 }

@@ -8,36 +8,36 @@ public class EnemyAttack : MonoBehaviour
 {
     public GameObject player;
     public GameObject cam;
-    public GameObject RuntimeScript;
+    public GameObject runtimeScript;
 
-    public float AttackRange = 3;
-    public float DamageMin = 5f, DamageMax = 10f, Damage;
-    public int AttackCooldown = 500, AttackTime = 0;
+    public float attackRange = 3;
+    public float damageMin = 5f, damageMax = 10f, damage;
+    public int attackCooldown = 500, attackTime = 0;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         cam = GameObject.FindGameObjectWithTag("MainCamera");
-        RuntimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
+        runtimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
     }
 
 
     void Update()
     {
-        if (!InventoryGeneral.GamePaused)
+        if (!InventoryGeneral.gamePaused)
         {
-            if (AttackTime == 0)
+            if (attackTime == 0)
             {
-                if (Vector2.Distance(player.transform.position, transform.position) < (AttackRange))
+                if (Vector2.Distance(player.transform.position, transform.position) < (attackRange))
                 {
-                    Damage = Random.Range(DamageMin, DamageMax);
-                    player.GetComponent<PlayerGeneral>().MinusHealth(Damage);
-                    cam.GetComponent<CameraGeneral>().CamShake(Damage / 100, 30);
-                    AttackTime = AttackCooldown;
+                    damage = Random.Range(damageMin, damageMax);
+                    player.GetComponent<PlayerGeneral>().MinusHealth(damage);
+                    cam.GetComponent<CameraGeneral>().CamShake(damage / 100, 30);
+                    attackTime = attackCooldown;
                 }
             }
-            else AttackTime--;
-            if (AttackTime < 0) AttackTime = 0;
+            else attackTime--;
+            if (attackTime < 0) attackTime = 0;
         }
     }
 }

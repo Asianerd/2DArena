@@ -6,19 +6,19 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D player; //Rigidbody2D - Cant be fetched by GameObject.FindObjectWithTag()
-    public float MovementSpeed = 4f;
-    public float SprintMultiplier = 2f;
-    float XMove,YMove;
+    public float movementSpeed = 4f;
+    public float sprintMultiplier = 2f;
+    float xMove,yMove;
     Vector2 movement = new Vector2();
-    bool IsSprint = false;
+    bool isSprint = false;
 
     void Update()
     {
-        XMove = Input.GetAxisRaw("Horizontal");
-        YMove = Input.GetAxisRaw("Vertical");
-        IsSprint = Input.GetButton("Sprint");
-        if (IsSprint) movement = new Vector2(XMove * MovementSpeed*SprintMultiplier, YMove * MovementSpeed*SprintMultiplier);
-        else movement = new Vector2(XMove * MovementSpeed, YMove * MovementSpeed);
+        xMove = Input.GetAxisRaw("Horizontal");
+        yMove = Input.GetAxisRaw("Vertical");
+        isSprint = Input.GetButton("Sprint");
+        if (isSprint) movement = new Vector2(xMove * movementSpeed*sprintMultiplier, yMove * movementSpeed*sprintMultiplier);
+        else movement = new Vector2(xMove * movementSpeed, yMove * movementSpeed);
         player.velocity = movement;
     }
 }

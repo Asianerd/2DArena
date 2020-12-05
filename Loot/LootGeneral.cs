@@ -5,32 +5,32 @@ using UnityEngine.UI;
 
 public class LootGeneral : MonoBehaviour
 {
-    public bool IsFollowing;
-    public float AttentionRange = 3f, PickupRange = 0.2f ,PickupSpeed = 0.5f;
-    public GameObject Player;
-    public WeaponData.Weapon CurrentWeapon;
+    public bool isFollowing;
+    public float attentionRange = 3f, pickupRange = 0.2f ,pickupSpeed = 0.5f;
+    public GameObject player;
+    public WeaponData.Weapon currentWeapon;
 
     void Start()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         GetComponentInChildren<Canvas>().worldCamera = FindObjectOfType<Camera>();
     }
 
     public void SetWeapon(WeaponData.Weapon SelectedWeapon,Sprite SelectedSprite)
     {
-        CurrentWeapon = SelectedWeapon;
-        GetComponentInChildren<Text>().text = CurrentWeapon.WeaponName;
+        currentWeapon = SelectedWeapon;
+        GetComponentInChildren<Text>().text = currentWeapon.weaponName;
         GetComponentInChildren<SpriteRenderer>().sprite = SelectedSprite;
     }
 
     void Update()
     {
-        float DistToPlayer = Vector2.Distance(transform.position, Player.transform.position);
-        if (IsFollowing) transform.position = Vector2.MoveTowards(transform.position, Player.transform.position,PickupSpeed);
-        if (DistToPlayer <= AttentionRange) IsFollowing = true;
-        if (DistToPlayer <= PickupRange)
+        float DistToPlayer = Vector2.Distance(transform.position, player.transform.position);
+        if (isFollowing) transform.position = Vector2.MoveTowards(transform.position, player.transform.position,pickupSpeed);
+        if (DistToPlayer <= attentionRange) isFollowing = true;
+        if (DistToPlayer <= pickupRange)
         {
-            Player.GetComponent<PlayerGeneral>().AppendInventory(CurrentWeapon);
+            player.GetComponent<PlayerGeneral>().AppendInventory(currentWeapon);
             Destroy(gameObject);
         }
     }

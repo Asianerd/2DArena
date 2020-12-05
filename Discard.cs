@@ -32,28 +32,28 @@ public class Discard : MonoBehaviour
 
     void Update()
     {
-        switch (PlayerGeneral.CurrentWeaponReference.Category)
+        switch (PlayerGeneral.currentWeaponReference.category)
         {
             case 1:
-                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponSpriteList[PlayerGeneral.CurrentWeaponReference.WeaponID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.globalRangeWeaponSpriteList[PlayerGeneral.currentWeaponReference.weaponID];
                 break;
             case 2:
-                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalProjectileSpriteList[PlayerGeneral.CurrentWeaponReference.ProjectileSpriteID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.globalProjectileSpriteList[PlayerGeneral.currentWeaponReference.projectileSpriteID];
                 break;
             default:
-                GetComponent<SpriteRenderer>().sprite = WeaponData.GlobalMeleeWeaponSpriteList[PlayerGeneral.CurrentWeaponReference.WeaponID];
+                GetComponent<SpriteRenderer>().sprite = WeaponData.globalMeleeWeaponSpriteList[PlayerGeneral.currentWeaponReference.weaponID];
                 break;
         }
-        if (!InventoryGeneral.GamePaused && IsSwinging)
+        if (!InventoryGeneral.gamePaused && IsSwinging)
         {
-            switch (Weapon.ScriptID)
+            switch (Weapon.scriptID)
             {
                 case 1:
                     //Stab
                     transform.position = Vector2.MoveTowards(transform.position, Target, Speed);
 
                     CurrentCooldown++;
-                    if (CurrentCooldown >= PlayerGeneral.CurrentWeaponReference.WeaponCooldown)
+                    if (CurrentCooldown >= PlayerGeneral.currentWeaponReference.weaponCooldown)
                     {
                         IsSwinging = false;
                         EnemyAttackedList = new List<GameObject>();
@@ -63,10 +63,10 @@ public class Discard : MonoBehaviour
                     //Auto-aim
                     if (NearestEnemy != null)
                     {
-                        transform.position = Vector2.MoveTowards(transform.position, NearestEnemy.transform.position, Weapon.Knockback);
+                        transform.position = Vector2.MoveTowards(transform.position, NearestEnemy.transform.position, Weapon.knockback);
 
                         CurrentCooldown++;
-                        if (CurrentCooldown >= PlayerGeneral.CurrentWeaponReference.WeaponCooldown)
+                        if (CurrentCooldown >= PlayerGeneral.currentWeaponReference.weaponCooldown)
                         {
                             IsSwinging = false;
                             EnemyAttackedList = new List<GameObject>();
@@ -82,15 +82,15 @@ public class Discard : MonoBehaviour
                     //Swing
                     if (IncrementAmount <= TotalIncrement)
                     {
-                        IncrementAmount += Weapon.Knockback;
-                        if (PlayerGeneral.WeaponObjectIsFlipped)
+                        IncrementAmount += Weapon.knockback;
+                        if (PlayerGeneral.weaponObjectIsFlipped)
                             transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z + IncrementAngle);
                         else
                             transform.rotation = Quaternion.Euler(0f, 0f, transform.rotation.eulerAngles.z - IncrementAngle);
-                        transform.position = new Vector2(PlayerGeneral.PlayerPosition.x + OffsetX, PlayerGeneral.PlayerPosition.y + OffsetY);
+                        transform.position = new Vector2(PlayerGeneral.playerPosition.x + OffsetX, PlayerGeneral.playerPosition.y + OffsetY);
                     }
                     CurrentCooldown++;
-                    if (CurrentCooldown >= PlayerGeneral.CurrentWeaponReference.WeaponCooldown)
+                    if (CurrentCooldown >= PlayerGeneral.currentWeaponReference.weaponCooldown)
                     {
                         IncrementAmount = 0;
                         IsSwinging = false;
@@ -105,30 +105,30 @@ public class Discard : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D Collision)
     {
-        if (Collision.CompareTag("Enemy") && !InventoryGeneral.GamePaused && IsSwinging)
+        if (Collision.CompareTag("Enemy") && !InventoryGeneral.gamePaused && IsSwinging)
         {
-            switch (Weapon.ScriptID)
+            switch (Weapon.scriptID)
             {
                 case 2:
-                    if (NearestEnemy.GetComponent<EnemyGeneral>().HP > 0)
+                    if (NearestEnemy.GetComponent<EnemyGeneral>().health > 0)
                     {
-                        double _DamageInflicted = UnityEngine.Random.Range(PlayerGeneral.CurrentWeaponReference.DamageMin, PlayerGeneral.CurrentWeaponReference.DamageMax);
-                        Collision.GetComponent<EnemyGeneral>().MinusHealth(_DamageInflicted, PlayerGeneral.CurrentWeaponReference.Knockback, PlayerGeneral.PlayerPosition);
+                        double _DamageInflicted = UnityEngine.Random.Range(PlayerGeneral.currentWeaponReference.damageMin, PlayerGeneral.currentWeaponReference.damageMax);
+                        Collision.GetComponent<EnemyGeneral>().MinusHealth(_DamageInflicted, PlayerGeneral.currentWeaponReference.knockback, PlayerGeneral.playerPosition);
                         EnemyAttackedList.Add(Collision.gameObject);
-                        if (PlayerGeneral.CurrentWeaponReference.IsBreakable) { Player.GetComponent<PlayerGeneral>().MinusWeaponDurability(); }
+                        if (PlayerGeneral.currentWeaponReference.isBreakable) { Player.GetComponent<PlayerGeneral>().MinusWeaponDurability(); }
                     }
                     else
                     {
-                        CurrentCooldown = Weapon.WeaponCooldown;
+                        CurrentCooldown = Weapon.weaponCooldown;
                     }
                     break;
                 default:
                     if (!EnemyAttackedList.Contains(Collision.gameObject))
                     {
-                        double DamageInflicted = UnityEngine.Random.Range(PlayerGeneral.CurrentWeaponReference.DamageMin, PlayerGeneral.CurrentWeaponReference.DamageMax);
-                        Collision.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, PlayerGeneral.CurrentWeaponReference.Knockback, PlayerGeneral.PlayerPosition);
+                        double DamageInflicted = UnityEngine.Random.Range(PlayerGeneral.currentWeaponReference.damageMin, PlayerGeneral.currentWeaponReference.damageMax);
+                        Collision.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, PlayerGeneral.currentWeaponReference.knockback, PlayerGeneral.playerPosition);
                         EnemyAttackedList.Add(Collision.gameObject);
-                        if (PlayerGeneral.CurrentWeaponReference.IsBreakable) { Player.GetComponent<PlayerGeneral>().MinusWeaponDurability(); }
+                        if (PlayerGeneral.currentWeaponReference.isBreakable) { Player.GetComponent<PlayerGeneral>().MinusWeaponDurability(); }
                     }
                     break;
             }
@@ -143,13 +143,13 @@ public class Discard : MonoBehaviour
 
     public void Swing()
     {
-        Weapon = PlayerGeneral.CurrentWeaponReference;
-        switch (Weapon.ScriptID)
+        Weapon = PlayerGeneral.currentWeaponReference;
+        switch (Weapon.scriptID)
         {
             case 1:
                 //Stab
-                Target = new Vector2(Mathf.Cos(PlayerGeneral.MouseAngle) * 100, Mathf.Sin(PlayerGeneral.MouseAngle) * 100);
-                Speed = PlayerGeneral.CurrentWeaponReference.Knockback;
+                Target = new Vector2(Mathf.Cos(PlayerGeneral.mouseAngle) * 100, Mathf.Sin(PlayerGeneral.mouseAngle) * 100);
+                Speed = PlayerGeneral.currentWeaponReference.knockback;
                 break;
             case 2:
                 //Auto-aim
@@ -159,7 +159,7 @@ public class Discard : MonoBehaviour
                     NearestEnemy = EnemyList[0];
                     foreach (GameObject i in EnemyList)
                     {
-                        if (Vector2.Distance(PlayerGeneral.PlayerPosition, i.transform.position) <= Vector2.Distance(PlayerGeneral.PlayerPosition, NearestEnemy.transform.position))
+                        if (Vector2.Distance(PlayerGeneral.playerPosition, i.transform.position) <= Vector2.Distance(PlayerGeneral.playerPosition, NearestEnemy.transform.position))
                         {
                             NearestEnemy = i;
                         }
@@ -167,15 +167,15 @@ public class Discard : MonoBehaviour
                 }
                 break;
             default:
-                OffsetX = Mathf.Cos(PlayerGeneral.MouseAngle) * 0.5f;
-                OffsetY = Mathf.Sin(PlayerGeneral.MouseAngle) * 0.5f;
-                IncrementAngle = Weapon.Knockback * 7; // Change this ; Speed(TotalAngle) is determined by the knockback
+                OffsetX = Mathf.Cos(PlayerGeneral.mouseAngle) * 0.5f;
+                OffsetY = Mathf.Sin(PlayerGeneral.mouseAngle) * 0.5f;
+                IncrementAngle = Weapon.knockback * 7; // Change this ; Speed(TotalAngle) is determined by the knockback
                 IncrementAmount = 0;
                 break;
         }
 
         //Look towards (2D version) - start
-        transform.position = new Vector2(PlayerGeneral.PlayerPosition.x + OffsetX, PlayerGeneral.PlayerPosition.y + OffsetX);
+        transform.position = new Vector2(PlayerGeneral.playerPosition.x + OffsetX, PlayerGeneral.playerPosition.y + OffsetX);
         Vector3 diff = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         diff.Normalize();
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;

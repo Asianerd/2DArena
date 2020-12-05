@@ -5,36 +5,36 @@ using UnityEngine;
 
 public class EnemyGeneral : MonoBehaviour
 {
-    public double HP = 100;
-    public float EnemyDist;
+    public double health = 100;
+    public float enemyDist;
     public GameObject runtime;
-    public GameObject Player;
-    public GameObject DamageBubblePrefab;
+    public GameObject player;
+    public GameObject damageBubblePrefab;
 
 
     void Awake()
     {
         runtime = GameObject.FindGameObjectWithTag("RuntimeScript");
-        Player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update() 
     {
-        if (HP <= 0)
+        if (health <= 0)
         {
-            int SpawnedWeaponID = UnityEngine.Random.Range(0, WeaponData.GlobalWeaponList.Count);
-            runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position, WeaponData.GlobalWeaponList[SpawnedWeaponID]);
+            int SpawnedWeaponID = UnityEngine.Random.Range(0, WeaponData.globalWeaponList.Count);
+            runtime.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position, WeaponData.globalWeaponList[SpawnedWeaponID]);
             Destroy(gameObject);
         }
     }
     public void MinusHealth(double LostHealth,float Knockback,Vector2 DamageSource)
     {
         double angle = Math.Atan2(transform.position.y - DamageSource.y, transform.position.x - DamageSource.x);
-        HP -= LostHealth;
+        health -= LostHealth;
         float targetx = Convert.ToSingle((Math.Cos(angle) * Knockback) + transform.position.x);
         float targety = Convert.ToSingle((Math.Sin(angle) * Knockback) + transform.position.y);
         transform.position = Vector2.MoveTowards(transform.position, new Vector2(targetx, targety), Knockback);
-        Instantiate(DamageBubblePrefab, transform.position, Quaternion.identity).GetComponent<FXDamageBubbleGeneral>().Damage = Convert.ToSingle(LostHealth);
+        Instantiate(damageBubblePrefab, transform.position, Quaternion.identity).GetComponent<FXDamageBubbleGeneral>().damage = Convert.ToSingle(LostHealth);
     }
     public float DistanceEnemy(float SourceX, float SourceY)
     {

@@ -5,19 +5,19 @@ using UnityEngine.UI;
 
 public class PlayerEquippedWeaponText : MonoBehaviour
 {
-    public GameObject Player;
-    WeaponData.Weapon Weapon;
+    public GameObject player;
+    WeaponData.Weapon weapon;
 
     void Start()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()
     {
         string WeaponText;
-        Weapon = PlayerGeneral.CurrentWeaponReference;
-        WeaponText = $"{Player.GetComponent<PlayerGeneral>().CurrentWeapon.WeaponName} {Weapon.DamageMin*Weapon.Level}/{Weapon.DamageMax*Weapon.Level}";
+        weapon = PlayerGeneral.currentWeaponReference;
+        WeaponText = $"{player.GetComponent<PlayerGeneral>().currentWeapon.weaponName} {weapon.damageMin*weapon.level}/{weapon.damageMax*weapon.level}";
         GetComponentInChildren<Text>().text = WeaponText;
     }
 }

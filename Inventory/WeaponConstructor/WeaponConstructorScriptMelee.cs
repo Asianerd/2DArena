@@ -5,21 +5,21 @@ using UnityEngine;
 public class WeaponConstructorScriptMelee : MonoBehaviour
 {
     // On the WeaponConstructorObject
-    public string Name;
-    public float DamageMin, DamageMax;
-    public float Knockback;
-    public int Cooldown;
+    public string name;
+    public float damageMin, damageMax;
+    public float knockback;
+    public int cooldown;
 
-    public int Rarity;
-    public int Category;
-    public int Type;
-    public int WpnID;
+    public int rarity;
+    public int category;
+    public int type;
+    public int wpnID;
 
-    public int Level = 1;
+    public int level = 1;
 
-    public int CProgress = 0;
-    public int MaxDurability = -100;
-    public int Effect = 0;
-    public int Mana = 0;
-    public int ScriptID = 0;
+    public int cProgress = 0;
+    public int maxDurability = -100;
+    public int effect = 0;
+    public int mana = 0;
+    public int scriptID = 0;
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,78 +12,74 @@ using UnityEngine.UIElements;
 
 public class PlayerGeneral : MonoBehaviour
 {
-    public Canvas InvCanvas;
-    public GameObject RuntimeScript;
-    public GameObject DamageBubblePrefab;
-    public Transform ProjectileHolder;
+    public GameObject runtimeScript;
+    public GameObject damageBubblePrefab;
+    public Transform projectileHolder;
 
-    public Camera PlayerCamera;
-    public static Vector3 MousePosition;
-    public static float MouseAngle;
-    public static Vector2 PlayerPosition;
+    public Camera playerCamera;
+    public static Vector3 mousePosition;
+    public static float mouseAngle;
+    public static Vector2 playerPosition;
 
-    public GameObject WpnObject;
-    public float CosmeticWeaponDistance = 1f;
+    public GameObject wpnObject;
+    public float cosmeticWeaponDistance = 1f;
+
+    public static List<WeaponData.Weapon> inventoryWeapon = new List<WeaponData.Weapon>();
+    public WeaponData.Weapon currentWeapon;
+    public static WeaponData.Weapon currentWeaponReference;
 
     //HP
     public float HP = 100, HPMax = 100, HPRegen = 1;
     public int HPRegenTime = 100, HPRegenClock = 0;
-    public static List<WeaponData.Weapon> InventoryWeapon = new List<WeaponData.Weapon>();
-    public List<ArrayList> InventoryLoot = new List<ArrayList>();
-    public List<string> InventoryLootName = new List<string>();
-    public WeaponData.Weapon EquippedWeapon;
 
     //ATK
-    public GameObject[] EnemyArray;
-    public float PlayerDamage = 3f;
-
-    public WeaponData.Weapon CurrentWeapon;
-    public static WeaponData.Weapon CurrentWeaponReference;
-
-    public int WeaponCooldown = 0;
+    public float playerDamage = 3f;
+    public int weaponCooldown = 0;
 
     //Projectile data
-    public List<GameObject> ProjectileSpawned;
-    public static int ProjectilesUsed;
+    public List<GameObject> projectileSpawned;
+    public static int projectilesUsed;
 
     //Animation data
-    public Animator PlayerEyeAnimator;
-    public int PlayerEyeAnimationCooldown;
-    int PlayerEyeCurrentAnimationCooldown = 0;
+    public Animator playerEyeAnimator;
+    public int playerEyeAnimationCooldown;
+    int playerEyeCurrentAnimationCooldown = 0;
 
 
 
-    public static bool WeaponObjectIsFlipped = false;
+    public static bool weaponObjectIsFlipped = false;
 
-    public GameObject TempText;
+    public GameObject tempText;
 
     public void ResetCurrentWeapon()
     {
-        CurrentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 100, 0, 1, 0, 0, 0);
+        currentWeapon = new WeaponData.Weapon("Fists", 50, 100, 1, 100, 0, 1, 0, 0, 0);
     }
 
     void Awake()
     {
         ResetCurrentWeapon();
-        PlayerCamera = FindObjectOfType<Camera>();
-        PlayerEyeAnimationCooldown = UnityEngine.Random.Range(0, 10000);
+        playerCamera = FindObjectOfType<Camera>();
+        runtimeScript = GameObject.FindGameObjectWithTag("RuntimeScript");
+        playerEyeAnimationCooldown = UnityEngine.Random.Range(0, 10000);
     }
 
     void Update()
     {
-        MousePosition = PlayerCamera.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition = playerCamera.ScreenToWorldPoint(Input.mousePosition);
 
-        MouseAngle = Mathf.Atan2(MousePosition.y - transform.position.y, MousePosition.x - transform.position.x);
+        mouseAngle = Mathf.Atan2(mousePosition.y - transform.position.y, mousePosition.x - transform.position.x);
 
-        PlayerPosition = new Vector2(transform.position.x, transform.position.y);
+        playerPosition = new Vector2(transform.position.x, transform.position.y);
 
-        CurrentWeaponReference = CurrentWeapon;
+        currentWeaponReference = currentWeapon;
 
-        TempText.GetComponent<Text>().text = $"LVL : {CurrentWeapon.Level}  {CurrentWeapon.LevelCurrentProgression}/{CurrentWeapon.LevelNextLevelProgression}";
+        tempText.GetComponent<Text>().text = $"LVL : {currentWeapon.level}  {currentWeapon.levelCurrentProgression}/{currentWeapon.levelNextLevelProgression}";
 
         // Remove please - taking 70ish fps to execute
         // Sets ProjectilesUsed to the amount of GameObjects with the same name
         // Just increase/decrease when a projectile is instantiated/destroyed
+        // Projectile weapon class unused now
         /*
         GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Projectile");
         ProjectilesUsed = 0;
@@ -97,22 +93,22 @@ public class PlayerGeneral : MonoBehaviour
         }
         */
 
-        CurrentWeapon.LevelCheck();
+        currentWeapon.LevelCheck();
 
         // Debug keys
         if (Input.GetKey(KeyCode.C))
         {
-            int SpawnedWeaponID = UnityEngine.Random.Range(0, WeaponData.GlobalWeaponList.Count);
-            RuntimeScript.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position, WeaponData.GlobalWeaponList[SpawnedWeaponID]);
+            int SpawnedWeaponID = UnityEngine.Random.Range(0, WeaponData.globalWeaponList.Count);
+            runtimeScript.GetComponent<LootSpawning>().SpawnWeaponLoot(transform.position, WeaponData.globalWeaponList[SpawnedWeaponID]);
         }
 
         if (Input.GetKeyDown(KeyCode.B))
         {
-            transform.position = new Vector2(MousePosition.x, MousePosition.y);
+            transform.position = new Vector2(mousePosition.x, mousePosition.y);
         }
         // Debug keys
 
-        if (!InventoryGeneral.GamePaused)
+        if (!InventoryGeneral.gamePaused)
         {
             Regen();
             Attack();
@@ -130,21 +126,21 @@ public class PlayerGeneral : MonoBehaviour
     public void MinusWeaponDurability(int LostDurability = 1,bool IsBreakOverride = false)
     {
         if (IsBreakOverride)
-            CurrentWeapon.Durability -= LostDurability;
+            currentWeapon.durability -= LostDurability;
         else
-            if (CurrentWeapon.IsBreakable && CurrentWeapon.Durability > 0)
-                CurrentWeapon.Durability -= LostDurability;
+            if (currentWeapon.isBreakable && currentWeapon.durability > 0)
+                currentWeapon.durability -= LostDurability;
     }
 
     public void AddWeaponLevelProgress(int WeaponProgress)
     {
-        CurrentWeapon.LevelCurrentProgression += WeaponProgress/10;
-        CurrentWeapon.LevelCheck();
+        currentWeapon.levelCurrentProgression += WeaponProgress/10;
+        currentWeapon.LevelCheck();
     }
 
     void WeaponDurabilityCheck()
     {
-        if ((CurrentWeapon.Durability <= 0) && !(CurrentWeapon.Durability == -100))
+        if ((currentWeapon.durability <= 0) && !(currentWeapon.durability == -100))
         {
             ResetCurrentWeapon();
         }
@@ -152,10 +148,10 @@ public class PlayerGeneral : MonoBehaviour
 
     void Attack()
     {
-        if ((WeaponCooldown == 0) && Input.GetMouseButton(0))
+        if ((weaponCooldown == 0) && Input.GetMouseButton(0))
         {
-            WeaponCooldown = CurrentWeapon.WeaponCooldown;
-            switch (CurrentWeapon.Category)
+            weaponCooldown = currentWeapon.weaponCooldown;
+            switch (currentWeapon.category)
             {
                 case 0:
                     MeleeAttack();
@@ -170,93 +166,93 @@ public class PlayerGeneral : MonoBehaviour
                     break;
             }
         }
-        if (WeaponCooldown > 0) WeaponCooldown--;
+        if (weaponCooldown > 0) weaponCooldown--;
     }
 
     void MeleeAttack()
     {        
-        WpnObject.GetComponent<WeaponObject>().SwingWrapper();
+        wpnObject.GetComponent<WeaponObject>().SwingWrapper();
     }
 
     void RangeAttack()
     {
         float length = 1.4f;
-        GameObject obj = Instantiate(CurrentWeapon.RangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle)*length)+transform.position.y)), Quaternion.identity,ProjectileHolder);
-        obj.GetComponent<RangeProjectileScript>().Set(CurrentWeapon,gameObject);
+        GameObject obj = Instantiate(currentWeapon.rangeProjectile, new Vector2(Convert.ToSingle((Mathf.Cos(mouseAngle)*length)+transform.position.x), Convert.ToSingle((Mathf.Sin(mouseAngle)*length)+transform.position.y)), Quaternion.identity,projectileHolder);
+        obj.GetComponent<RangeProjectileScript>().Set(currentWeapon,gameObject);
     }
 
     void ProjectileAttack()
     {
         float length = 1.4f;
-        if(ProjectilesUsed < CurrentWeapon.Amount)
+        if(projectilesUsed < currentWeapon.amount)
         {
             AddProjectile();
-            GameObject proj = Instantiate(CurrentWeapon.Projectile, new Vector2(Convert.ToSingle((Mathf.Cos(MouseAngle) * length) + transform.position.x), Convert.ToSingle((Mathf.Sin(MouseAngle) * length) + transform.position.y)), Quaternion.identity,ProjectileHolder);
-            proj.name = CurrentWeapon.WeaponName;
-            proj.GetComponent<ProjectileScript>().Set(CurrentWeapon,gameObject);
+            GameObject proj = Instantiate(currentWeapon.projectile, new Vector2(Convert.ToSingle((Mathf.Cos(mouseAngle) * length) + transform.position.x), Convert.ToSingle((Mathf.Sin(mouseAngle) * length) + transform.position.y)), Quaternion.identity,projectileHolder);
+            proj.name = currentWeapon.weaponName;
+            proj.GetComponent<ProjectileScript>().Set(currentWeapon,gameObject);
         }
     }
 
-    float TempMouseAngle;
+    float tempMouseAngle;
 
     void ShowWeapon()
     {
         float ReturnSpeed = 0.4f;
-        WpnObject.transform.position = Vector2.MoveTowards(WpnObject.transform.position, new Vector2(transform.position.x + (Mathf.Cos(TempMouseAngle) * CosmeticWeaponDistance), transform.position.y + (Mathf.Sin(TempMouseAngle) * CosmeticWeaponDistance)), ReturnSpeed);
-        if (!WeaponObject.IsSwinging)
+        wpnObject.transform.position = Vector2.MoveTowards(wpnObject.transform.position, new Vector2(transform.position.x + (Mathf.Cos(tempMouseAngle) * cosmeticWeaponDistance), transform.position.y + (Mathf.Sin(tempMouseAngle) * cosmeticWeaponDistance)), ReturnSpeed);
+        if (!WeaponObject.isSwinging)
         {
-            Vector3 diff = Camera.main.ScreenToWorldPoint(Input.mousePosition) - WpnObject.transform.position;
+            Vector3 diff = Camera.main.ScreenToWorldPoint(Input.mousePosition) - wpnObject.transform.position;
             diff.Normalize();
             float rot_z = Mathf.Atan2(diff.y*100, diff.x*100) * Mathf.Rad2Deg;
 
-            TempMouseAngle = Mathf.Atan2(MousePosition.y- transform.position.y, MousePosition.x - transform.position.x);
+            tempMouseAngle = Mathf.Atan2(mousePosition.y- transform.position.y, mousePosition.x - transform.position.x);
 
-            switch (CurrentWeapon.Category)
+            switch (currentWeapon.category)
             {
                 case 0:
-                    WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    wpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                     break;
                 case 1:
-                    WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    wpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                     break;
                 case 2:
-                    WpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    wpnObject.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                     break;
                 default:
                     break;
             }
 
-            if ((Math.Abs(MouseAngle * Mathf.Rad2Deg)) >= 90)
+            if ((Math.Abs(mouseAngle * Mathf.Rad2Deg)) >= 90)
             {
-                WpnObject.transform.localScale = new Vector3(1, -1, 1);
-                WeaponObjectIsFlipped = true;
+                wpnObject.transform.localScale = new Vector3(1, -1, 1);
+                weaponObjectIsFlipped = true;
             }
             else 
             {
-                WpnObject.transform.localScale = new Vector3(1, 1, 1);
-                WeaponObjectIsFlipped = false;
+                wpnObject.transform.localScale = new Vector3(1, 1, 1);
+                weaponObjectIsFlipped = false;
             }
         }
     }
 
     void PlayerEyeAnimation()
     {
-        if (PlayerEyeCurrentAnimationCooldown > 0)
+        if (playerEyeCurrentAnimationCooldown > 0)
         {
-            PlayerEyeCurrentAnimationCooldown--;
+            playerEyeCurrentAnimationCooldown--;
         }
         else
         {
-            PlayerEyeAnimationCooldown = UnityEngine.Random.Range(0, 10000);
-            PlayerEyeCurrentAnimationCooldown = PlayerEyeAnimationCooldown;
+            playerEyeAnimationCooldown = UnityEngine.Random.Range(0, 10000);
+            playerEyeCurrentAnimationCooldown = playerEyeAnimationCooldown;
         }
 
-        PlayerEyeAnimator.SetInteger("BlinkTimer", PlayerEyeCurrentAnimationCooldown);
+        playerEyeAnimator.SetInteger("BlinkTimer", playerEyeCurrentAnimationCooldown);
     }
 
     public void AppendInventory(WeaponData.Weapon WantedWeapon)
     {
-        InventoryWeapon.Add(new WeaponData.Weapon(WantedWeapon));
+        inventoryWeapon.Add(new WeaponData.Weapon(WantedWeapon));
     }
 
     void Regen()
@@ -276,11 +272,11 @@ public class PlayerGeneral : MonoBehaviour
 
     public static void MinusProjectile()
     {
-        ProjectilesUsed--;
+        projectilesUsed--;
     }
 
     public static void AddProjectile()
     {
-        ProjectilesUsed++;
+        projectilesUsed++;
     }
 }

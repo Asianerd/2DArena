@@ -12,39 +12,35 @@ using UnityEngine.UIElements;
 
 public class WeaponData : MonoBehaviour
 {
-    public List<GameObject> RangeProjectilePrefabList;
-    public List<GameObject> ProjectilePrefabList;
+    public static Sprite[] globalMeleeWeaponSpriteList;
+    public static Sprite[] globalRangeWeaponSpriteList;
+    public static Sprite[] globalProjectileSpriteList;
 
-    public static Sprite[] GlobalMeleeWeaponSpriteList;
-    public static Sprite[] GlobalRangeWeaponSpriteList;
-    public static Sprite[] GlobalProjectileSpriteList;
+    public GameObject genericRangeProjectile;
+    public GameObject genericProjectile;
 
-    public GameObject GenericRangeProjectile;
-    public GameObject GenericProjectile;
+    public static Sprite[] globalRangeWeaponProjectileSpriteList;
 
-    public static Sprite[] GlobalRangeWeaponProjectileSpriteList;
+    public GameObject lootPrefab;
 
-    public List<Sprite> LootSpriteList;
-    public GameObject LootPrefab;
-
-    public static List<Weapon> GlobalWeaponList = new List<Weapon>();
+    public static List<Weapon> globalWeaponList = new List<Weapon>();
     
-    public static Sprite[] GlobalWeaponBorderList;
-    public static Sprite[] GlobalWeaponTypeSprite;
-    public static string[] GlobalWeaponRarityNames = new string[] { "Common", "Uncommon", "Rare", "Legendary", "Mythical", "Artifact" };
-    public static Sprite[] GlobalRarityBackground;
+    public static Sprite[] globalWeaponBorderList;
+    public static Sprite[] globalWeaponTypeSprite;
+    public static string[] globalWeaponRarityNames = new string[] { "Common", "Uncommon", "Rare", "Legendary", "Mythical", "Artifact" };
+    public static Sprite[] globalRarityBackground;
 
     public class Weapon
     {
-        public string WeaponName;
-        public float DamageMin, DamageMax, Knockback;
-        public int WeaponCooldown, Rarity, Durability, MaxDurability;
-        public bool IsBreakable = true;
-        public int ManaUsage;
-        public int Category;
-        public int WeaponID; // For the WeaponObject's Sprite
-        public int ScriptID;
-        public int Level, LevelCurrentProgression, LevelNextLevelProgression;
+        public string weaponName;
+        public float damageMin, damageMax, knockback;
+        public int weaponCooldown, rarity, durability, maxDurability;
+        public bool isBreakable = true;
+        public int manaUsage;
+        public int category;
+        public int weaponID; // For the WeaponObject's Sprite
+        public int scriptID;
+        public int level, levelCurrentProgression, levelNextLevelProgression;
         /* Category
          * 
          * (0) Melee
@@ -88,7 +84,7 @@ public class WeaponData : MonoBehaviour
          * (5) Artifact - 1
          * 
          */
-        public int Effect;
+        public int effect;
         /* Effects
          * 
          * (0) None
@@ -102,19 +98,19 @@ public class WeaponData : MonoBehaviour
             // Melee
 
             // Range
-        public GameObject RangeProjectile;
+        public GameObject rangeProjectile;
 
             // Projectile
-        public GameObject Projectile;
-        public int Used;
-        public int Amount;
-        public bool ProjectileSpin;
-        public float ProjectileSpinSpeed;
+        public GameObject projectile;
+        public int used;
+        public int amount;
+        public bool projectileSpin;
+        public float projectileSpinSpeed;
         
             // Range & Projectile
-        public int ShelfLife;
-        public float ProjectileSpeed;
-        public int ProjectileSpriteID;     //Possibly removing these two as it might not be used (the sprites already in the projectile GameObject) DONT REMOVE - stupid fucking vs doesnt want to work
+        public int shelfLife;
+        public float projectileSpeed;
+        public int projectileSpriteID;     //Possibly removing these two as it might not be used (the sprites already in the projectile GameObject) DONT REMOVE - stupid fucking vs doesnt want to work
 
         /* Overload order
          * 
@@ -127,27 +123,27 @@ public class WeaponData : MonoBehaviour
             int WpnCProgress = 0, int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, int WpnScriptID = 0)
         {
             // Default values for every weapon
-            WeaponName = name;
-            DamageMin = DmgMin;
-            DamageMax = DmgMax;
-            Knockback = WpnKnockback;
-            WeaponCooldown = WpnCooldown;
+            weaponName = name;
+            damageMin = DmgMin;
+            damageMax = DmgMax;
+            knockback = WpnKnockback;
+            weaponCooldown = WpnCooldown;
 
             if (WpnMaxDurability == -100)
-                IsBreakable = false;
-            MaxDurability = WpnMaxDurability;
-            Durability = MaxDurability;
-            Level = WpnLevel;
-            LevelCurrentProgression = WpnCProgress;
-            LevelNextLevelProgression = 2^(WpnLevel+8);
-            Rarity = WpnRarity;
-            Category = WpnCategory;
-            Level = WpnLevel;
+                isBreakable = false;
+            maxDurability = WpnMaxDurability;
+            durability = maxDurability;
+            level = WpnLevel;
+            levelCurrentProgression = WpnCProgress;
+            levelNextLevelProgression = 2^(WpnLevel+8);
+            rarity = WpnRarity;
+            category = WpnCategory;
+            level = WpnLevel;
 
-            Effect = WpnEffect;
-            ManaUsage = WpnMana;
-            WeaponID = WpnID;
-            ScriptID = WpnScriptID;
+            effect = WpnEffect;
+            manaUsage = WpnMana;
+            weaponID = WpnID;
+            scriptID = WpnScriptID;
 
 
             // Melee
@@ -159,33 +155,33 @@ public class WeaponData : MonoBehaviour
             , int WpnCProgress=0, int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, int WpnScriptID = 0)
         {
             // Default values for every weapon
-            WeaponName = name;
-            DamageMin = DmgMin;
-            DamageMax = DmgMax;
-            Knockback = WpnKnockback;
-            WeaponCooldown = WpnCooldown;
+            weaponName = name;
+            damageMin = DmgMin;
+            damageMax = DmgMax;
+            knockback = WpnKnockback;
+            weaponCooldown = WpnCooldown;
 
             if (WpnMaxDurability == -100)
-                IsBreakable = false;
-            MaxDurability = WpnMaxDurability;
-            Durability = MaxDurability;
+                isBreakable = false;
+            maxDurability = WpnMaxDurability;
+            durability = maxDurability;
 
-            Rarity = WpnRarity;
-            Category = WpnCategory;
-            Level = WpnLevel;
-            LevelCurrentProgression = WpnCProgress;
-            LevelNextLevelProgression = Convert.ToInt32(Math.Pow(2,WpnLevel + 8));
-            Effect = WpnEffect;
-            ManaUsage = WpnMana;
-            WeaponID = WpnID;
-            ScriptID = WpnScriptID;
+            rarity = WpnRarity;
+            category = WpnCategory;
+            level = WpnLevel;
+            levelCurrentProgression = WpnCProgress;
+            levelNextLevelProgression = Convert.ToInt32(Math.Pow(2,WpnLevel + 8));
+            effect = WpnEffect;
+            manaUsage = WpnMana;
+            weaponID = WpnID;
+            scriptID = WpnScriptID;
 
 
             // Range
-            RangeProjectile = WpnProjectile;
-            ShelfLife = WpnShelfLife;
-            ProjectileSpeed= WpnProjectileSpeed;
-            ProjectileSpriteID = WpnProjectileSpriteID;
+            rangeProjectile = WpnProjectile;
+            shelfLife = WpnShelfLife;
+            projectileSpeed= WpnProjectileSpeed;
+            projectileSpriteID = WpnProjectileSpriteID;
         }
 
         // Projectile
@@ -194,90 +190,90 @@ public class WeaponData : MonoBehaviour
             , int WpnCProgress=0,int WpnMaxDurability = -100, int WpnEffect = 0, int WpnMana = 0, bool WpnProjectileSpin = false, float WpnProjectileSpinSpeed = 0, int WpnScriptID = 0)
         {
             // Default values for every weapon
-            WeaponName = name;
-            DamageMin = DmgMin;
-            DamageMax = DmgMax;
-            Knockback = WpnKnockback;
-            WeaponCooldown = WpnCooldown;
+            weaponName = name;
+            damageMin = DmgMin;
+            damageMax = DmgMax;
+            knockback = WpnKnockback;
+            weaponCooldown = WpnCooldown;
 
             if (WpnMaxDurability == -100)
-                IsBreakable = false;
-            MaxDurability = WpnMaxDurability;
-            Durability = MaxDurability;
+                isBreakable = false;
+            maxDurability = WpnMaxDurability;
+            durability = maxDurability;
 
-            Rarity = WpnRarity;
-            Category = WpnCategory;
-            Level = WpnLevel;
-            LevelCurrentProgression = WpnCProgress;
-            LevelNextLevelProgression = 2 ^ (WpnLevel + 8);
-            Effect = WpnEffect;
-            ManaUsage = WpnMana;
-            WeaponID = WpnID;
-            ScriptID = WpnScriptID;
+            rarity = WpnRarity;
+            category = WpnCategory;
+            level = WpnLevel;
+            levelCurrentProgression = WpnCProgress;
+            levelNextLevelProgression = 2 ^ (WpnLevel + 8);
+            effect = WpnEffect;
+            manaUsage = WpnMana;
+            weaponID = WpnID;
+            scriptID = WpnScriptID;
 
             // Projectile
-            Projectile = WpnProjectile;
-            ShelfLife = WpnShelfLife;
-            Amount = WpnAmount;
-            Used = 0;
-            ProjectileSpeed = WpnProjectileSpeed;
-            ProjectileSpriteID = WpnProjectileSpriteID;
-            ProjectileSpin = WpnProjectileSpin;
-            ProjectileSpinSpeed = WpnProjectileSpinSpeed;
+            projectile = WpnProjectile;
+            shelfLife = WpnShelfLife;
+            amount = WpnAmount;
+            used = 0;
+            projectileSpeed = WpnProjectileSpeed;
+            projectileSpriteID = WpnProjectileSpriteID;
+            projectileSpin = WpnProjectileSpin;
+            projectileSpinSpeed = WpnProjectileSpinSpeed;
         }
 
 
         // Weapon = new Weapon(Weapon); - just ignore this; done to make an instance without changing the reference; theres definitely a better way to do this
         public Weapon(Weapon weapon)
         {
-            WeaponName = weapon.WeaponName;
-            DamageMin = weapon.DamageMin;
-            DamageMax = weapon.DamageMax;
-            Knockback = weapon.Knockback;
-            WeaponCooldown = weapon.WeaponCooldown;
+            weaponName = weapon.weaponName;
+            damageMin = weapon.damageMin;
+            damageMax = weapon.damageMax;
+            knockback = weapon.knockback;
+            weaponCooldown = weapon.weaponCooldown;
 
-            if (weapon.MaxDurability == -100)
-                IsBreakable = false;
-            MaxDurability = weapon.MaxDurability;
-            Durability = weapon.Durability;
+            if (weapon.maxDurability == -100)
+                isBreakable = false;
+            maxDurability = weapon.maxDurability;
+            durability = weapon.durability;
 
-            Rarity = weapon.Rarity;
-            Category = weapon.Category;
-            Level = weapon.Level;
-            LevelCurrentProgression = weapon.LevelCurrentProgression;
-            LevelNextLevelProgression = weapon.LevelNextLevelProgression;
-            Effect = weapon.Effect;
-            ManaUsage = weapon.ManaUsage;
-            WeaponID = weapon.WeaponID;
-            ScriptID = weapon.ScriptID;
+            rarity = weapon.rarity;
+            category = weapon.category;
+            level = weapon.level;
+            levelCurrentProgression = weapon.levelCurrentProgression;
+            levelNextLevelProgression = weapon.levelNextLevelProgression;
+            effect = weapon.effect;
+            manaUsage = weapon.manaUsage;
+            weaponID = weapon.weaponID;
+            scriptID = weapon.scriptID;
 
 
             // Melee
 
             // Range
-            RangeProjectile = weapon.RangeProjectile;
-            ShelfLife = weapon.ShelfLife;
-            ProjectileSpeed = weapon.ProjectileSpeed;
-            ProjectileSpriteID = weapon.ProjectileSpriteID;
+            rangeProjectile = weapon.rangeProjectile;
+            shelfLife = weapon.shelfLife;
+            projectileSpeed = weapon.projectileSpeed;
+            projectileSpriteID = weapon.projectileSpriteID;
 
             // Projectile
-            Projectile = weapon.Projectile;
-            ShelfLife = weapon.ShelfLife;
-            Amount = weapon.Amount;
-            Used = 0;
-            ProjectileSpeed = weapon.ProjectileSpeed;
-            ProjectileSpriteID = weapon.ProjectileSpriteID;
-            ProjectileSpin = weapon.ProjectileSpin;
-            ProjectileSpinSpeed = weapon.ProjectileSpinSpeed;
+            projectile = weapon.projectile;
+            shelfLife = weapon.shelfLife;
+            amount = weapon.amount;
+            used = 0;
+            projectileSpeed = weapon.projectileSpeed;
+            projectileSpriteID = weapon.projectileSpriteID;
+            projectileSpin = weapon.projectileSpin;
+            projectileSpinSpeed = weapon.projectileSpinSpeed;
         }
 
         public void LevelCheck()
         {
-            if(LevelCurrentProgression>=LevelNextLevelProgression)
+            if(levelCurrentProgression>=levelNextLevelProgression)
             {
-                LevelCurrentProgression -= LevelNextLevelProgression;
-                Level++;
-                LevelNextLevelProgression = Convert.ToInt32(Math.Pow(2, (Level + 8)));
+                levelCurrentProgression -= levelNextLevelProgression;
+                level++;
+                levelNextLevelProgression = Convert.ToInt32(Math.Pow(2, (level + 8)));
                 //LevelNextLevelProgression = 2 ^ (Level + 8); exponents dont work in c#  fuck
             }
         }
@@ -285,37 +281,37 @@ public class WeaponData : MonoBehaviour
 
     public class Loot
     {
-        public string LootName;
-        public int LootAmount,LootAmountMax;
-        public Sprite LootSprite;
-        public int LootID;
-        public int PickupCooldown = 500;
-        public int PickupCurrentCooldown = 500;
+        public string lootName;
+        public int lootAmount,lootAmountMax;
+        public Sprite lootSprite;
+        public int lootID;
+        public int pickupCooldown = 500;
+        public int pickupCurrentCooldown = 500;
         public Loot(string Name, int Amount, int ID, Sprite SpriteID, int AmountMax = 999)
         {
-            LootName = Name;
-            LootID = ID;
-            LootSprite = SpriteID;
-            LootAmount = Amount;
-            LootAmountMax = AmountMax;
+            lootName = Name;
+            lootID = ID;
+            lootSprite = SpriteID;
+            lootAmount = Amount;
+            lootAmountMax = AmountMax;
         }
-        public bool Pickable() { return (PickupCurrentCooldown == PickupCooldown); }
+        public bool Pickable() { return (pickupCurrentCooldown == pickupCooldown); }
         public void PickupCountdown(bool Override = false)
         {
-            if (PickupCurrentCooldown > 0 | Override)
-                PickupCurrentCooldown--;
+            if (pickupCurrentCooldown > 0 | Override)
+                pickupCurrentCooldown--;
         }
     }
 
     void Awake()
     {
-        GlobalWeaponBorderList = Resources.LoadAll<Sprite>("UISprites/Rarity/Border");
-        GlobalRarityBackground = Resources.LoadAll<Sprite>("UISprites/Rarity/Selection");
-        GlobalWeaponTypeSprite = Resources.LoadAll<Sprite>("UISprites/WeaponTypeSprites");
-        GlobalMeleeWeaponSpriteList = Resources.LoadAll<Sprite>("WeaponSprites");
-        GlobalRangeWeaponSpriteList = Resources.LoadAll<Sprite>("RangeProjectileWeaponSprites");
-        GlobalRangeWeaponProjectileSpriteList = Resources.LoadAll<Sprite>("RangeProjectileSprites");
-        GlobalProjectileSpriteList = Resources.LoadAll<Sprite>("ProjectileSprites");
+        globalWeaponBorderList = Resources.LoadAll<Sprite>("UISprites/Rarity/Border");
+        globalRarityBackground = Resources.LoadAll<Sprite>("UISprites/Rarity/Selection");
+        globalWeaponTypeSprite = Resources.LoadAll<Sprite>("UISprites/WeaponTypeSprites");
+        globalMeleeWeaponSpriteList = Resources.LoadAll<Sprite>("WeaponSprites");
+        globalRangeWeaponSpriteList = Resources.LoadAll<Sprite>("RangeProjectileWeaponSprites");
+        globalRangeWeaponProjectileSpriteList = Resources.LoadAll<Sprite>("RangeProjectileSprites");
+        globalProjectileSpriteList = Resources.LoadAll<Sprite>("ProjectileSprites");
 
         /* Creating all the weapons based on the fields in the WeaponConstructorScriptMelee/Range/Projectile scripts 
          * attached to the GameObjects in Assets/Resources/WeaponConstructor/(Melee/Range/Projectile) 
@@ -324,21 +320,21 @@ public class WeaponData : MonoBehaviour
         foreach (GameObject y in WeaponConstructorArray)
         {
             WeaponConstructorScriptMelee x = y.GetComponent<WeaponConstructorScriptMelee>();
-            GlobalWeaponList.Add(new Weapon(x.Name, x.DamageMin, x.DamageMax, x.Knockback, x.Cooldown, x.Rarity, x.Level, x.Category, x.WpnID, x.CProgress, x.MaxDurability, x.Effect, x.Mana, x.ScriptID));
+            globalWeaponList.Add(new Weapon(x.name, x.damageMin, x.damageMax, x.knockback, x.cooldown, x.rarity, x.level, x.category, x.wpnID, x.cProgress, x.maxDurability, x.effect, x.mana, x.scriptID));
         }
 
         WeaponConstructorArray = Resources.LoadAll<GameObject>("WeaponConstructor/Range");
         foreach(GameObject y in WeaponConstructorArray)
         {
             WeaponConstructorScriptRange x = y.GetComponent<WeaponConstructorScriptRange>();
-            GlobalWeaponList.Add(new Weapon(x.Name, x.DamageMin, x.DamageMax, x.Knockback, x.Cooldown, x.Rarity, x.Level, x.Category, x.WpnID, x.ShelfLife, x.ProjectileFired, x.ProjectileSpeed, x.ProjectileSpriteID, x.CProgress, x.MaxDurability, x.Effect, x.Mana, x.ScriptID));
+            globalWeaponList.Add(new Weapon(x.name, x.damageMin, x.damageMax, x.knockback, x.cooldown, x.rarity, x.level, x.category, x.wpnID, x.shelfLife, x.projectileFired, x.projectileSpeed, x.projectileSpriteID, x.cProgress, x.maxDurability, x.effect, x.mana, x.scriptID));
         }
 
         WeaponConstructorArray = Resources.LoadAll<GameObject>("WeaponConstructor/Projectile");
         foreach(GameObject y in WeaponConstructorArray)
         {
             WeaponConstructorScriptProjectile x = y.GetComponent<WeaponConstructorScriptProjectile>();
-            GlobalWeaponList.Add(new Weapon(x.Name, x.DamageMin, x.DamageMax, x.Knockback, x.Cooldown, x.Rarity, x.Level, x.Category, x.WpnID, x.ShelfLife, x.ProjectileFired, x.Amount, x.ProjectileSpeed, x.ProjectileSpriteID, x.CProgress, x.MaxDurability, x.Effect, x.Mana, x.ProjectileSpin, x.ProjectileSpinSpeed, x.ScriptID));
+            globalWeaponList.Add(new Weapon(x.name, x.damageMin, x.damageMax, x.knockback, x.cooldown, x.rarity, x.level, x.category, x.wpnID, x.shelfLife, x.projectileFired, x.amount, x.projectileSpeed, x.projectileSpriteID, x.cProgress, x.maxDurability, x.effect, x.mana, x.projectileSpin, x.projectileSpinSpeed, x.scriptID));
         }
 
 

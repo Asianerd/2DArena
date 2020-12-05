@@ -6,25 +6,25 @@ using UnityEngine;
 
 public class RangeProjectileScript : MonoBehaviour
 {
-    WeaponData.Weapon ProjectileWeapon;
-    GameObject Player;
+    WeaponData.Weapon projectileWeapon;
+    GameObject player;
 
     // Straight
-    double DirectionAngle;
-    public float DamageMin, DamageMax;
-    public float Speed;
-    public int ShelfLife;
-    float TargetX,TargetY;
-    bool HasDied = false;
+    double directionAngle;
+    public float damageMin, damageMax;
+    public float speed;
+    public int shelfLife;
+    float targetX, targetY;
+    bool hasDied = false;
 
 
     public void Set(WeaponData.Weapon Weapon, GameObject Plyr)
     {
-        DirectionAngle = PlayerGeneral.MouseAngle;
-        ProjectileWeapon = Weapon;
-        TargetX = Convert.ToSingle(Math.Cos(DirectionAngle) * 10000);
-        TargetY = Convert.ToSingle(Math.Sin(DirectionAngle) * 10000);
-        Player = Plyr;
+        directionAngle = PlayerGeneral.mouseAngle;
+        projectileWeapon = Weapon;
+        targetX = Convert.ToSingle(Math.Cos(directionAngle) * 10000);
+        targetY = Convert.ToSingle(Math.Sin(directionAngle) * 10000);
+        player = Plyr;
         //GetComponentInChildren<SpriteRenderer>().sprite = WeaponData.GlobalRangeWeaponProjectileSpriteList[weapon.ProjectileSpriteID; Its going to be set in the SpriteRenderer (cos theres gonna be multiple Projectile prefabs)
         //GetComponent<CapsuleCollider2D>().size = GetComponentInChildren<SpriteRenderer>().sprite.rect.size/10;
 
@@ -33,34 +33,34 @@ public class RangeProjectileScript : MonoBehaviour
         //diff.Normalize();
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, rot_z);*/
-        transform.rotation = Quaternion.Euler(0f, 0f, PlayerGeneral.MouseAngle * Mathf.Rad2Deg);
+        transform.rotation = Quaternion.Euler(0f, 0f, PlayerGeneral.mouseAngle * Mathf.Rad2Deg);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        double DamageInflicted = (UnityEngine.Random.Range(DamageMin, DamageMax))*ProjectileWeapon.Level;
+        double DamageInflicted = (UnityEngine.Random.Range(damageMin, damageMax))*projectileWeapon.level;
         GameObject CollidedObject = collision.gameObject;
         if(CollidedObject.CompareTag("Enemy"))
         {
-            if (!HasDied)
+            if (!hasDied)
             {
-                CollidedObject.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, ProjectileWeapon.Knockback, transform.position);
-                Player.GetComponent<PlayerGeneral>().MinusWeaponDurability();
-                Player.GetComponent<PlayerGeneral>().AddWeaponLevelProgress(Convert.ToInt32(DamageInflicted));
+                CollidedObject.GetComponent<EnemyGeneral>().MinusHealth(DamageInflicted, projectileWeapon.knockback, transform.position);
+                player.GetComponent<PlayerGeneral>().MinusWeaponDurability();
+                player.GetComponent<PlayerGeneral>().AddWeaponLevelProgress(Convert.ToInt32(DamageInflicted));
             }
-            HasDied = true;
+            hasDied = true;
             Destroy(gameObject);
         }
     }
 
     void Update()
     {
-        if (!InventoryGeneral.GamePaused)
+        if (!InventoryGeneral.gamePaused)
         {
-            if (ShelfLife > 0)
+            if (shelfLife > 0)
             {
-                ShelfLife--;
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(TargetX, TargetY), Speed);
+                shelfLife--;
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(targetX, targetY), speed);
             }
             else
             {

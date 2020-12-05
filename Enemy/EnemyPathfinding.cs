@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyPathfinding : MonoBehaviour
 {
     public GameObject player;
-    public float EnemySpeed = 0.005f;
+    public float enemySpeed = 0.005f;
     
     private void Start()
     {
@@ -14,6 +14,6 @@ public class EnemyPathfinding : MonoBehaviour
 
     void Update()
     {
-        transform.position = Vector2.MoveTowards(transform.position, player.transform.position, EnemySpeed*(Time.deltaTime*100));
+        transform.position = Vector2.MoveTowards(transform.position, player.transform.position, enemySpeed*(Time.deltaTime*100));
     }
 }

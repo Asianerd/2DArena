@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class WeaponInventoryGeneral : MonoBehaviour
 {
-    public GameObject ContentObject;
-    public GameObject ButtonPrefab;
-    public GameObject WeaponSelectTab;
-    public GameObject SelectionOutline;
+    public GameObject contentObject;
+    public GameObject buttonPrefab;
+    public GameObject weaponSelectTab;
+    public GameObject selectionOutline;
 
 
     void OnEnable()
     {
         // When the inventory is opened
-        foreach (Transform child in ContentObject.transform) {Destroy(child.gameObject);}
+        foreach (Transform child in contentObject.transform) {Destroy(child.gameObject);}
         UpdateInventory();
     }
 
@@ -26,13 +26,13 @@ public class WeaponInventoryGeneral : MonoBehaviour
 
         // This is done because when a change is applied to the inventory, the whole inventory needs to be Destroy()ed and Instantiate()ed again to update the changes.
         // That will lose the LButton field for the InventorySelectionTabGeneral.cs. This will then keep the weapon selected and redeclare the LButton field.
-        foreach (WeaponData.Weapon i in PlayerGeneral.InventoryWeapon)
+        foreach (WeaponData.Weapon i in PlayerGeneral.inventoryWeapon)
         {
-            GameObject obj = Instantiate(ButtonPrefab, ContentObject.transform);
+            GameObject obj = Instantiate(buttonPrefab, contentObject.transform);
             obj.GetComponent<InventoryWeaponButtonGeneral>().SetWeapon(i);
             if (i == SelectedWeapon)
             {
-                WeaponSelectTab.GetComponent<InventorySelectionTabGeneral>().Set(i, obj);
+                weaponSelectTab.GetComponent<InventorySelectionTabGeneral>().Set(i, obj);
             }
         }
     }
@@ -41,7 +41,7 @@ public class WeaponInventoryGeneral : MonoBehaviour
     {
         // This is when inventory is opened
         List<WeaponData.Weapon> PlayerInventory;
-        PlayerInventory = new List<WeaponData.Weapon>(PlayerGeneral.InventoryWeapon);
+        PlayerInventory = new List<WeaponData.Weapon>(PlayerGeneral.inventoryWeapon);
 
         WeaponData.Weapon FirstWeapon;
         List<WeaponData.Weapon> OtherWeapons;
@@ -50,7 +50,7 @@ public class WeaponInventoryGeneral : MonoBehaviour
         else
         {
             FirstWeapon = null;
-            WeaponSelectTab.GetComponent<InventorySelectionTabGeneral>().SetEmpty();
+            weaponSelectTab.GetComponent<InventorySelectionTabGeneral>().SetEmpty();
         }
         if (PlayerInventory.Count > 1)
         {
@@ -64,16 +64,16 @@ public class WeaponInventoryGeneral : MonoBehaviour
         GameObject obj;
         if (FirstWeapon != null)
         {
-            obj = Instantiate(ButtonPrefab, ContentObject.transform);
+            obj = Instantiate(buttonPrefab, contentObject.transform);
             obj.GetComponent<InventoryWeaponButtonGeneral>().SetWeapon(FirstWeapon);
-            WeaponSelectTab.GetComponent<InventorySelectionTabGeneral>().Set(FirstWeapon, obj);
+            weaponSelectTab.GetComponent<InventorySelectionTabGeneral>().Set(FirstWeapon, obj);
         }
 
         if (OtherWeapons != null)
         {
             foreach (WeaponData.Weapon i in OtherWeapons)
             {
-                obj = Instantiate(ButtonPrefab, ContentObject.transform);
+                obj = Instantiate(buttonPrefab, contentObject.transform);
                 obj.GetComponent<InventoryWeaponButtonGeneral>().SetWeapon(i);
             }
         }

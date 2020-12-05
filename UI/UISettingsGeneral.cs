@@ -6,32 +6,39 @@ using UnityEngine.UI;
 
 public class UISettingsGeneral : MonoBehaviour
 {
-    public Slider FPSSlider;
-    public float FPS;
+    public Slider fpsSlider;
+    public float fps;
+    public Button vSyncButton;
+    public Sprite toggledButton, untoggledButton;
+
+    private void OnEnable()
+    {
+        fpsSlider.value = Convert.ToSingle(Application.targetFrameRate);
+    }
 
     private void Update()
     {
-        FPS = FPSSlider.value;
+        if (fpsSlider.interactable)
+        {
+            fps = fpsSlider.value;
+        }
         FPSSet();
-        Debug.Log(FPS);
+        ChangeVSyncButtonSprite();
     }
 
     void FPSSet()
     {
-        if (FPS < 10)
-        {
-            QualitySettings.vSyncCount = 0;
-            Application.targetFrameRate = 10;
-        }
-        if (FPS == 0)
-        {
-            QualitySettings.vSyncCount = 1;
-        }
-        if(!(FPS < 10) && !(FPS == 0))
-        {
-            Application.targetFrameRate = Convert.ToInt32(FPS);
-        }
+        Application.targetFrameRate = Convert.ToInt32(fps);
+    }
 
+    void ChangeVSyncButtonSprite()
+    {
+        vSyncButton.image.sprite = QualitySettings.vSyncCount != 0 ? toggledButton : untoggledButton;
+    }
 
+    public void ToggleVSync()
+    {
+        QualitySettings.vSyncCount = QualitySettings.vSyncCount == 0 ? 1 : 0;
+        fpsSlider.interactable = QualitySettings.vSyncCount == 0;
     }
 }
